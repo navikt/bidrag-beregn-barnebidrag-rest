@@ -1,0 +1,5 @@
+{
+  "namespace": "default",
+  "ingress_preprod": "https://bidrag-beregn-bidrag-rest.nais.preprod.local/",
+  "ingress_nais": "https://bidrag-beregn-bidrag-rest.dev-fss.nais.io/"
+}
