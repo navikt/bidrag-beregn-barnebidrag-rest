@@ -33,3 +33,6 @@ spec:
     - https://bidrag-beregn-bidrag-rest.prod-fss.nais.io
   vault:
     enabled: false
+  env:
+    - name: BIDRAGSEVNE_URL
+      value: https://bidrag-beregn-bidragsevne-rest.nais.adeo.no/bidrag-beregn-bidragsevne-rest

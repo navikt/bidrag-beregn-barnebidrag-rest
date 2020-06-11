@@ -1,3 +1,5 @@
+BIDRAGSEVNE_URL: https://bidrag-beregn-bidragsevne-rest-q1.nais.preprod.local/bidrag-beregn-bidragsevne-rest
+
 server:
   servlet:
     context-path: /bidrag-beregn-bidrag-rest

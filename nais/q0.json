@@ -1,5 +1,6 @@
 {
   "namespace": "default",
   "ingress_preprod": "https://bidrag-beregn-bidrag-rest.nais.preprod.local/",
-  "ingress_nais": "https://bidrag-beregn-bidrag-rest.dev-fss.nais.io/"
+  "ingress_nais": "https://bidrag-beregn-bidrag-rest.dev-fss.nais.io/",
+  "bidragsevneurl": "https://bidrag-beregn-bidragsevne-rest-q1.dev-fss.nais.io/bidrag-beregn-bidragsevne-rest"
 }
