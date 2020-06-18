@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 public class BidragsevneConsumer {
@@ -26,7 +28,9 @@ public class BidragsevneConsumer {
 
   public HttpStatusResponse<BeregnBidragsevneResultat> hentBidragsevne(BeregnBidragsevneGrunnlag bidragsevneGrunnlag) {
 
-    var request = new HttpEntity<>(bidragsevneGrunnlag.toString());
+    var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    var request = new HttpEntity<>(bidragsevneGrunnlag.toString(), headers);
     var bidragsevneResponse = restTemplate.exchange(bidragsevneUrl, HttpMethod.POST, request, BIDRAGSEVNE_RESULTAT);
 
     if (bidragsevneResponse == null) {
