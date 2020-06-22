@@ -18,6 +18,9 @@ import no.nav.bidrag.beregn.bidrag.rest.dto.http.ResultatGrunnlag;
 import no.nav.bidrag.beregn.bidrag.rest.dto.http.ResultatPeriode;
 import no.nav.bidrag.beregn.bidrag.rest.dto.http.SaerfradragPeriode;
 import no.nav.bidrag.beregn.bidrag.rest.dto.http.Sjablon;
+import no.nav.bidrag.beregn.bidrag.rest.dto.http.SjablonInnhold;
+import no.nav.bidrag.beregn.bidrag.rest.dto.http.SjablonNokkel;
+import no.nav.bidrag.beregn.bidrag.rest.dto.http.SkatteklassePeriode;
 
 public class TestUtil {
 
@@ -40,6 +43,10 @@ public class TestUtil {
 
   public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenInntektPeriodeListe() {
     return byggBidragsevneGrunnlag("inntektPeriodeListe");
+  }
+
+  public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenSkatteklassePeriodeListe() {
+    return byggBidragsevneGrunnlag("skatteklassePeriodeListe");
   }
 
   public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenBostatusPeriodeListe() {
@@ -70,12 +77,24 @@ public class TestUtil {
     return byggBidragsevneGrunnlag("inntektType");
   }
 
-  public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenSkatteklasse() {
-    return byggBidragsevneGrunnlag("skatteklasse");
-  }
-
   public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenInntektBelop() {
     return byggBidragsevneGrunnlag("inntektBelop");
+  }
+
+  public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenSkatteklasseDatoFraTil() {
+    return byggBidragsevneGrunnlag("skatteklasseDatoFraTil");
+  }
+
+  public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenSkatteklasseDatoFra() {
+    return byggBidragsevneGrunnlag("skatteklasseDatoFra");
+  }
+
+  public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenSkatteklasseDatoTil() {
+    return byggBidragsevneGrunnlag("skatteklasseDatoTil");
+  }
+
+  public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenSkatteklasse() {
+    return byggBidragsevneGrunnlag("skatteklasse");
   }
 
   public static BeregnBidragsevneGrunnlag byggBidragsevneGrunnlagUtenBostatusDatoFraTil() {
@@ -133,8 +152,10 @@ public class TestUtil {
     var inntektDatoFra = (nullVerdi.equals("inntektDatoFra") ? null : LocalDate.parse("2017-01-01"));
     var inntektDatoTil = (nullVerdi.equals("inntektDatoTil") ? null : LocalDate.parse("2020-01-01"));
     var inntektType = (nullVerdi.equals("inntektType") ? null : "LØNNSINNTEKT");
-    var skatteklasse = (nullVerdi.equals("skatteklasse") ? null : 1);
     var inntektBelop = (nullVerdi.equals("inntektBelop") ? null : 100000d);
+    var skatteklasseDatoFra = (nullVerdi.equals("skatteklasseDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var skatteklasseDatoTil = (nullVerdi.equals("skatteklasseDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var skatteklasse = (nullVerdi.equals("skatteklasse") ? null : 1);
     var bostatusDatoFra = (nullVerdi.equals("bostatusDatoFra") ? null : LocalDate.parse("2017-01-01"));
     var bostatusDatoTil = (nullVerdi.equals("bostatusDatoTil") ? null : LocalDate.parse("2020-01-01"));
     var bostatusKode = (nullVerdi.equals("bostatusKode") ? null : "MED_ANDRE");
@@ -151,12 +172,26 @@ public class TestUtil {
     } else {
       InntektPeriode inntektPeriode;
       if (nullVerdi.equals("inntektDatoFraTil")) {
-        inntektPeriode = new InntektPeriode(null, inntektType, skatteklasse, inntektBelop);
+        inntektPeriode = new InntektPeriode(null, inntektType, inntektBelop);
       } else {
-        inntektPeriode = new InntektPeriode(new Periode(inntektDatoFra, inntektDatoTil), inntektType, skatteklasse, inntektBelop);
+        inntektPeriode = new InntektPeriode(new Periode(inntektDatoFra, inntektDatoTil), inntektType, inntektBelop);
       }
       inntektPeriodeListe = new ArrayList<>();
       inntektPeriodeListe.add(inntektPeriode);
+    }
+
+    List<SkatteklassePeriode> skatteklassePeriodeListe;
+    if (nullVerdi.equals("skatteklassePeriodeListe")) {
+      skatteklassePeriodeListe = null;
+    } else {
+      SkatteklassePeriode skatteklassePeriode;
+      if (nullVerdi.equals("skatteklasseDatoFraTil")) {
+        skatteklassePeriode = new SkatteklassePeriode(null, skatteklasse);
+      } else {
+        skatteklassePeriode = new SkatteklassePeriode(new Periode(skatteklasseDatoFra, skatteklasseDatoTil), skatteklasse);
+      }
+      skatteklassePeriodeListe = new ArrayList<>();
+      skatteklassePeriodeListe.add(skatteklassePeriode);
     }
 
     List<BostatusPeriode> bostatusPeriodeListe;
@@ -202,8 +237,8 @@ public class TestUtil {
       saerfradragPeriodeListe.add(saerfradragPeriode);
     }
 
-    return new BeregnBidragsevneGrunnlag(beregnDatoFra, beregnDatoTil, inntektPeriodeListe, bostatusPeriodeListe, antallBarnIEgetHusholdPeriodeListe,
-        saerfradragPeriodeListe);
+    return new BeregnBidragsevneGrunnlag(beregnDatoFra, beregnDatoTil, inntektPeriodeListe, skatteklassePeriodeListe, bostatusPeriodeListe,
+        antallBarnIEgetHusholdPeriodeListe, saerfradragPeriodeListe);
   }
 
   // Bygger opp BeregnBidragsevneResultat
@@ -212,7 +247,8 @@ public class TestUtil {
     bidragPeriodeResultatListe.add(new ResultatPeriode(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new ResultatBeregning(100d),
         new ResultatGrunnlag(singletonList(new Inntekt("LØNNSINNTEKT", 500000d)), 1, "MED_ANDRE", 1,
-            "HELT", singletonList(new Sjablon("SatsTrygdeavgift", 0d, 0d)))));
+            "HELT", singletonList(new Sjablon("SatsTrygdeavgift", singletonList(new SjablonNokkel("Nokkelnavn", "Nokkelverdi")),
+            singletonList(new SjablonInnhold("InnholdNavn", 0d)))))));
     return new BeregnBidragsevneResultat(bidragPeriodeResultatListe);
   }
 }
