@@ -1,5 +1,6 @@
 package no.nav.bidrag.beregn.bidrag.rest.consumer;
 
+import java.util.Collections;
 import no.nav.bidrag.beregn.bidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.bidrag.rest.dto.http.BeregnBidragsevneResultat;
 import no.nav.bidrag.commons.web.HttpStatusResponse;
@@ -30,7 +31,10 @@ public class BidragsevneConsumer {
 
     var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    var request = new HttpEntity<>(bidragsevneGrunnlag.toString(), headers);
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+    var request = new HttpEntity<>(bidragsevneGrunnlag, headers);
+
     var bidragsevneResponse = restTemplate.exchange(bidragsevneUrl, HttpMethod.POST, request, BIDRAGSEVNE_RESULTAT);
 
     if (bidragsevneResponse == null) {
