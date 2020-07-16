@@ -169,6 +169,8 @@ public class BeregnBidragService {
     sjablonPeriodeListe.addAll(mapSjablonForbruksutgifter(sjablonForbruksutgifterResponse.getBody()));
     underholdskostnadGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
 
+    //TODO Legg til NettoBarnetilsynPeriodeCore fra netto barnetilsyn core-tjenesten
+
     // Kaller core-modulen for beregning av underholdskostnad
     LOGGER.debug("Underholdskostnad - grunnlag for beregning: {}", underholdskostnadGrunnlag);
     underholdskostnadResultat = underholdskostnadCore.beregnUnderholdskostnad(underholdskostnadGrunnlag);

@@ -3,14 +3,17 @@ package no.nav.bidrag.beregn.bidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.bidrag.rest.exception.UgyldigInputException
+import no.nav.bidrag.beregn.felles.dto.PeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.BarnetilsynMedStonadPeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ForpleiningUtgiftPeriodeCore
+import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore
 import java.time.LocalDate
+import java.util.Collections.singletonList
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en underholdskostnadberegning")
@@ -33,7 +36,9 @@ data class BeregnUnderholdskostnadGrunnlag(
       barnetilsynMedStonadPeriodeListe = if (barnetilsynMedStonadPeriodeListe != null) barnetilsynMedStonadPeriodeListe.map { it.tilCore() }
       else throw UgyldigInputException("barnetilsynMedStonadPeriodeListe kan ikke være null"),
 
-      nettoBarnetilsynPeriodeListe = emptyList(),
+      //TODO Endre til emptyList
+      nettoBarnetilsynPeriodeListe = singletonList(
+          NettoBarnetilsynPeriodeCore(PeriodeCore(LocalDate.parse("2019-07-01"), LocalDate.parse("2020-01-01")), 1000.0)),
 
       forpleiningUtgiftPeriodeListe = if (forpleiningUtgiftPeriodeListe != null) forpleiningUtgiftPeriodeListe.map { it.tilCore() }
       else throw UgyldigInputException("forpleiningUtgiftPeriodeListe kan ikke være null"),
