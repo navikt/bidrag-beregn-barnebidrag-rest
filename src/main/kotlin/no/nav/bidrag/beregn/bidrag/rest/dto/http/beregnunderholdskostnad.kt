@@ -18,11 +18,12 @@ data class BeregnUnderholdskostnadGrunnlag(
     @ApiModelProperty(value = "Beregn underholdskostnad fra-dato") var beregnDatoFra: LocalDate? = null,
     @ApiModelProperty(value = "Beregn underholdskostnad til-dato") var beregnDatoTil: LocalDate? = null,
     @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var soknadBarnFodselsdato: LocalDate? = null,
-    @ApiModelProperty(value = "Periodisert liste over bidragsmottakers barnetilsyn med stønad")
-      val barnetilsynMedStonadPeriodeListe: List<BarnetilsynMedStonadPeriode>? = null,
-    @ApiModelProperty(value = "Periodisert liste over bidragsmottakers utgifter til forpleining")
-      val forpleiningUtgiftPeriodeListe: List<ForpleiningUtgiftPeriode>? = null
+    @ApiModelProperty(
+        value = "Periodisert liste over bidragsmottakers barnetilsyn med stønad") val barnetilsynMedStonadPeriodeListe: List<BarnetilsynMedStonadPeriode>? = null,
+    @ApiModelProperty(
+        value = "Periodisert liste over bidragsmottakers utgifter til forpleining") val forpleiningUtgiftPeriodeListe: List<ForpleiningUtgiftPeriode>? = null
 ) {
+
   fun tilCore() = BeregnUnderholdskostnadGrunnlagCore(
       beregnDatoFra = if (beregnDatoFra != null) beregnDatoFra!! else throw UgyldigInputException("beregnDatoFra kan ikke være null"),
       beregnDatoTil = if (beregnDatoTil != null) beregnDatoTil!! else throw UgyldigInputException("beregnDatoTil kan ikke være null"),
@@ -30,12 +31,12 @@ data class BeregnUnderholdskostnadGrunnlag(
           "soknadBarnFodselsdato kan ikke være null"),
 
       barnetilsynMedStonadPeriodeListe = if (barnetilsynMedStonadPeriodeListe != null) barnetilsynMedStonadPeriodeListe.map { it.tilCore() }
-        else throw UgyldigInputException("barnetilsynMedStonadPeriodeListe kan ikke være null"),
+      else throw UgyldigInputException("barnetilsynMedStonadPeriodeListe kan ikke være null"),
 
       nettoBarnetilsynPeriodeListe = emptyList(),
 
       forpleiningUtgiftPeriodeListe = if (forpleiningUtgiftPeriodeListe != null) forpleiningUtgiftPeriodeListe.map { it.tilCore() }
-        else throw UgyldigInputException("forpleiningUtgiftPeriodeListe kan ikke være null"),
+      else throw UgyldigInputException("forpleiningUtgiftPeriodeListe kan ikke være null"),
 
       sjablonPeriodeListe = emptyList()
   )
@@ -45,15 +46,16 @@ data class BeregnUnderholdskostnadGrunnlag(
 data class BarnetilsynMedStonadPeriode(
     @ApiModelProperty(value = "Bidragspliktiges barnetilsyn med stønad fra-til-dato") var barnetilsynMedStonadPeriodeDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Bidragspliktiges barnetilsyn med stønad tilsyn-type") var barnetilsynMedStonadTilsynType: String? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetisyn med stønad stønad-type") var barnetilsynMedStonadStonadType: String? = null
+    @ApiModelProperty(value = "Bidragspliktiges barnetilsyn med stønad stønad-type") var barnetilsynMedStonadStonadType: String? = null
 ) {
+
   fun tilCore() = BarnetilsynMedStonadPeriodeCore(
       barnetilsynMedStonadPeriodeDatoFraTil = if (barnetilsynMedStonadPeriodeDatoFraTil != null) barnetilsynMedStonadPeriodeDatoFraTil!!.tilCore()
-        else throw UgyldigInputException("barnetilsynMedStonadPeriodeDatoFraTil kan ikke være null"),
+      else throw UgyldigInputException("barnetilsynMedStonadPeriodeDatoFraTil kan ikke være null"),
       barnetilsynMedStonadTilsynType = if (barnetilsynMedStonadTilsynType != null) barnetilsynMedStonadTilsynType!!
-        else throw UgyldigInputException("barnetilsynMedStonadTilsynType kan ikke være null"),
+      else throw UgyldigInputException("barnetilsynMedStonadTilsynType kan ikke være null"),
       barnetilsynStonadStonadType = if (barnetilsynMedStonadStonadType != null) barnetilsynMedStonadStonadType!!
-        else throw UgyldigInputException("barnetilsynMedStonadStonadType kan ikke være null")
+      else throw UgyldigInputException("barnetilsynMedStonadStonadType kan ikke være null")
   )
 }
 
@@ -62,22 +64,23 @@ data class ForpleiningUtgiftPeriode(
     @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining fra-til-dato") var forpleiningUtgiftPeriodeDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining beløp") var forpleiningUtgiftBelop: Double? = null
 ) {
+
   fun tilCore() = ForpleiningUtgiftPeriodeCore(
       forpleiningUtgiftPeriodeDatoFraTil = if (forpleiningUtgiftPeriodeDatoFraTil != null) forpleiningUtgiftPeriodeDatoFraTil!!.tilCore()
-        else throw UgyldigInputException("forpleiningUtgiftPeriodeDatoFraTil kan ikke være null"),
+      else throw UgyldigInputException("forpleiningUtgiftPeriodeDatoFraTil kan ikke være null"),
       forpleiningUtgiftBelop = if (forpleiningUtgiftBelop != null) forpleiningUtgiftBelop!!
-        else throw UgyldigInputException("forpleiningUtgiftBelop kan ikke være null")
+      else throw UgyldigInputException("forpleiningUtgiftBelop kan ikke være null")
   )
 }
-
 
 // Resultat
 @ApiModel(value = "Totalresultatet av beregning av underholdskostnad")
 data class BeregnUnderholdskostnadResultat(
     @ApiModelProperty(
         value = "Periodisert liste over resultat av beregning av underholdskostnad")
-          var resultatPeriodeListe: List<ResultatPeriodeUnderholdskostnad> = emptyList()
+    var resultatPeriodeListe: List<ResultatPeriodeUnderholdskostnad> = emptyList()
 ) {
+
   constructor(beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultatCore) : this(
       resultatPeriodeListe = beregnUnderholdskostnadResultat.resultatPeriodeListe.map { ResultatPeriodeUnderholdskostnad(it) }
   )
@@ -89,6 +92,7 @@ data class ResultatPeriodeUnderholdskostnad(
     @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningUnderholdskostnad? = null,
     @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagUnderholdskostnad? = null
 ) {
+
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
       resultatDatoFraTil = Periode(resultatPeriode.resultatDatoFraTil),
       resultatBeregning = ResultatBeregningUnderholdskostnad(resultatPeriode.resultatBeregning),
@@ -100,6 +104,7 @@ data class ResultatPeriodeUnderholdskostnad(
 data class ResultatBeregningUnderholdskostnad(
     @ApiModelProperty(value = "Beløp underholdskostnad") var resultatBelopUnderholdskostnad: Double = 0.0
 ) {
+
   constructor(resultatBeregning: ResultatBeregningCore) : this(
       resultatBelopUnderholdskostnad = resultatBeregning.resultatBelopUnderholdskostnad
   )
@@ -114,6 +119,7 @@ data class ResultatGrunnlagUnderholdskostnad(
     @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: Double? = null,
     @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
+
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       soknadBarnAlder = resultatGrunnlag.soknadBarnAlder,
       barnetilsynMedStonadTilsynType = resultatGrunnlag.barnetilsynMedStonadTilsynType,
