@@ -17,7 +17,6 @@ import no.nav.bidrag.beregn.bidrag.rest.service.BeregnBidragService;
 import no.nav.bidrag.commons.web.HttpStatusResponse;
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -50,8 +49,8 @@ class BeregnBidragControllerTest {
   @DisplayName("Skal returnere bidrag resultat ved gyldig input")
   void skalReturnereBidragResultatVedGyldigInput() {
 
-    when(beregnBidragServiceMock.beregn(any(BeregnBidragGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse(OK, new BeregnBidragResultat(TestUtil.dummyBidragsevneResultat(), "Resten av resultatet")));
+    when(beregnBidragServiceMock.beregn(any(BeregnBidragGrunnlag.class))).thenReturn(new HttpStatusResponse(OK,
+        new BeregnBidragResultat(TestUtil.dummyBidragsevneResultat(), TestUtil.dummyUnderholdskostnadResultat(), "Resten av resultatet")));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-bidrag-rest/beregn/bidrag";
     var request = initHttpEntity(TestUtil.byggBidragGrunnlag());
@@ -61,6 +60,7 @@ class BeregnBidragControllerTest {
     assertAll(
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
         () -> assertThat(bidragResultat).isNotNull(),
+
         () -> assertThat(bidragResultat.getBeregnBidragsevneResultat()).isNotNull(),
         () -> assertThat(bidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe()).isNotNull(),
         () -> assertThat(bidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(1),
@@ -70,23 +70,38 @@ class BeregnBidragControllerTest {
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(bidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvne())
             .isEqualTo(100d),
+
+        () -> assertThat(bidragResultat.getBeregnUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(bidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(bidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(
+            bidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            .isEqualTo(LocalDate.parse("2017-01-01")),
+        () -> assertThat(
+            bidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            .isEqualTo(LocalDate.parse("2019-01-01")),
+        () -> assertThat(bidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelopUnderholdskostnad()).isEqualTo(100d),
+
         () -> assertThat(bidragResultat.getRestenAvResultatet()).isNotNull(),
         () -> assertThat(bidragResultat.getRestenAvResultatet()).isEqualTo("Resten av resultatet")
     );
   }
 
-  //TODO Implementere denne testen når inputkontroll er på plass
   @Test
-  @Disabled
   @DisplayName("Skal returnere 400 Bad Request når input data mangler")
   void skalReturnere400BadRequestNårInputDataMangler() {
 
+    when(beregnBidragServiceMock.beregn(any(BeregnBidragGrunnlag.class))).thenReturn(new HttpStatusResponse(BAD_REQUEST, null));
+
     var url = "http://localhost:" + port + "/bidrag-beregn-bidrag-rest/beregn/bidrag";
-    var request = initHttpEntity(new BeregnBidragGrunnlag(TestUtil.byggBidragsevneGrunnlagUtenBostatusKode(), " "));
+    var request = initHttpEntity(TestUtil.byggBidragGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnBidragResultat.class);
+    var bidragResultat = responseEntity.getBody();
 
     assertAll(
-        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST)
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST),
+        () -> assertThat(bidragResultat).isNull()
     );
   }
 
@@ -94,8 +109,7 @@ class BeregnBidragControllerTest {
   @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler")
   void skalReturnere500InternalServerErrorNårKallTilServicenFeiler() {
 
-    when(beregnBidragServiceMock.beregn(any(BeregnBidragGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse(INTERNAL_SERVER_ERROR, null));
+    when(beregnBidragServiceMock.beregn(any(BeregnBidragGrunnlag.class))).thenReturn(new HttpStatusResponse(INTERNAL_SERVER_ERROR, null));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-bidrag-rest/beregn/bidrag";
     var request = initHttpEntity(TestUtil.byggBidragGrunnlag());

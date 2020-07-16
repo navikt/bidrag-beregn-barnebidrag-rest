@@ -35,3 +35,5 @@ spec:
   env:
     - name: BIDRAGSEVNE_URL
       value: {{ bidragsevneurl }}
+    - name: SJABLON_URL
+      value: {{ sjablonurl }}

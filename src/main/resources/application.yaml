@@ -1,4 +1,5 @@
 BIDRAGSEVNE_URL: https://bidrag-beregn-bidragsevne-rest-q1.nais.preprod.local/bidrag-beregn-bidragsevne-rest
+SJABLON_URL: https://bidrag-sjablon-q1.nais.preprod.local/bidrag-sjablon
 
 server:
   servlet:
