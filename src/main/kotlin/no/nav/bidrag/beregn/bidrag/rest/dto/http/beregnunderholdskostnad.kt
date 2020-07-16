@@ -13,7 +13,7 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore
 import java.time.LocalDate
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for beregning av underholdskostnad")
+@ApiModel(value = "Grunnlaget for en underholdskostnadberegning")
 data class BeregnUnderholdskostnadGrunnlag(
     @ApiModelProperty(value = "Beregn underholdskostnad fra-dato") var beregnDatoFra: LocalDate? = null,
     @ApiModelProperty(value = "Beregn underholdskostnad til-dato") var beregnDatoTil: LocalDate? = null,
