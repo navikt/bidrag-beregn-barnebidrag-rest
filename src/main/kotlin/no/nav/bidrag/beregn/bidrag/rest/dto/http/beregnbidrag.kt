@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty
 @ApiModel(value = "Grunnlaget for en bidragsberegning")
 data class BeregnBidragGrunnlag(
     @ApiModelProperty(value = "Beregn bidragsevne grunnlag") var beregnBidragsevneGrunnlag: BeregnBidragsevneGrunnlag? = null,
+    @ApiModelProperty(value = "Beregn underholdskostnad grunnlag") var beregnUnderholdskostnadGrunnlag: BeregnUnderholdskostnadGrunnlag? = null,
     @ApiModelProperty(value = "Resten av grunnlaget") var restenAvGrunnlaget: String? = "Resten av grunnlaget"
 )
 
@@ -14,5 +15,6 @@ data class BeregnBidragGrunnlag(
 @ApiModel(value = "Resultatet av en bidragsberegning")
 data class BeregnBidragResultat(
     @ApiModelProperty(value = "Beregn bidragsevne resultat") var beregnBidragsevneResultat: BeregnBidragsevneResultat,
+    @ApiModelProperty(value = "Beregn underholdskostnad resultat") var beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultat,
     @ApiModelProperty(value = "Resten av resultatet") var restenAvResultatet: String
 )

@@ -1,6 +1,8 @@
 package no.nav.bidrag.beregn.bidrag.rest;
 
 import no.nav.bidrag.beregn.bidrag.rest.consumer.BidragsevneConsumer;
+import no.nav.bidrag.beregn.bidrag.rest.consumer.SjablonConsumer;
+import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.commons.ExceptionLogger;
 import no.nav.bidrag.commons.web.CorrelationIdFilter;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +15,18 @@ import org.springframework.web.client.RestTemplate;
 public class BidragBeregnBidrag {
 
   @Bean
+  public UnderholdskostnadCore underholdskostnadCore() {
+    return UnderholdskostnadCore.getInstance();
+  }
+
+  @Bean
   public BidragsevneConsumer bidragsevneConsumer(@Value("${BIDRAGSEVNE_URL}") String bidragsevneBaseUrl, RestTemplate restTemplate) {
     return new BidragsevneConsumer(restTemplate, bidragsevneBaseUrl);
+  }
+
+  @Bean
+  public SjablonConsumer sjablonConsumer(@Value("${SJABLON_URL}") String sjablonBaseUrl, RestTemplate restTemplate) {
+    return new SjablonConsumer(restTemplate, sjablonBaseUrl);
   }
 
   @Bean
@@ -30,5 +42,4 @@ public class BidragBeregnBidrag {
   public static void main(String[] args) {
     SpringApplication.run(BidragBeregnBidrag.class, args);
   }
-
 }

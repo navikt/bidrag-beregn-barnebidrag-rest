@@ -66,8 +66,7 @@ class BidragsevneConsumerTest {
         .thenReturn(new ResponseEntity(body, HttpStatus.SERVICE_UNAVAILABLE));
     var bidragsevneResponse = bidragsevneConsumer.hentBidragsevne(TestUtil.byggBidragsevneGrunnlag());
 
-    assertThat(bidragsevneResponse)
-        .isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.SERVICE_UNAVAILABLE,
+    assertThat(bidragsevneResponse).isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.SERVICE_UNAVAILABLE,
             "[error code:\"503\", error msg:\"SERVICE_UNAVAILABLE\", error text:\"Service utilgjengelig\"]"));
   }
 
