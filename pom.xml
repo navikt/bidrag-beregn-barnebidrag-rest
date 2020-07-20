@@ -11,7 +11,7 @@
   <artifactId>bidrag-beregn-barnebidrag-rest</artifactId>
   <version>0.0.7-SNAPSHOT</version>
   <name>bidrag-beregn-barnebidrag-rest</name>
-  <description>Beregning av bidrag</description>
+  <description>Beregning av barnebidrag</description>
 
   <properties>
     <!-- build -->
