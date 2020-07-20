@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: bidrag-beregn-bidrag-rest
+  name: bidrag-beregn-barnebidrag-rest
   namespace: {{ namespace }}
   labels:
     team: bidrag
@@ -9,18 +9,18 @@ spec:
   image: {{ image }}
   port: 8080
   liveness:
-    path: /bidrag-beregn-bidrag-rest/actuator/health
+    path: /bidrag-beregn-barnebidrag-rest/actuator/health
     initialDelay: 20
     timeout: 1
     periodSeconds: 5
     failureThreshold: 10
   readiness:
-    path: /bidrag-beregn-bidrag-rest/actuator/health
+    path: /bidrag-beregn-barnebidrag-rest/actuator/health
     initialDelay: 20
     timeout: 1
   prometheus:
     enabled: true
-    path: /bidrag-beregn-bidrag-rest/actuator/prometheus
+    path: /bidrag-beregn-barnebidrag-rest/actuator/prometheus
   resources:
     limits:
       cpu: 1000m
@@ -29,8 +29,8 @@ spec:
       cpu: 500m
       memory: 512Mi
   ingresses:
-    - https://bidrag-beregn-bidrag-rest.nais.adeo.no/
-    - https://bidrag-beregn-bidrag-rest.prod-fss.nais.io
+    - https://bidrag-beregn-barnebidrag-rest.nais.adeo.no/
+    - https://bidrag-beregn-barnebidrag-rest.prod-fss.nais.io
   vault:
     enabled: false
   env:

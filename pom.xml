@@ -8,9 +8,9 @@
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>no.nav.bidrag</groupId>
-  <artifactId>bidrag-beregn-bidrag-rest</artifactId>
+  <artifactId>bidrag-beregn-barnebidrag-rest</artifactId>
   <version>0.0.7-SNAPSHOT</version>
-  <name>bidrag-beregn-bidrag-rest</name>
+  <name>bidrag-beregn-barnebidrag-rest</name>
   <description>Beregning av bidrag</description>
 
   <properties>
