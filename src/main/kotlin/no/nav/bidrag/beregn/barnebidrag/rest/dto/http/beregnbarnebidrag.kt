@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty
 data class BeregnBarnebidragGrunnlag(
     @ApiModelProperty(value = "Beregn bidragsevne grunnlag") var beregnBidragsevneGrunnlag: BeregnBidragsevneGrunnlag? = null,
     @ApiModelProperty(value = "Beregn underholdskostnad grunnlag") var beregnUnderholdskostnadGrunnlag: BeregnUnderholdskostnadGrunnlag? = null,
+    @ApiModelProperty(value = "Beregn netto barnetilsyn grunnlag") var beregnNettoBarnetilsynGrunnlag: BeregnNettoBarnetilsynGrunnlag? = null,
     @ApiModelProperty(value = "Resten av grunnlaget") var restenAvGrunnlaget: String? = "Resten av grunnlaget"
 )
 
@@ -16,5 +17,6 @@ data class BeregnBarnebidragGrunnlag(
 data class BeregnBarnebidragResultat(
     @ApiModelProperty(value = "Beregn bidragsevne resultat") var beregnBidragsevneResultat: BeregnBidragsevneResultat,
     @ApiModelProperty(value = "Beregn underholdskostnad resultat") var beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultat,
+    @ApiModelProperty(value = "Beregn netto barnetilsyn resultat") var beregnNettoBarnetilsynResultat: BeregnNettoBarnetilsynResultat,
     @ApiModelProperty(value = "Resten av resultatet") var restenAvResultatet: String
 )
