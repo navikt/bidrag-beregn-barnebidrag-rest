@@ -118,4 +118,88 @@ class SjablonConsumerTest {
     assertThat(sjablonResponse)
         .isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ukjent feil ved kall av bidrag-sjablon"));
   }
+
+  @Test
+  @DisplayName("Skal hente liste av MaksTilsyn-sjabloner når respons fra tjenesten er OK")
+  void skalHenteListeAvMaksTilsynSjablonerNårResponsFraTjenestenErOk() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<MaksTilsyn>>) any()))
+        .thenReturn(new ResponseEntity<>(TestUtil.dummySjablonMaksTilsynListe(), HttpStatus.OK));
+    var sjablonResponse = sjablonConsumer.hentSjablonMaksTilsyn();
+
+    assertAll(
+        () -> assertThat(sjablonResponse).isNotNull(),
+        () -> assertThat(sjablonResponse.getBody().size()).isEqualTo(TestUtil.dummySjablonMaksTilsynListe().size()),
+        () -> assertThat(sjablonResponse.getBody().get(0).getMaksBelopTilsyn())
+            .isEqualTo(TestUtil.dummySjablonMaksTilsynListe().get(0).getMaksBelopTilsyn())
+    );
+  }
+
+  @Test
+  @DisplayName("Skal returnere mottatt status for MaksTilsyn-sjabloner når respons fra tjenesten ikke er OK")
+  void skalReturnereMottattStatusForMaksTilsynSjablonerNårResponsFraTjenestenIkkeErOk() {
+    MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+    body.put("error code", singletonList("503"));
+    body.put("error msg", singletonList("SERVICE_UNAVAILABLE"));
+    body.put("error text", singletonList("Service utilgjengelig"));
+
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<MaksTilsyn>>) any()))
+        .thenReturn(new ResponseEntity(body, HttpStatus.SERVICE_UNAVAILABLE));
+    var sjablonResponse = sjablonConsumer.hentSjablonMaksTilsyn();
+
+    assertThat(sjablonResponse).isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.SERVICE_UNAVAILABLE,
+            "[error code:\"503\", error msg:\"SERVICE_UNAVAILABLE\", error text:\"Service utilgjengelig\"]"));
+  }
+
+  @Test
+  @DisplayName("Skal returnere InternalServerError for MaksTilsyn-sjabloner når respons fra tjenesten er null")
+  void skalReturnereInternalServerErrorForMaksTilsynSjablonerNårResponsFraTjenestenErNull() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<MaksTilsyn>>) any()))
+        .thenReturn(null);
+    var sjablonResponse = sjablonConsumer.hentSjablonMaksTilsyn();
+
+    assertThat(sjablonResponse)
+        .isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ukjent feil ved kall av bidrag-sjablon"));
+  }
+
+  @Test
+  @DisplayName("Skal hente liste av MaksFradrag-sjabloner når respons fra tjenesten er OK")
+  void skalHenteListeAvMaksFradragSjablonerNårResponsFraTjenestenErOk() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<MaksFradrag>>) any()))
+        .thenReturn(new ResponseEntity<>(TestUtil.dummySjablonMaksFradragListe(), HttpStatus.OK));
+    var sjablonResponse = sjablonConsumer.hentSjablonMaksFradrag();
+
+    assertAll(
+        () -> assertThat(sjablonResponse).isNotNull(),
+        () -> assertThat(sjablonResponse.getBody().size()).isEqualTo(TestUtil.dummySjablonMaksFradragListe().size()),
+        () -> assertThat(sjablonResponse.getBody().get(0).getMaksBelopFradrag())
+            .isEqualTo(TestUtil.dummySjablonMaksFradragListe().get(0).getMaksBelopFradrag())
+    );
+  }
+
+  @Test
+  @DisplayName("Skal returnere mottatt status for MaksFradrag-sjabloner når respons fra tjenesten ikke er OK")
+  void skalReturnereMottattStatusForMaksFradragSjablonerNårResponsFraTjenestenIkkeErOk() {
+    MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+    body.put("error code", singletonList("503"));
+    body.put("error msg", singletonList("SERVICE_UNAVAILABLE"));
+    body.put("error text", singletonList("Service utilgjengelig"));
+
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<MaksFradrag>>) any()))
+        .thenReturn(new ResponseEntity(body, HttpStatus.SERVICE_UNAVAILABLE));
+    var sjablonResponse = sjablonConsumer.hentSjablonMaksFradrag();
+
+    assertThat(sjablonResponse).isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.SERVICE_UNAVAILABLE,
+            "[error code:\"503\", error msg:\"SERVICE_UNAVAILABLE\", error text:\"Service utilgjengelig\"]"));
+  }
+
+  @Test
+  @DisplayName("Skal returnere InternalServerError for MaksFradrag-sjabloner når respons fra tjenesten er null")
+  void skalReturnereInternalServerErrorForMaksFradragSjablonerNårResponsFraTjenestenErNull() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<MaksFradrag>>) any()))
+        .thenReturn(null);
+    var sjablonResponse = sjablonConsumer.hentSjablonMaksFradrag();
+
+    assertThat(sjablonResponse)
+        .isEqualToComparingFieldByField(new HttpStatusResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ukjent feil ved kall av bidrag-sjablon"));
+  }
 }
