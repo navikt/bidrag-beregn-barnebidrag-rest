@@ -214,10 +214,13 @@ public class BeregnBarnebidragService {
     nettoBarnetilsynResultat = nettoBarnetilsynCore.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlag);
 
     if (!nettoBarnetilsynResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn" + System.lineSeparator()
-          + "Netto barnetilsyn - grunnlag for beregning: " + nettoBarnetilsynGrunnlag + System.lineSeparator()
-          + "Netto barnetilsyn - avvik: " + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
-          .collect(Collectors.joining("; ")));
+      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet:" + System.lineSeparator()
+          + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Netto barnetilsyn - grunnlag for beregning:" + System.lineSeparator()
+          + "beregnDatoFra= " + nettoBarnetilsynGrunnlag.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + nettoBarnetilsynGrunnlag.getBeregnDatoTil() + System.lineSeparator()
+          + "faktiskUtgiftPeriodeListe= " + nettoBarnetilsynGrunnlag.getFaktiskUtgiftPeriodeListe());
       throw new UgyldigInputException(
           nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
     }
@@ -241,10 +244,16 @@ public class BeregnBarnebidragService {
     underholdskostnadResultat = underholdskostnadCore.beregnUnderholdskostnad(underholdskostnadGrunnlag);
 
     if (!underholdskostnadResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av underholdskostnad" + System.lineSeparator()
-          + "Underholdskostnad - grunnlag for beregning: " + underholdskostnadGrunnlag + System.lineSeparator()
-          + "Underholdskostnad - avvik: " + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
-          .collect(Collectors.joining("; ")));
+      LOGGER.error("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet:" + System.lineSeparator()
+          + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + underholdskostnadGrunnlag.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + underholdskostnadGrunnlag.getBeregnDatoTil() + System.lineSeparator()
+          + "soknadBarnFodselsdatoTil= " + underholdskostnadGrunnlag.getSoknadBarnFodselsdato() + System.lineSeparator()
+          + "barneTilsynMedStonadPeriodeListe= " + underholdskostnadGrunnlag.getBarnetilsynMedStonadPeriodeListe() + System.lineSeparator()
+          + "forpleiningUtgiftPeriodeListe= " + underholdskostnadGrunnlag.getForpleiningUtgiftPeriodeListe() + System.lineSeparator()
+          + "nettoBarnetilsynPeriodeListe= " + underholdskostnadGrunnlag.getNettoBarnetilsynPeriodeListe() + System.lineSeparator());
       throw new UgyldigInputException(
           underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
     }
