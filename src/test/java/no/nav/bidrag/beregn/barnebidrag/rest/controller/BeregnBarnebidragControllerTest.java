@@ -14,7 +14,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragService;
-import no.nav.bidrag.commons.web.HttpStatusResponse;
+import no.nav.bidrag.commons.web.HttpResponse;
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +49,7 @@ class BeregnBarnebidragControllerTest {
   @DisplayName("Skal returnere barnebidrag resultat ved gyldig input")
   void skalReturnereBarnebidragResultatVedGyldigInput() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(new HttpStatusResponse(OK,
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(OK,
         new BeregnBarnebidragResultat(TestUtil.dummyBidragsevneResultat(), TestUtil.dummyUnderholdskostnadResultat(),
             TestUtil.dummyNettoBarnetilsynResultat(), "Resten av resultatet")));
 
@@ -109,7 +109,7 @@ class BeregnBarnebidragControllerTest {
   @DisplayName("Skal returnere 400 Bad Request når input data mangler")
   void skalReturnere400BadRequestNårInputDataMangler() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(new HttpStatusResponse(BAD_REQUEST, null));
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST, null));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
@@ -126,7 +126,7 @@ class BeregnBarnebidragControllerTest {
   @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler")
   void skalReturnere500InternalServerErrorNårKallTilServicenFeiler() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(new HttpStatusResponse(INTERNAL_SERVER_ERROR, null));
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR, null));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
