@@ -109,7 +109,7 @@ class BeregnBarnebidragControllerTest {
   @DisplayName("Skal returnere 400 Bad Request når input data mangler")
   void skalReturnere400BadRequestNårInputDataMangler() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST, null));
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
@@ -126,7 +126,7 @@ class BeregnBarnebidragControllerTest {
   @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler")
   void skalReturnere500InternalServerErrorNårKallTilServicenFeiler() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR, null));
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
