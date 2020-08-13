@@ -26,7 +26,7 @@ import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore;
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
-import no.nav.bidrag.commons.web.HttpStatusResponse;
+import no.nav.bidrag.commons.web.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +35,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @DisplayName("BeregnBarnebidragServiceTest")
 class BeregnBarnebidragServiceTest {
@@ -59,29 +60,29 @@ class BeregnBarnebidragServiceTest {
   @Test
   @DisplayName("Skal beregne bidrag når retur fra SjablonConsumer, BidragsevneConsumer, UnderholdskostnadCore og NettoBarnetilsynCore er OK")
   void skalBeregneBidragsevneNårReturFraSjablonConsumerOgBidragsevneConsumerOgUnderholdskostnadCoreErOk() {
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
 
     when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
 
     var beregnBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag());
 
     assertAll(
-        () -> assertThat(beregnBarnebidragResultat.getHttpStatus()).isEqualTo(HttpStatus.OK),
-        () -> assertThat(beregnBarnebidragResultat.getBody()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnBidragsevneResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getRestenAvResultatet()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(1)
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getRestenAvResultatet()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(1)
     );
   }
 
@@ -91,14 +92,14 @@ class BeregnBarnebidragServiceTest {
     var underholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnUnderholdskostnadGrunnlagCore.class);
     var nettoBarnetilsynGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnNettoBarnetilsynGrunnlagCore.class);
 
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
 
     when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(underholdskostnadGrunnlagTilCoreCaptor.capture()))
         .thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCoreCaptor.capture()))
@@ -114,19 +115,19 @@ class BeregnBarnebidragServiceTest {
         TestUtil.dummySjablonMaksFradragListe().size() + TestUtil.dummySjablonMaksTilsynListe().size();
 
     assertAll(
-        () -> assertThat(beregnBarnebidragResultat.getHttpStatus()).isEqualTo(HttpStatus.OK),
-        () -> assertThat(beregnBarnebidragResultat.getBody()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
 
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().size())
             .isEqualTo(forventetAntallSjablonElementerUnderholdskostnad),
 
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
         () -> assertThat(nettoBarnetilsynGrunnlagTilCore.getSjablonPeriodeListe().size())
             .isEqualTo(forventetAntallSjablonElementerNettoBarnetilsyn),
@@ -172,7 +173,7 @@ class BeregnBarnebidragServiceTest {
     body.put("error code", "503");
     body.put("error msg", "SERVICE_UNAVAILABLE");
     body.put("error text", "Service utilgjengelig");
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpStatusResponse(HttpStatus.SERVICE_UNAVAILABLE, body.toString()));
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpResponse(new ResponseEntity(body, HttpStatus.SERVICE_UNAVAILABLE)));
 
     assertThatExceptionOfType(SjablonConsumerException.class)
         .isThrownBy(() -> beregnBarnebidragService
@@ -188,13 +189,13 @@ class BeregnBarnebidragServiceTest {
     body.put("error code", "503");
     body.put("error msg", "SERVICE_UNAVAILABLE");
     body.put("error text", "Service utilgjengelig");
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse(HttpStatus.SERVICE_UNAVAILABLE, body.toString()));
+        .thenReturn(new HttpResponse(new ResponseEntity(body, HttpStatus.SERVICE_UNAVAILABLE)));
 
     assertThatExceptionOfType(BidragsevneConsumerException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
@@ -204,13 +205,13 @@ class BeregnBarnebidragServiceTest {
   @Test
   @DisplayName("Skal kaste UgyldigInputException ved feil retur fra UnderholdskostnadCore")
   void skalKasteUgyldigInputExceptionVedFeilReturFraUnderholdskostnadCore() {
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCoreMedAvvik());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
 
@@ -223,13 +224,13 @@ class BeregnBarnebidragServiceTest {
   @Test
   @DisplayName("Skal kaste UgyldigInputException ved feil retur fra NettoBarnetilsynCore")
   void skalKasteUgyldigInputExceptionVedFeilReturFraNettoBarnetilsynCore() {
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(new HttpStatusResponse<>(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCoreMedAvvik());
 

@@ -39,7 +39,7 @@ import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatC
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore;
-import no.nav.bidrag.commons.web.HttpStatusResponse;
+import no.nav.bidrag.commons.web.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -55,11 +55,11 @@ public class BeregnBarnebidragService {
   private final UnderholdskostnadCore underholdskostnadCore;
   private final NettoBarnetilsynCore nettoBarnetilsynCore;
 
-  private HttpStatusResponse<BeregnBidragsevneResultat> bidragsevneResultat;
-  private HttpStatusResponse<List<Sjablontall>> sjablonSjablontallResponse;
-  private HttpStatusResponse<List<Forbruksutgifter>> sjablonForbruksutgifterResponse;
-  private HttpStatusResponse<List<MaksTilsyn>> sjablonMaksTilsynResponse;
-  private HttpStatusResponse<List<MaksFradrag>> sjablonMaksFradragResponse;
+  private HttpResponse<BeregnBidragsevneResultat> bidragsevneResultat;
+  private HttpResponse<List<Sjablontall>> sjablonSjablontallResponse;
+  private HttpResponse<List<Forbruksutgifter>> sjablonForbruksutgifterResponse;
+  private HttpResponse<List<MaksTilsyn>> sjablonMaksTilsynResponse;
+  private HttpResponse<List<MaksFradrag>> sjablonMaksFradragResponse;
   private BeregnUnderholdskostnadResultatCore underholdskostnadResultat;
   private BeregnNettoBarnetilsynResultatCore nettoBarnetilsynResultat;
 
@@ -115,7 +115,7 @@ public class BeregnBarnebidragService {
     this.nettoBarnetilsynCore = nettoBarnetilsynCore;
   }
 
-  public HttpStatusResponse<BeregnBarnebidragResultat> beregn(BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+  public HttpResponse<BeregnBarnebidragResultat> beregn(BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
 
     // Ekstraher grunnlag for beregning av underholdskostnad. Her gjøres også kontroll av inputdata
     var underholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnUnderholdskostnadGrunnlag().tilCore();
@@ -137,7 +137,7 @@ public class BeregnBarnebidragService {
 
     // Kall totalberegning
 
-    return new HttpStatusResponse(HttpStatus.OK, new BeregnBarnebidragResultat(bidragsevneResultat.getBody(),
+    return HttpResponse.from(HttpStatus.OK, new BeregnBarnebidragResultat(bidragsevneResultat.getResponseEntity().getBody(),
         new BeregnUnderholdskostnadResultat(underholdskostnadResultat), new BeregnNettoBarnetilsynResultat(nettoBarnetilsynResultat),
         "Resten av resultatet"));
   }
@@ -147,45 +147,53 @@ public class BeregnBarnebidragService {
     // Henter sjabloner for sjablontall
     sjablonSjablontallResponse = sjablonConsumer.hentSjablonSjablontall();
 
-    if (!(sjablonSjablontallResponse.getHttpStatus().is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (sjablontall). Status: {}", sjablonSjablontallResponse.getHttpStatus().toString());
+    if (!(sjablonSjablontallResponse.is2xxSuccessful())) {
+      LOGGER.error("Feil ved kall av bidrag-sjablon (sjablontall). Status: {}",
+          sjablonSjablontallResponse.getResponseEntity().getStatusCode().toString());
       throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (sjablontall). Status: "
-          + sjablonSjablontallResponse.getHttpStatus().toString() + " Melding: " + sjablonSjablontallResponse.getBody());
+          + sjablonSjablontallResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonSjablontallResponse.getResponseEntity()
+          .getBody());
     } else {
-      LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallResponse.getBody().size());
+      LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallResponse.getResponseEntity().getBody().size());
     }
 
     // Henter sjabloner for forbruksutgifter
     sjablonForbruksutgifterResponse = sjablonConsumer.hentSjablonForbruksutgifter();
 
-    if (!(sjablonForbruksutgifterResponse.getHttpStatus().is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (forbruksutgifter). Status: {}", sjablonForbruksutgifterResponse.getHttpStatus().toString());
+    if (!(sjablonForbruksutgifterResponse.is2xxSuccessful())) {
+      LOGGER.error("Feil ved kall av bidrag-sjablon (forbruksutgifter). Status: {}",
+          sjablonForbruksutgifterResponse.getResponseEntity().getStatusCode().toString());
       throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (forbruksutgifter). Status: "
-          + sjablonForbruksutgifterResponse.getHttpStatus().toString() + " Melding: " + sjablonForbruksutgifterResponse.getBody());
+          + sjablonForbruksutgifterResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonForbruksutgifterResponse
+          .getResponseEntity().getBody());
     } else {
-      LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterResponse.getBody().size());
+      LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterResponse.getResponseEntity().getBody().size());
     }
 
     // Henter sjabloner for maks tilsyn
     sjablonMaksTilsynResponse = sjablonConsumer.hentSjablonMaksTilsyn();
 
-    if (!(sjablonMaksTilsynResponse.getHttpStatus().is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (maks tilsyn). Status: {}", sjablonMaksTilsynResponse.getHttpStatus().toString());
+    if (!(sjablonMaksTilsynResponse.is2xxSuccessful())) {
+      LOGGER.error("Feil ved kall av bidrag-sjablon (maks tilsyn). Status: {}",
+          sjablonMaksTilsynResponse.getResponseEntity().getStatusCode().toString());
       throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (maks tilsyn). Status: "
-          + sjablonMaksTilsynResponse.getHttpStatus().toString() + " Melding: " + sjablonMaksTilsynResponse.getBody());
+          + sjablonMaksTilsynResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonMaksTilsynResponse.getResponseEntity()
+          .getBody());
     } else {
-      LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynResponse.getBody().size());
+      LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynResponse.getResponseEntity().getBody().size());
     }
 
     // Henter sjabloner for maks bidrag
     sjablonMaksFradragResponse = sjablonConsumer.hentSjablonMaksFradrag();
 
-    if (!(sjablonMaksFradragResponse.getHttpStatus().is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (maks fradrag). Status: {}", sjablonMaksFradragResponse.getHttpStatus().toString());
+    if (!(sjablonMaksFradragResponse.is2xxSuccessful())) {
+      LOGGER.error("Feil ved kall av bidrag-sjablon (maks fradrag). Status: {}",
+          sjablonMaksFradragResponse.getResponseEntity().getStatusCode().toString());
       throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (maks fradrag). Status: "
-          + sjablonMaksFradragResponse.getHttpStatus().toString() + " Melding: " + sjablonMaksFradragResponse.getBody());
+          + sjablonMaksFradragResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonMaksFradragResponse.getResponseEntity()
+          .getBody());
     } else {
-      LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragResponse.getBody().size());
+      LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragResponse.getResponseEntity().getBody().size());
     }
   }
 
@@ -193,10 +201,10 @@ public class BeregnBarnebidragService {
   private void beregnBidragsevne(BeregnBidragsevneGrunnlag bidragsevneGrunnlag) {
     bidragsevneResultat = bidragsevneConsumer.hentBidragsevne(bidragsevneGrunnlag);
 
-    if (!(bidragsevneResultat.getHttpStatus().is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-beregn-bidragsevne-rest. Status: {}", bidragsevneResultat.getHttpStatus().toString());
+    if (!(bidragsevneResultat.is2xxSuccessful())) {
+      LOGGER.error("Feil ved kall av bidrag-beregn-bidragsevne-rest. Status: {}", bidragsevneResultat.getResponseEntity().getStatusCode().toString());
       throw new BidragsevneConsumerException("Feil ved kall av bidrag-beregn-bidragsevne-rest. Status: "
-          + bidragsevneResultat.getHttpStatus().toString() + " Melding: " + bidragsevneResultat.getBody());
+          + bidragsevneResultat.getResponseEntity().getStatusCode().toString() + " Melding: " + bidragsevneResultat.getResponseEntity().getBody());
     }
   }
 
@@ -204,9 +212,9 @@ public class BeregnBarnebidragService {
   private void beregnNettoBarnetilsyn(BeregnNettoBarnetilsynGrunnlagCore nettoBarnetilsynGrunnlag) {
     // Populerer liste over aktuelle sjabloner
     var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
-    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonMaksTilsyn(sjablonMaksTilsynResponse.getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonMaksFradrag(sjablonMaksFradragResponse.getBody()));
+    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
+    sjablonPeriodeListe.addAll(mapSjablonMaksTilsyn(sjablonMaksTilsynResponse.getResponseEntity().getBody()));
+    sjablonPeriodeListe.addAll(mapSjablonMaksFradrag(sjablonMaksFradragResponse.getResponseEntity().getBody()));
     nettoBarnetilsynGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
 
     // Kaller core-modulen for beregning av netto barnetilsyn
@@ -232,8 +240,8 @@ public class BeregnBarnebidragService {
   private void beregnUnderholdskostnad(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlag) {
     // Populerer liste over aktuelle sjabloner
     var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
-    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonForbruksutgifter(sjablonForbruksutgifterResponse.getBody()));
+    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
+    sjablonPeriodeListe.addAll(mapSjablonForbruksutgifter(sjablonForbruksutgifterResponse.getResponseEntity().getBody()));
     underholdskostnadGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
 
     //TODO Legg til NettoBarnetilsynPeriodeCore fra netto barnetilsyn core-tjenesten
