@@ -222,21 +222,20 @@ public class BeregnBarnebidragService {
     nettoBarnetilsynResultat = nettoBarnetilsynCore.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlag);
 
     if (!nettoBarnetilsynResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet:" + System.lineSeparator()
-          + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
-          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: " + System.lineSeparator()
+          + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Netto barnetilsyn - grunnlag for beregning:" + System.lineSeparator()
           + "beregnDatoFra= " + nettoBarnetilsynGrunnlag.getBeregnDatoFra() + System.lineSeparator()
           + "beregnDatoTil= " + nettoBarnetilsynGrunnlag.getBeregnDatoTil() + System.lineSeparator()
           + "faktiskUtgiftPeriodeListe= " + nettoBarnetilsynGrunnlag.getFaktiskUtgiftPeriodeListe());
-      throw new UgyldigInputException(
-          nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+      throw new UgyldigInputException("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: "
+          + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
     }
 
     LOGGER.debug("Netto barnetilsyn - resultat av beregning: {}", nettoBarnetilsynResultat.getResultatPeriodeListe());
   }
 
-  // Kaller rest-modul for beregning av bidragsevne
+  // Kaller rest-modul for beregning av underholdskostnad
   private void beregnUnderholdskostnad(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlag) {
     // Populerer liste over aktuelle sjabloner
     var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
@@ -252,9 +251,8 @@ public class BeregnBarnebidragService {
     underholdskostnadResultat = underholdskostnadCore.beregnUnderholdskostnad(underholdskostnadGrunnlag);
 
     if (!underholdskostnadResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet:" + System.lineSeparator()
-          + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
-          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.error("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
+          + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
           + "beregnDatoFra= " + underholdskostnadGrunnlag.getBeregnDatoFra() + System.lineSeparator()
           + "beregnDatoTil= " + underholdskostnadGrunnlag.getBeregnDatoTil() + System.lineSeparator()
@@ -262,8 +260,8 @@ public class BeregnBarnebidragService {
           + "barneTilsynMedStonadPeriodeListe= " + underholdskostnadGrunnlag.getBarnetilsynMedStonadPeriodeListe() + System.lineSeparator()
           + "forpleiningUtgiftPeriodeListe= " + underholdskostnadGrunnlag.getForpleiningUtgiftPeriodeListe() + System.lineSeparator()
           + "nettoBarnetilsynPeriodeListe= " + underholdskostnadGrunnlag.getNettoBarnetilsynPeriodeListe() + System.lineSeparator());
-      throw new UgyldigInputException(
-          underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+      throw new UgyldigInputException("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: "
+          + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
     }
 
     LOGGER.debug("Underholdskostnad - resultat av beregning: {}", underholdskostnadResultat.getResultatPeriodeListe());
