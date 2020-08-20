@@ -1,7 +1,7 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.consumer;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.exception.BidragsevneConsumerException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +21,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,7 +36,7 @@ class BidragsevneConsumerTest {
 
   @Test
   @DisplayName("Skal hente Bidragsevne når respons fra tjenesten er OK")
-  void skalHenteBidragsevneNårResponsFraTjenestenErOk() {
+  void skalHenteBidragsevneNaarResponsFraTjenestenErOk() {
     when(restTemplateMock.exchange(anyString(), eq(HttpMethod.POST), any(), (ParameterizedTypeReference<BeregnBidragsevneResultat>) any()))
         .thenReturn(new ResponseEntity<>(TestUtil.dummyBidragsevneResultat(), HttpStatus.OK));
     var bidragsevneResponse = bidragsevneConsumer.hentBidragsevne(TestUtil.byggBidragsevneGrunnlag());
@@ -55,23 +55,12 @@ class BidragsevneConsumerTest {
   }
 
   @Test
-  @DisplayName("Skal returnere mottatt status for Bidragsevne når respons fra tjenesten ikke er OK")
-  void skalReturnereMottattStatusForBidragsevneNårResponsFraTjenestenIkkeErOk() {
-    MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-    body.put("error code", singletonList("503"));
-    body.put("error msg", singletonList("SERVICE_UNAVAILABLE"));
-    body.put("error text", singletonList("Service utilgjengelig"));
-
+  @DisplayName("Skal kaste BidragsevneConsumerException når respons fra tjenesten ikke er OK")
+  void skalKasteRestClientExceptionNaarResponsFraTjenestenIkkeErOk() {
     when(restTemplateMock.exchange(anyString(), eq(HttpMethod.POST), any(), (ParameterizedTypeReference<BeregnBidragsevneResultat>) any()))
-        .thenReturn(new ResponseEntity(body, HttpStatus.SERVICE_UNAVAILABLE));
-    var bidragsevneResponse = bidragsevneConsumer.hentBidragsevne(TestUtil.byggBidragsevneGrunnlag());
+        .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
 
-    assertAll(
-        () -> assertThat(bidragsevneResponse).isNotNull(),
-        () -> assertThat(bidragsevneResponse.getResponseEntity().getStatusCode()).isNotNull(),
-        () -> assertThat(bidragsevneResponse.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE),
-        () -> assertThat(bidragsevneResponse.getResponseEntity().getHeaders()).isNotNull(),
-        () -> assertThat(bidragsevneResponse.getResponseEntity().getHeaders().toString()).contains("Service utilgjengelig")
-    );
+    assertThatExceptionOfType(BidragsevneConsumerException.class)
+        .isThrownBy(() -> bidragsevneConsumer.hentBidragsevne(TestUtil.byggBidragsevneGrunnlag()));
   }
 }

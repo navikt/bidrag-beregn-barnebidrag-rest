@@ -3,6 +3,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest.consumer;
 import java.util.Collections;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.exception.BidragsevneConsumerException;
 import no.nav.bidrag.commons.web.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 public class BidragsevneConsumer {
@@ -35,9 +37,15 @@ public class BidragsevneConsumer {
 
     var request = new HttpEntity<>(bidragsevneGrunnlag, headers);
 
-    var bidragsevneResponse = restTemplate.exchange(bidragsevneUrl, HttpMethod.POST, request, BIDRAGSEVNE_RESULTAT);
-
-    LOGGER.info("hentBidragsevne fikk http status {} fra bidrag-beregn-bidragsevne-rest", bidragsevneResponse.getStatusCode());
-    return new HttpResponse<>(bidragsevneResponse);
+    try {
+      var bidragsevneResponse = restTemplate.exchange(bidragsevneUrl, HttpMethod.POST, request, BIDRAGSEVNE_RESULTAT);
+      LOGGER.info("hentBidragsevne fikk http status {} fra bidrag-beregn-bidragsevne-rest", bidragsevneResponse.getStatusCode());
+      return new HttpResponse<>(bidragsevneResponse);
+    } catch (RestClientResponseException exception) {
+      var meldingstekst = (exception.getResponseHeaders() != null) ? exception.getResponseHeaders().getFirst("Error") : "";
+      LOGGER.error("hentSjablonBidragsevne fikk følgende feilkode fra bidrag-beregn-bidragsevne-rest: {}, med melding {}", exception.getStatusText(),
+          meldingstekst);
+      throw new BidragsevneConsumerException(exception, meldingstekst);
+    }
   }
 }
