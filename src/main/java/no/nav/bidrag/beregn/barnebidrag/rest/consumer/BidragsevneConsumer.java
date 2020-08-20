@@ -43,7 +43,7 @@ public class BidragsevneConsumer {
       return new HttpResponse<>(bidragsevneResponse);
     } catch (RestClientResponseException exception) {
       var meldingstekst = (exception.getResponseHeaders() != null) ? exception.getResponseHeaders().getFirst("Error") : "";
-      LOGGER.error("hentSjablonBidragsevne fikk følgende feilkode fra bidrag-beregn-bidragsevne-rest: {}, med melding {}", exception.getStatusText(),
+      LOGGER.error("hentBidragsevne fikk følgende feilkode fra bidrag-beregn-bidragsevne-rest: {}, med melding {}", exception.getStatusText(),
           meldingstekst);
       throw new BidragsevneConsumerException(exception, meldingstekst);
     }
