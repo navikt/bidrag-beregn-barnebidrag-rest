@@ -18,7 +18,7 @@ public class BidragsevneConsumerException extends RuntimeException {
 
   public BidragsevneConsumerException(RestClientResponseException exception, String meldingstekst) {
     super(exception);
-    this.statusCode = HttpStatus.valueOf(exception.getStatusText());
+    this.statusCode = HttpStatus.valueOf(exception.getRawStatusCode());
     this.meldingstekst = meldingstekst;
   }
 
