@@ -1,10 +1,10 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.service;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +21,6 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnUnderholdskostnadResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.exception.BidragsevneConsumerException;
-import no.nav.bidrag.beregn.barnebidrag.rest.exception.SjablonConsumerException;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
 import no.nav.bidrag.beregn.felles.dto.PeriodeCore;
@@ -146,66 +144,24 @@ public class BeregnBarnebidragService {
   private void hentSjabloner() {
     // Henter sjabloner for sjablontall
     sjablonSjablontallResponse = sjablonConsumer.hentSjablonSjablontall();
-
-    if (!(sjablonSjablontallResponse.is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (sjablontall). Status: {}",
-          sjablonSjablontallResponse.getResponseEntity().getStatusCode().toString());
-      throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (sjablontall). Status: "
-          + sjablonSjablontallResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonSjablontallResponse.getResponseEntity()
-          .getBody());
-    } else {
-      LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallResponse.getResponseEntity().getBody().size());
-    }
+    LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallResponse.getResponseEntity().getBody().size());
 
     // Henter sjabloner for forbruksutgifter
     sjablonForbruksutgifterResponse = sjablonConsumer.hentSjablonForbruksutgifter();
-
-    if (!(sjablonForbruksutgifterResponse.is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (forbruksutgifter). Status: {}",
-          sjablonForbruksutgifterResponse.getResponseEntity().getStatusCode().toString());
-      throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (forbruksutgifter). Status: "
-          + sjablonForbruksutgifterResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonForbruksutgifterResponse
-          .getResponseEntity().getBody());
-    } else {
       LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterResponse.getResponseEntity().getBody().size());
-    }
 
     // Henter sjabloner for maks tilsyn
     sjablonMaksTilsynResponse = sjablonConsumer.hentSjablonMaksTilsyn();
-
-    if (!(sjablonMaksTilsynResponse.is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (maks tilsyn). Status: {}",
-          sjablonMaksTilsynResponse.getResponseEntity().getStatusCode().toString());
-      throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (maks tilsyn). Status: "
-          + sjablonMaksTilsynResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonMaksTilsynResponse.getResponseEntity()
-          .getBody());
-    } else {
       LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynResponse.getResponseEntity().getBody().size());
-    }
 
     // Henter sjabloner for maks bidrag
     sjablonMaksFradragResponse = sjablonConsumer.hentSjablonMaksFradrag();
-
-    if (!(sjablonMaksFradragResponse.is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-sjablon (maks fradrag). Status: {}",
-          sjablonMaksFradragResponse.getResponseEntity().getStatusCode().toString());
-      throw new SjablonConsumerException("Feil ved kall av bidrag-sjablon (maks fradrag). Status: "
-          + sjablonMaksFradragResponse.getResponseEntity().getStatusCode().toString() + " Melding: " + sjablonMaksFradragResponse.getResponseEntity()
-          .getBody());
-    } else {
       LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragResponse.getResponseEntity().getBody().size());
-    }
   }
 
   // Kaller rest-modul for beregning av bidragsevne
   private void beregnBidragsevne(BeregnBidragsevneGrunnlag bidragsevneGrunnlag) {
     bidragsevneResultat = bidragsevneConsumer.hentBidragsevne(bidragsevneGrunnlag);
-
-    if (!(bidragsevneResultat.is2xxSuccessful())) {
-      LOGGER.error("Feil ved kall av bidrag-beregn-bidragsevne-rest. Status: {}", bidragsevneResultat.getResponseEntity().getStatusCode().toString());
-      throw new BidragsevneConsumerException("Feil ved kall av bidrag-beregn-bidragsevne-rest. Status: "
-          + bidragsevneResultat.getResponseEntity().getStatusCode().toString() + " Melding: " + bidragsevneResultat.getResponseEntity().getBody());
-    }
   }
 
   // Kaller rest-modul for beregning av netto barnetilsyn
@@ -275,7 +231,7 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sSL.getDatoFom(), sSL.getDatoTom()),
             sjablontallMap.get(sSL.getTypeSjablon()),
             emptyList(),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sSL.getVerdi().doubleValue()))))
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sSL.getVerdi().doubleValue()))))
         .collect(toList());
   }
 
@@ -287,8 +243,8 @@ public class BeregnBarnebidragService {
         .map(sFL -> new SjablonPeriodeCore(
             new PeriodeCore(sFL.getDatoFom(), sFL.getDatoTom()),
             SjablonNavn.FORBRUKSUTGIFTER.getNavn(),
-            Arrays.asList(new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sFL.getAlderTom().toString())),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.FORBRUK_TOTAL_BELOP.getNavn(), sFL.getBelopForbrukTot().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sFL.getAlderTom().toString())),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.FORBRUK_TOTAL_BELOP.getNavn(), sFL.getBelopForbrukTot().doubleValue()))))
         .collect(toList());
   }
 
@@ -300,8 +256,8 @@ public class BeregnBarnebidragService {
         .map(sMTL -> new SjablonPeriodeCore(
             new PeriodeCore(sMTL.getDatoFom(), sMTL.getDatoTom()),
             SjablonNavn.MAKS_TILSYN.getNavn(),
-            Arrays.asList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMTL.getAntBarnTom().toString())),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_TILSYN_BELOP.getNavn(), sMTL.getMaksBelopTilsyn().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMTL.getAntBarnTom().toString())),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_TILSYN_BELOP.getNavn(), sMTL.getMaksBelopTilsyn().doubleValue()))))
         .collect(toList());
   }
 
@@ -313,8 +269,8 @@ public class BeregnBarnebidragService {
         .map(sMFL -> new SjablonPeriodeCore(
             new PeriodeCore(sMFL.getDatoFom(), sMFL.getDatoTom()),
             SjablonNavn.MAKS_FRADRAG.getNavn(),
-            Arrays.asList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMFL.getAntBarnTom().toString())),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sMFL.getMaksBelopFradrag().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMFL.getAntBarnTom().toString())),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sMFL.getMaksBelopFradrag().doubleValue()))))
         .collect(toList());
   }
 }

@@ -1,6 +1,5 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.exception;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,30 +9,38 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlerAdvice {
 
   @ExceptionHandler
-  public ResponseEntity<?> handleUgyldigInputException(UgyldigInputException ugyldigInputException) {
+  public ResponseEntity<?> handleUgyldigInputException(UgyldigInputException exception) {
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
-        .header(HttpHeaders.WARNING, warningFrom(ugyldigInputException))
+        .header("Error", errorMsg(exception))
         .build();
   }
 
   @ExceptionHandler
-  public ResponseEntity<?> handleBidragsevneConsumerException(BidragsevneConsumerException bidragsevneConsumerException) {
+  public ResponseEntity<?> handleBidragsevneConsumerException(BidragsevneConsumerException exception) {
     return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .header(HttpHeaders.WARNING, warningFrom(bidragsevneConsumerException))
+        .status(exception.getStatusCode())
+        .header("Error", errorMsg(exception, exception.getMeldingstekst()))
         .build();
   }
 
   @ExceptionHandler
-  public ResponseEntity<?> handleSjablonConsumerException(SjablonConsumerException sjablonConsumerException) {
+  public ResponseEntity<?> handleSjablonConsumerException(SjablonConsumerException exception) {
     return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .header(HttpHeaders.WARNING, warningFrom(sjablonConsumerException))
+        .status(exception.getStatusCode())
+        .header("Error", errorMsg(exception))
         .build();
   }
 
-  private String warningFrom(RuntimeException runtimeException) {
+  private String errorMsg(RuntimeException runtimeException) {
     return String.format("%s: %s", runtimeException.getClass().getSimpleName(), runtimeException.getMessage());
+  }
+
+  private String errorMsg(RuntimeException runtimeException, String meldingstekst) {
+    if (meldingstekst.isBlank()) {
+      return errorMsg(runtimeException);
+    } else {
+      return String.format("%s: %s", runtimeException.getClass().getSimpleName(), meldingstekst);
+    }
   }
 }

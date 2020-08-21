@@ -1,11 +1,13 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.consumer;
 
 import java.util.List;
+import no.nav.bidrag.beregn.barnebidrag.rest.exception.SjablonConsumerException;
 import no.nav.bidrag.commons.web.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 public class SjablonConsumer {
@@ -35,30 +37,54 @@ public class SjablonConsumer {
   }
 
   public HttpResponse<List<Sjablontall>> hentSjablonSjablontall() {
-    var sjablonResponse = restTemplate.exchange(sjablonSjablontallUrl, HttpMethod.GET, null, SJABLON_SJABLONTALL_LISTE);
 
-    LOGGER.info("hentSjablonSjablontall fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
-    return new HttpResponse<>(sjablonResponse);
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonSjablontallUrl, HttpMethod.GET, null, SJABLON_SJABLONTALL_LISTE);
+      LOGGER.info("hentSjablonSjablontall fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonSjablontall fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
   }
 
   public HttpResponse<List<Forbruksutgifter>> hentSjablonForbruksutgifter() {
-    var sjablonResponse = restTemplate.exchange(sjablonForbruksutgifterUrl, HttpMethod.GET, null, SJABLON_FORBRUKSUTGIFTER_LISTE);
 
-    LOGGER.info("hentSjablonForbruksutgifter fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
-    return new HttpResponse<>(sjablonResponse);
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonForbruksutgifterUrl, HttpMethod.GET, null, SJABLON_FORBRUKSUTGIFTER_LISTE);
+      LOGGER.info("hentSjablonForbruksutgifter fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonForbruksutgifter fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
   }
 
   public HttpResponse<List<MaksTilsyn>> hentSjablonMaksTilsyn() {
-    var sjablonResponse = restTemplate.exchange(sjablonMaksTilsynUrl, HttpMethod.GET, null, SJABLON_MAKS_TILSYN_LISTE);
 
-    LOGGER.info("hentSjablonMaksTilsyn fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
-    return new HttpResponse<>(sjablonResponse);
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonMaksTilsynUrl, HttpMethod.GET, null, SJABLON_MAKS_TILSYN_LISTE);
+      LOGGER.info("hentSjablonMaksTilsyn fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonMaksTilsyn fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
   }
 
   public HttpResponse<List<MaksFradrag>> hentSjablonMaksFradrag() {
-    var sjablonResponse = restTemplate.exchange(sjablonMaksFradragUrl, HttpMethod.GET, null, SJABLON_MAKS_FRADRAG_LISTE);
 
-    LOGGER.info("hentSjablonMaksFradrag fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
-    return new HttpResponse<>(sjablonResponse);
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonMaksFradragUrl, HttpMethod.GET, null, SJABLON_MAKS_FRADRAG_LISTE);
+      LOGGER.info("hentSjablonMaksFradrag fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonMaksFradrag fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
   }
 }
