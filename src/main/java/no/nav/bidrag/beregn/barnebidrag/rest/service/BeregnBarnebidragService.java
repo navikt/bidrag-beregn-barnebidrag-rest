@@ -148,15 +148,15 @@ public class BeregnBarnebidragService {
 
     // Henter sjabloner for forbruksutgifter
     sjablonForbruksutgifterResponse = sjablonConsumer.hentSjablonForbruksutgifter();
-      LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterResponse.getResponseEntity().getBody().size());
+    LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterResponse.getResponseEntity().getBody().size());
 
     // Henter sjabloner for maks tilsyn
     sjablonMaksTilsynResponse = sjablonConsumer.hentSjablonMaksTilsyn();
-      LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynResponse.getResponseEntity().getBody().size());
+    LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynResponse.getResponseEntity().getBody().size());
 
     // Henter sjabloner for maks bidrag
     sjablonMaksFradragResponse = sjablonConsumer.hentSjablonMaksFradrag();
-      LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragResponse.getResponseEntity().getBody().size());
+    LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragResponse.getResponseEntity().getBody().size());
   }
 
   // Kaller rest-modul for beregning av bidragsevne
