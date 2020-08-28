@@ -21,12 +21,15 @@ public class SjablonConsumer {
   };
   private static final ParameterizedTypeReference<List<MaksFradrag>> SJABLON_MAKS_FRADRAG_LISTE = new ParameterizedTypeReference<>() {
   };
+  private static final ParameterizedTypeReference<List<Samvaersfradrag>> SJABLON_SAMVAERSFRADRAG_LISTE = new ParameterizedTypeReference<>() {
+  };
 
   private final RestTemplate restTemplate;
   private final String sjablonSjablontallUrl;
   private final String sjablonForbruksutgifterUrl;
   private final String sjablonMaksTilsynUrl;
   private final String sjablonMaksFradragUrl;
+  private final String sjablonSamvaersfradragUrl;
 
   public SjablonConsumer(RestTemplate restTemplate, String sjablonBaseUrl) {
     this.restTemplate = restTemplate;
@@ -34,10 +37,10 @@ public class SjablonConsumer {
     this.sjablonForbruksutgifterUrl = sjablonBaseUrl + "/forbruksutgifter/all";
     this.sjablonMaksTilsynUrl = sjablonBaseUrl + "/makstilsyn/all";
     this.sjablonMaksFradragUrl = sjablonBaseUrl + "/maksfradrag/all";
+    this.sjablonSamvaersfradragUrl = sjablonBaseUrl + "/samvaersfradrag/all";
   }
 
   public HttpResponse<List<Sjablontall>> hentSjablonSjablontall() {
-
     try {
       var sjablonResponse = restTemplate.exchange(sjablonSjablontallUrl, HttpMethod.GET, null, SJABLON_SJABLONTALL_LISTE);
       LOGGER.info("hentSjablonSjablontall fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
@@ -50,7 +53,6 @@ public class SjablonConsumer {
   }
 
   public HttpResponse<List<Forbruksutgifter>> hentSjablonForbruksutgifter() {
-
     try {
       var sjablonResponse = restTemplate.exchange(sjablonForbruksutgifterUrl, HttpMethod.GET, null, SJABLON_FORBRUKSUTGIFTER_LISTE);
       LOGGER.info("hentSjablonForbruksutgifter fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
@@ -63,7 +65,6 @@ public class SjablonConsumer {
   }
 
   public HttpResponse<List<MaksTilsyn>> hentSjablonMaksTilsyn() {
-
     try {
       var sjablonResponse = restTemplate.exchange(sjablonMaksTilsynUrl, HttpMethod.GET, null, SJABLON_MAKS_TILSYN_LISTE);
       LOGGER.info("hentSjablonMaksTilsyn fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
@@ -76,13 +77,24 @@ public class SjablonConsumer {
   }
 
   public HttpResponse<List<MaksFradrag>> hentSjablonMaksFradrag() {
-
     try {
       var sjablonResponse = restTemplate.exchange(sjablonMaksFradragUrl, HttpMethod.GET, null, SJABLON_MAKS_FRADRAG_LISTE);
       LOGGER.info("hentSjablonMaksFradrag fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
       return new HttpResponse<>(sjablonResponse);
     } catch (RestClientResponseException exception) {
       LOGGER.error("hentSjablonMaksFradrag fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
+  }
+
+  public HttpResponse<List<Samvaersfradrag>> hentSjablonSamvaersfradrag() {
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonSamvaersfradragUrl, HttpMethod.GET, null, SJABLON_SAMVAERSFRADRAG_LISTE);
+      LOGGER.info("hentSjablonSamvaersfradrag fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonSamvaersfradrag fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
           exception.getMessage());
       throw new SjablonConsumerException(exception);
     }

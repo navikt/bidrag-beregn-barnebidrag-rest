@@ -183,4 +183,62 @@ class DtoTest {
     var grunnlag = TestUtil.byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftBelop();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("faktiskUtgiftBelop kan ikke være null");
   }
+
+  // Samværsfradrag
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarSFBeregnDatoFraErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenBeregnDatoFra();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("beregnDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarSFBeregnDatoTilErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenBeregnDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("beregnDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når soknadsbarnFodselsdato er null")
+  void skalKasteIllegalArgumentExceptionNaarSFSoknadsbarnFodselsdatoErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSoknadsbarnFodselsdato();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("soknadsbarnFodselsdato kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når samvaersklassePeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarSFSamvaersklassePeriodeListeErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("samvaersklassePeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når samvaersklassePeriodeDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarSFSamvaersklassePeriodeDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeDatoFraTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("samvaersklassePeriodeDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når samvaersklassePeriodeDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarSFSamvaersklassePeriodeDatoFraErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeDatoFra();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("periodeDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når samvaersklassePeriodeDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarSFSamvaersklassePeriodeDatoTilErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("periodeDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når samvaersklasse er null")
+  void skalKasteIllegalArgumentExceptionNaarSFSamvaersklasseErNull() {
+    var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklasse();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore).withMessage("samvaersklasse kan ikke være null");
+  }
 }

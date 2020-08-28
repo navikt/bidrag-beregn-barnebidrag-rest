@@ -3,6 +3,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.BidragsevneConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
+import no.nav.bidrag.beregn.samvaersfradrag.SamvaersfradragCore;
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.commons.ExceptionLogger;
 import no.nav.bidrag.commons.web.CorrelationIdFilter;
@@ -16,13 +17,18 @@ import org.springframework.web.client.RestTemplate;
 public class BidragBeregnBarnebidrag {
 
   @Bean
+  public NettoBarnetilsynCore nettoBarnetilsynCore() {
+    return NettoBarnetilsynCore.getInstance();
+  }
+
+  @Bean
   public UnderholdskostnadCore underholdskostnadCore() {
     return UnderholdskostnadCore.getInstance();
   }
 
   @Bean
-  public NettoBarnetilsynCore nettoBarnetilsynCore() {
-    return NettoBarnetilsynCore.getInstance();
+  public SamvaersfradragCore samvaersfradragCore() {
+    return SamvaersfradragCore.getInstance();
   }
 
   @Bean
