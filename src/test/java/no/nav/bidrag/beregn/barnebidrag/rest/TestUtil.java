@@ -73,6 +73,46 @@ public class TestUtil {
     return byggBidragsevneGrunnlag("");
   }
 
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlag() {
+    return byggNettoBarnetilsynGrunnlag("");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenBeregnDatoFra() {
+    return byggNettoBarnetilsynGrunnlag("beregnDatoFra");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenBeregnDatoTil() {
+    return byggNettoBarnetilsynGrunnlag("beregnDatoTil");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeListe() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeListe");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeDatoFraTil() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeDatoFraTil");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeDatoFra() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeDatoFra");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeDatoTil() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeDatoTil");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftSoknadsbarnFodselsdato() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftSoknadsbarnFodselsdato");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftSoknadsbarnPersonId() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftSoknadsbarnPersonId");
+  }
+
+  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftBelop() {
+    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftBelop");
+  }
+
   public static BeregnUnderholdskostnadGrunnlag byggUnderholdskostnadGrunnlag() {
     return byggUnderholdskostnadGrunnlag("");
   }
@@ -131,46 +171,6 @@ public class TestUtil {
 
   public static BeregnUnderholdskostnadGrunnlag byggUnderholdskostnadGrunnlagUtenForpleiningUtgiftBelop() {
     return byggUnderholdskostnadGrunnlag("forpleiningUtgiftBelop");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlag() {
-    return byggNettoBarnetilsynGrunnlag("");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenBeregnDatoFra() {
-    return byggNettoBarnetilsynGrunnlag("beregnDatoFra");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenBeregnDatoTil() {
-    return byggNettoBarnetilsynGrunnlag("beregnDatoTil");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeListe() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeListe");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeDatoFraTil() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeDatoFraTil");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeDatoFra() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeDatoFra");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeDatoTil() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftPeriodeDatoTil");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftSoknadsbarnFodselsdato() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftSoknadsbarnFodselsdato");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftSoknadsbarnPersonId() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftSoknadsbarnPersonId");
-  }
-
-  public static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftBelop() {
-    return byggNettoBarnetilsynGrunnlag("faktiskUtgiftBelop");
   }
 
   public static BeregnSamvaersfradragGrunnlag byggSamvaersfradragGrunnlag() {
@@ -305,6 +305,35 @@ public class TestUtil {
         antallBarnIEgetHusholdPeriodeListe, saerfradragPeriodeListe);
   }
 
+  // Bygger opp NettoBarnetilsynGrunnlag
+  private static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlag(String nullVerdi) {
+    var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var beregnDatoTil = (nullVerdi.equals("beregnDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var faktiskUtgiftPeriodeDatoFra = (nullVerdi.equals("faktiskUtgiftPeriodeDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var faktiskUtgiftPeriodeDatoTil = (nullVerdi.equals("faktiskUtgiftPeriodeDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var faktiskUtgiftSoknadsbarnFodselsdato = (nullVerdi.equals("faktiskUtgiftSoknadsbarnFodselsdato") ? null : LocalDate.parse("2010-01-01"));
+    var faktiskUtgiftSoknadsbarnPersonId = (nullVerdi.equals("faktiskUtgiftSoknadsbarnPersonId") ? null : 1);
+    var faktiskUtgiftBelop = (nullVerdi.equals("faktiskUtgiftBelop") ? null : 1000d);
+
+    List<FaktiskUtgiftPeriode> faktiskUtgiftPeriodeListe;
+    if (nullVerdi.equals("faktiskUtgiftPeriodeListe")) {
+      faktiskUtgiftPeriodeListe = null;
+    } else {
+      FaktiskUtgiftPeriode faktiskUtgiftPeriode;
+      if (nullVerdi.equals("faktiskUtgiftPeriodeDatoFraTil")) {
+        faktiskUtgiftPeriode = new FaktiskUtgiftPeriode(null, faktiskUtgiftSoknadsbarnFodselsdato, faktiskUtgiftSoknadsbarnPersonId,
+            faktiskUtgiftBelop);
+      } else {
+        faktiskUtgiftPeriode = new FaktiskUtgiftPeriode(new Periode(faktiskUtgiftPeriodeDatoFra, faktiskUtgiftPeriodeDatoTil),
+            faktiskUtgiftSoknadsbarnFodselsdato, faktiskUtgiftSoknadsbarnPersonId, faktiskUtgiftBelop);
+      }
+      faktiskUtgiftPeriodeListe = new ArrayList<>();
+      faktiskUtgiftPeriodeListe.add(faktiskUtgiftPeriode);
+    }
+
+    return new BeregnNettoBarnetilsynGrunnlag(beregnDatoFra, beregnDatoTil, faktiskUtgiftPeriodeListe);
+  }
+
   // Bygger opp BeregnUnderholdskostnadGrunnlag
   private static BeregnUnderholdskostnadGrunnlag byggUnderholdskostnadGrunnlag(String nullVerdi) {
     var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
@@ -352,35 +381,6 @@ public class TestUtil {
         forpleiningUtgiftPeriodeListe);
   }
 
-  // Bygger opp NettoBarnetilsynGrunnlag
-  private static BeregnNettoBarnetilsynGrunnlag byggNettoBarnetilsynGrunnlag(String nullVerdi) {
-    var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
-    var beregnDatoTil = (nullVerdi.equals("beregnDatoTil") ? null : LocalDate.parse("2020-01-01"));
-    var faktiskUtgiftPeriodeDatoFra = (nullVerdi.equals("faktiskUtgiftPeriodeDatoFra") ? null : LocalDate.parse("2017-01-01"));
-    var faktiskUtgiftPeriodeDatoTil = (nullVerdi.equals("faktiskUtgiftPeriodeDatoTil") ? null : LocalDate.parse("2020-01-01"));
-    var faktiskUtgiftSoknadsbarnFodselsdato = (nullVerdi.equals("faktiskUtgiftSoknadsbarnFodselsdato") ? null : LocalDate.parse("2010-01-01"));
-    var faktiskUtgiftSoknadsbarnPersonId = (nullVerdi.equals("faktiskUtgiftSoknadsbarnPersonId") ? null : 1);
-    var faktiskUtgiftBelop = (nullVerdi.equals("faktiskUtgiftBelop") ? null : 1000d);
-
-    List<FaktiskUtgiftPeriode> faktiskUtgiftPeriodeListe;
-    if (nullVerdi.equals("faktiskUtgiftPeriodeListe")) {
-      faktiskUtgiftPeriodeListe = null;
-    } else {
-      FaktiskUtgiftPeriode faktiskUtgiftPeriode;
-      if (nullVerdi.equals("faktiskUtgiftPeriodeDatoFraTil")) {
-        faktiskUtgiftPeriode = new FaktiskUtgiftPeriode(null, faktiskUtgiftSoknadsbarnFodselsdato, faktiskUtgiftSoknadsbarnPersonId,
-            faktiskUtgiftBelop);
-      } else {
-        faktiskUtgiftPeriode = new FaktiskUtgiftPeriode(new Periode(faktiskUtgiftPeriodeDatoFra, faktiskUtgiftPeriodeDatoTil),
-            faktiskUtgiftSoknadsbarnFodselsdato, faktiskUtgiftSoknadsbarnPersonId, faktiskUtgiftBelop);
-      }
-      faktiskUtgiftPeriodeListe = new ArrayList<>();
-      faktiskUtgiftPeriodeListe.add(faktiskUtgiftPeriode);
-    }
-
-    return new BeregnNettoBarnetilsynGrunnlag(beregnDatoFra, beregnDatoTil, faktiskUtgiftPeriodeListe);
-  }
-
   // Bygger opp Samværsfradrag
   private static BeregnSamvaersfradragGrunnlag byggSamvaersfradragGrunnlag(String nullVerdi) {
     var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
@@ -388,7 +388,7 @@ public class TestUtil {
     var soknadsbarnFodselsdato = (nullVerdi.equals("soknadsbarnFodselsdato") ? null : LocalDate.parse("2017-01-01"));
     var samvaersklassePeriodeDatoFra = (nullVerdi.equals("samvaersklassePeriodeDatoFra") ? null : LocalDate.parse("2017-01-01"));
     var samvaersklassePeriodeDatoTil = (nullVerdi.equals("samvaersklassePeriodeDatoTil") ? null : LocalDate.parse("2020-01-01"));
-    var samvaersklasse = (nullVerdi.equals("samvaersklasse") ? null : "Klasse");
+    var samvaersklasse = (nullVerdi.equals("samvaersklasse") ? null : "00");
 
     List<SamvaersklassePeriode> samvaersklassePeriodeListe;
     if (nullVerdi.equals("samvaersklassePeriodeListe")) {
@@ -417,6 +417,37 @@ public class TestUtil {
             "HELT", singletonList(new Sjablon(SjablonTallNavn.TRYGDEAVGIFT_PROSENT.getNavn(), emptyList(),
             singletonList(new SjablonInnhold(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), 8d)))))));
     return new BeregnBidragsevneResultat(bidragPeriodeResultatListe);
+  }
+
+  // Bygger opp BeregnNettoBarnetilsynResultat
+  public static BeregnNettoBarnetilsynResultat dummyNettoBarnetilsynResultat() {
+    var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeNettoBarnetilsyn>();
+    bidragPeriodeResultatListe.add(new ResultatPeriodeNettoBarnetilsyn(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        singletonList(new ResultatBeregningNettoBarnetilsyn(1, 100)),
+        new ResultatGrunnlagNettoBarnetilsyn(singletonList(new ResultatGrunnlagFaktiskUtgift(LocalDate.parse("2010-01-01"), 1, 100d)),
+            emptyList())));
+    return new BeregnNettoBarnetilsynResultat(bidragPeriodeResultatListe);
+  }
+
+  // Bygger opp BeregnNettoBarnetilsynResultatCore
+  public static BeregnNettoBarnetilsynResultatCore dummyNettoBarnetilsynResultatCore() {
+    var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore>();
+    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore(
+        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        singletonList(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatBeregningCore(1, 100)),
+        new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatGrunnlagCore(
+            singletonList(new FaktiskUtgiftCore(LocalDate.parse("2010-01-01"), 1, 100d)), emptyList())));
+    return new BeregnNettoBarnetilsynResultatCore(bidragPeriodeResultatListe, emptyList());
+  }
+
+  // Bygger opp BeregnNettoBarnetilsynResultatCore med avvik
+  public static BeregnNettoBarnetilsynResultatCore dummyNettoBarnetilsynResultatCoreMedAvvik() {
+    var avvikListe = new ArrayList<AvvikCore>();
+    avvikListe.add(new AvvikCore("beregnDatoFra kan ikke være null", "NULL_VERDI_I_DATO"));
+    avvikListe.add(new AvvikCore(
+        "periodeDatoTil må være etter periodeDatoFra i faktiskUtgiftPeriodeListe: periodeDatoFra=2018-04-01, periodeDatoTil=2018-03-01",
+        "DATO_FRA_ETTER_DATO_TIL"));
+    return new BeregnNettoBarnetilsynResultatCore(emptyList(), avvikListe);
   }
 
   // Bygger opp BeregnUnderholdskostnadResultat
@@ -451,43 +482,12 @@ public class TestUtil {
     return new BeregnUnderholdskostnadResultatCore(emptyList(), avvikListe);
   }
 
-  // Bygger opp BeregnNettoBarnetilsynResultat
-  public static BeregnNettoBarnetilsynResultat dummyNettoBarnetilsynResultat() {
-    var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeNettoBarnetilsyn>();
-    bidragPeriodeResultatListe.add(new ResultatPeriodeNettoBarnetilsyn(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        singletonList(new ResultatBeregningNettoBarnetilsyn(1, 100)),
-        new ResultatGrunnlagNettoBarnetilsyn(singletonList(new ResultatGrunnlagFaktiskUtgift(LocalDate.parse("2010-01-01"), 1, 100d)),
-            emptyList())));
-    return new BeregnNettoBarnetilsynResultat(bidragPeriodeResultatListe);
-  }
-
-  // Bygger opp BeregnNettoBarnetilsynResultatCore
-  public static BeregnNettoBarnetilsynResultatCore dummyNettoBarnetilsynResultatCore() {
-    var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore>();
-    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore(
-        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        singletonList(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatBeregningCore(1, 100)),
-        new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatGrunnlagCore(
-            singletonList(new FaktiskUtgiftCore(LocalDate.parse("2010-01-01"), 1, 100d)), emptyList())));
-    return new BeregnNettoBarnetilsynResultatCore(bidragPeriodeResultatListe, emptyList());
-  }
-
-  // Bygger opp BeregnNettoBarnetilsynResultatCore med avvik
-  public static BeregnNettoBarnetilsynResultatCore dummyNettoBarnetilsynResultatCoreMedAvvik() {
-    var avvikListe = new ArrayList<AvvikCore>();
-    avvikListe.add(new AvvikCore("beregnDatoFra kan ikke være null", "NULL_VERDI_I_DATO"));
-    avvikListe.add(new AvvikCore(
-        "periodeDatoTil må være etter periodeDatoFra i faktiskUtgiftPeriodeListe: periodeDatoFra=2018-04-01, periodeDatoTil=2018-03-01",
-        "DATO_FRA_ETTER_DATO_TIL"));
-    return new BeregnNettoBarnetilsynResultatCore(emptyList(), avvikListe);
-  }
-
   // Bygger opp BeregnSamvaersfradragResultat
   public static BeregnSamvaersfradragResultat dummySamvaersfradragResultat() {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeSamvaersfradrag>();
     bidragPeriodeResultatListe.add(new ResultatPeriodeSamvaersfradrag(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new ResultatBeregningSamvaersfradrag(100d),
-        new ResultatGrunnlagSamvaersfradrag(9, "A", emptyList())));
+        new ResultatGrunnlagSamvaersfradrag(9, "00", emptyList())));
     return new BeregnSamvaersfradragResultat(bidragPeriodeResultatListe);
   }
 
@@ -497,7 +497,7 @@ public class TestUtil {
     bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore(
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatBeregningCore(100d),
-        new no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatGrunnlagCore(9, "A", emptyList())));
+        new no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatGrunnlagCore(9, "00", emptyList())));
     return new BeregnSamvaersfradragResultatCore(bidragPeriodeResultatListe, emptyList());
   }
 
