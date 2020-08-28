@@ -7,8 +7,9 @@ import io.swagger.annotations.ApiModelProperty
 @ApiModel(value = "Grunnlaget for en barnebidragsberegning")
 data class BeregnBarnebidragGrunnlag(
     @ApiModelProperty(value = "Beregn bidragsevne grunnlag") var beregnBidragsevneGrunnlag: BeregnBidragsevneGrunnlag? = null,
-    @ApiModelProperty(value = "Beregn underholdskostnad grunnlag") var beregnUnderholdskostnadGrunnlag: BeregnUnderholdskostnadGrunnlag? = null,
     @ApiModelProperty(value = "Beregn netto barnetilsyn grunnlag") var beregnNettoBarnetilsynGrunnlag: BeregnNettoBarnetilsynGrunnlag? = null,
+    @ApiModelProperty(value = "Beregn underholdskostnad grunnlag") var beregnUnderholdskostnadGrunnlag: BeregnUnderholdskostnadGrunnlag? = null,
+    @ApiModelProperty(value = "Beregn samværsfradrag grunnlag") var beregnSamvaersfradragGrunnlag: BeregnSamvaersfradragGrunnlag? = null,
     @ApiModelProperty(value = "Resten av grunnlaget") var restenAvGrunnlaget: String? = "Resten av grunnlaget"
 )
 
@@ -16,7 +17,8 @@ data class BeregnBarnebidragGrunnlag(
 @ApiModel(value = "Resultatet av en barnebidragsberegning")
 data class BeregnBarnebidragResultat(
     @ApiModelProperty(value = "Beregn bidragsevne resultat") var beregnBidragsevneResultat: BeregnBidragsevneResultat,
-    @ApiModelProperty(value = "Beregn underholdskostnad resultat") var beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultat,
     @ApiModelProperty(value = "Beregn netto barnetilsyn resultat") var beregnNettoBarnetilsynResultat: BeregnNettoBarnetilsynResultat,
+    @ApiModelProperty(value = "Beregn underholdskostnad resultat") var beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultat,
+    @ApiModelProperty(value = "Beregn samværsfradrag resultat") var beregnSamvaersfradragResultat: BeregnSamvaersfradragResultat,
     @ApiModelProperty(value = "Resten av resultatet") var restenAvResultatet: String
 )

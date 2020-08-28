@@ -50,8 +50,8 @@ class BeregnBarnebidragControllerTest {
   void skalReturnereBarnebidragResultatVedGyldigInput() {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(OK,
-        new BeregnBarnebidragResultat(TestUtil.dummyBidragsevneResultat(), TestUtil.dummyUnderholdskostnadResultat(),
-            TestUtil.dummyNettoBarnetilsynResultat(), "Resten av resultatet")));
+        new BeregnBarnebidragResultat(TestUtil.dummyBidragsevneResultat(), TestUtil.dummyNettoBarnetilsynResultat(),
+            TestUtil.dummyUnderholdskostnadResultat(), TestUtil.dummySamvaersfradragResultat(), "Resten av resultatet")));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
@@ -100,6 +100,18 @@ class BeregnBarnebidragControllerTest {
         () -> assertThat(barnebidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
             .getResultatBelopUnderholdskostnad()).isEqualTo(100d),
 
+        () -> assertThat(barnebidragResultat.getBeregnSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(barnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(barnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(
+            barnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            .isEqualTo(LocalDate.parse("2017-01-01")),
+        () -> assertThat(
+            barnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            .isEqualTo(LocalDate.parse("2019-01-01")),
+        () -> assertThat(barnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatSamvaersfradragBelop()).isEqualTo(100d),
+
         () -> assertThat(barnebidragResultat.getRestenAvResultatet()).isNotNull(),
         () -> assertThat(barnebidragResultat.getRestenAvResultatet()).isEqualTo("Resten av resultatet")
     );
@@ -107,7 +119,7 @@ class BeregnBarnebidragControllerTest {
 
   @Test
   @DisplayName("Skal returnere 400 Bad Request når input data mangler")
-  void skalReturnere400BadRequestNårInputDataMangler() {
+  void skalReturnere400BadRequestNaarInputDataMangler() {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
 
@@ -124,7 +136,7 @@ class BeregnBarnebidragControllerTest {
 
   @Test
   @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler")
-  void skalReturnere500InternalServerErrorNårKallTilServicenFeiler() {
+  void skalReturnere500InternalServerErrorNaarKallTilServicenFeiler() {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
 

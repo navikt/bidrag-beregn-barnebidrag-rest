@@ -1,5 +1,6 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.service;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -13,6 +14,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.BidragsevneConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Forbruksutgifter;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksFradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksTilsyn;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Samvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Sjablontall;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
@@ -20,6 +22,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnSamvaersfradragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnUnderholdskostnadResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
@@ -34,6 +37,9 @@ import no.nav.bidrag.beregn.felles.enums.SjablonTallNavn;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore;
+import no.nav.bidrag.beregn.samvaersfradrag.SamvaersfradragCore;
+import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCore;
+import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCore;
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore;
@@ -50,16 +56,19 @@ public class BeregnBarnebidragService {
 
   private final BidragsevneConsumer bidragsevneConsumer;
   private final SjablonConsumer sjablonConsumer;
-  private final UnderholdskostnadCore underholdskostnadCore;
   private final NettoBarnetilsynCore nettoBarnetilsynCore;
+  private final UnderholdskostnadCore underholdskostnadCore;
+  private final SamvaersfradragCore samvaersfradragCore;
 
   private HttpResponse<BeregnBidragsevneResultat> bidragsevneResultat;
   private HttpResponse<List<Sjablontall>> sjablonSjablontallResponse;
   private HttpResponse<List<Forbruksutgifter>> sjablonForbruksutgifterResponse;
   private HttpResponse<List<MaksTilsyn>> sjablonMaksTilsynResponse;
   private HttpResponse<List<MaksFradrag>> sjablonMaksFradragResponse;
-  private BeregnUnderholdskostnadResultatCore underholdskostnadResultat;
+  private HttpResponse<List<Samvaersfradrag>> sjablonSamvaersfradragResponse;
   private BeregnNettoBarnetilsynResultatCore nettoBarnetilsynResultat;
+  private BeregnUnderholdskostnadResultatCore underholdskostnadResultat;
+  private BeregnSamvaersfradragResultatCore samvaersfradragResultat;
 
   private final Map<String, String> sjablontallMap = new HashMap<>() {{
     put("0001", SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn());
@@ -106,20 +115,24 @@ public class BeregnBarnebidragService {
   }};
 
   public BeregnBarnebidragService(BidragsevneConsumer bidragsevneConsumer, SjablonConsumer sjablonConsumer,
-      UnderholdskostnadCore underholdskostnadCore, NettoBarnetilsynCore nettoBarnetilsynCore) {
+      NettoBarnetilsynCore nettoBarnetilsynCore, UnderholdskostnadCore underholdskostnadCore, SamvaersfradragCore samvaersfradragCore) {
     this.bidragsevneConsumer = bidragsevneConsumer;
     this.sjablonConsumer = sjablonConsumer;
-    this.underholdskostnadCore = underholdskostnadCore;
     this.nettoBarnetilsynCore = nettoBarnetilsynCore;
+    this.underholdskostnadCore = underholdskostnadCore;
+    this.samvaersfradragCore = samvaersfradragCore;
   }
 
   public HttpResponse<BeregnBarnebidragResultat> beregn(BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
 
+    // Ekstraher grunnlag for beregning av netto barnetilsyn. Her gjøres også kontroll av inputdata
+    var nettoBarnetilsynGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnNettoBarnetilsynGrunnlag().tilCore();
+
     // Ekstraher grunnlag for beregning av underholdskostnad. Her gjøres også kontroll av inputdata
     var underholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnUnderholdskostnadGrunnlag().tilCore();
 
-    // Ekstraher grunnlag for beregning av netto barnetilsyn. Her gjøres også kontroll av inputdata
-    var nettoBarnetilsynGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnNettoBarnetilsynGrunnlag().tilCore();
+    // Ekstraher grunnlag for beregning av samværsfradrag. Her gjøres også kontroll av inputdata
+    var samvaersfradragGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnSamvaersfradragGrunnlag().tilCore();
 
     // Hent sjabloner
     hentSjabloner();
@@ -133,11 +146,14 @@ public class BeregnBarnebidragService {
     // Kall beregning av underholdskostnad
     beregnUnderholdskostnad(underholdskostnadGrunnlagTilCore);
 
+    // Kall beregning av samværsfradrag
+    beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
+
     // Kall totalberegning
 
     return HttpResponse.from(HttpStatus.OK, new BeregnBarnebidragResultat(bidragsevneResultat.getResponseEntity().getBody(),
-        new BeregnUnderholdskostnadResultat(underholdskostnadResultat), new BeregnNettoBarnetilsynResultat(nettoBarnetilsynResultat),
-        "Resten av resultatet"));
+        new BeregnNettoBarnetilsynResultat(nettoBarnetilsynResultat), new BeregnUnderholdskostnadResultat(underholdskostnadResultat),
+        new BeregnSamvaersfradragResultat(samvaersfradragResultat), "Resten av resultatet"));
   }
 
   // Henter sjabloner
@@ -157,6 +173,10 @@ public class BeregnBarnebidragService {
     // Henter sjabloner for maks bidrag
     sjablonMaksFradragResponse = sjablonConsumer.hentSjablonMaksFradrag();
     LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragResponse.getResponseEntity().getBody().size());
+
+    // Henter sjabloner for samværsfradrag
+    sjablonSamvaersfradragResponse = sjablonConsumer.hentSjablonSamvaersfradrag();
+    LOGGER.debug("Antall sjabloner hentet av type Samværsfradrag: {}", sjablonSamvaersfradragResponse.getResponseEntity().getBody().size());
   }
 
   // Kaller rest-modul for beregning av bidragsevne
@@ -164,7 +184,7 @@ public class BeregnBarnebidragService {
     bidragsevneResultat = bidragsevneConsumer.hentBidragsevne(bidragsevneGrunnlag);
   }
 
-  // Kaller rest-modul for beregning av netto barnetilsyn
+  // Beregning av netto barnetilsyn
   private void beregnNettoBarnetilsyn(BeregnNettoBarnetilsynGrunnlagCore nettoBarnetilsynGrunnlag) {
     // Populerer liste over aktuelle sjabloner
     var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
@@ -191,7 +211,7 @@ public class BeregnBarnebidragService {
     LOGGER.debug("Netto barnetilsyn - resultat av beregning: {}", nettoBarnetilsynResultat.getResultatPeriodeListe());
   }
 
-  // Kaller rest-modul for beregning av underholdskostnad
+  // Beregning av underholdskostnad
   private void beregnUnderholdskostnad(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlag) {
     // Populerer liste over aktuelle sjabloner
     var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
@@ -212,7 +232,7 @@ public class BeregnBarnebidragService {
       LOGGER.info("Underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
           + "beregnDatoFra= " + underholdskostnadGrunnlag.getBeregnDatoFra() + System.lineSeparator()
           + "beregnDatoTil= " + underholdskostnadGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "soknadBarnFodselsdatoTil= " + underholdskostnadGrunnlag.getSoknadBarnFodselsdato() + System.lineSeparator()
+          + "soknadBarnFodselsdato= " + underholdskostnadGrunnlag.getSoknadBarnFodselsdato() + System.lineSeparator()
           + "barneTilsynMedStonadPeriodeListe= " + underholdskostnadGrunnlag.getBarnetilsynMedStonadPeriodeListe() + System.lineSeparator()
           + "forpleiningUtgiftPeriodeListe= " + underholdskostnadGrunnlag.getForpleiningUtgiftPeriodeListe() + System.lineSeparator()
           + "nettoBarnetilsynPeriodeListe= " + underholdskostnadGrunnlag.getNettoBarnetilsynPeriodeListe() + System.lineSeparator());
@@ -221,6 +241,32 @@ public class BeregnBarnebidragService {
     }
 
     LOGGER.debug("Underholdskostnad - resultat av beregning: {}", underholdskostnadResultat.getResultatPeriodeListe());
+  }
+
+  // Beregning av samværsfradrag
+  private void beregnSamvaersfradrag(BeregnSamvaersfradragGrunnlagCore samvaersfradragGrunnlag) {
+    // Populerer liste over aktuelle sjabloner
+    var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>(
+        mapSjablonSamvaersfradrag(sjablonSamvaersfradragResponse.getResponseEntity().getBody()));
+    samvaersfradragGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
+
+    // Kaller core-modulen for beregning av samværsfradrag
+    LOGGER.debug("Samværsfradrag - grunnlag for beregning: {}", samvaersfradragGrunnlag);
+    samvaersfradragResultat = samvaersfradragCore.beregnSamvaersfradrag(samvaersfradragGrunnlag);
+
+    if (!samvaersfradragResultat.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: " + System.lineSeparator()
+          + samvaersfradragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Samværsfradrag - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + samvaersfradragGrunnlag.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + samvaersfradragGrunnlag.getBeregnDatoTil() + System.lineSeparator()
+          + "soknadsbarnFodselsdato= " + samvaersfradragGrunnlag.getSoknadsbarnFodselsdato() + System.lineSeparator()
+          + "samvaersklassePeriodeListe= " + samvaersfradragGrunnlag.getSamvaersklassePeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: "
+          + samvaersfradragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Samværsfradrag - resultat av beregning: {}", samvaersfradragResultat.getResultatPeriodeListe());
   }
 
   // Mapper sjabloner av typen sjablontall
@@ -271,6 +317,22 @@ public class BeregnBarnebidragService {
             SjablonNavn.MAKS_FRADRAG.getNavn(),
             singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMFL.getAntBarnTom().toString())),
             singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sMFL.getMaksBelopFradrag().doubleValue()))))
+        .collect(toList());
+  }
+
+  // Mapper sjabloner av typen samværsfradrag
+  private List<SjablonPeriodeCore> mapSjablonSamvaersfradrag(List<Samvaersfradrag> sjablonSamvaersfradragListe) {
+
+    return sjablonSamvaersfradragListe
+        .stream()
+        .map(sSL -> new SjablonPeriodeCore(
+            new PeriodeCore(sSL.getDatoFom(), sSL.getDatoTom()),
+            SjablonNavn.SAMVAERSFRADRAG.getNavn(),
+            asList(new SjablonNokkelCore(SjablonNokkelNavn.SAMVAERSKLASSE.getNavn(), sSL.getSamvaersklasse()),
+                new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sSL.getAlderTom().toString())),
+            asList(new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_DAGER_TOM.getNavn(), sSL.getAntDagerTom().doubleValue()),
+                new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_NETTER_TOM.getNavn(), sSL.getAntNetterTom().doubleValue()),
+                new SjablonInnholdCore(SjablonInnholdNavn.FRADRAG_BELOP.getNavn(), sSL.getBelopFradrag().doubleValue()))))
         .collect(toList());
   }
 }
