@@ -117,6 +117,7 @@ public class BeregnBarnebidragService {
     put("0038", SjablonTallNavn.FORSKUDDSSATS_75PROSENT_BELOP.getNavn());
     put("0039", SjablonTallNavn.FORDEL_SAERFRADRAG_BELOP.getNavn());
     put("0040", SjablonTallNavn.SKATTESATS_ALMINNELIG_INNTEKT_PROSENT.getNavn());
+    put("0041", SjablonTallNavn.FORHOYET_BARNETRYGD_BELOP.getNavn());
     put("0100", SjablonTallNavn.FASTSETTELSESGEBYR_BELOP.getNavn());
   }};
 
@@ -313,7 +314,7 @@ public class BeregnBarnebidragService {
         .stream()
         .map(sSL -> new SjablonPeriodeCore(
             new PeriodeCore(sSL.getDatoFom(), sSL.getDatoTom()),
-            sjablontallMap.get(sSL.getTypeSjablon()),
+            sjablontallMap.getOrDefault(sSL.getTypeSjablon(), sSL.getTypeSjablon()),
             emptyList(),
             singletonList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sSL.getVerdi().doubleValue()))))
         .collect(toList());
