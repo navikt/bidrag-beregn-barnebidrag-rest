@@ -12,7 +12,7 @@ import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore
 import java.time.LocalDate
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for beregning av BPs andel av underholdskostnad")
+@ApiModel(value = "Grunnlaget for en beregning av BPs andel av underholdskostnad")
 data class BeregnBPsAndelUnderholdskostnadGrunnlag(
     @ApiModelProperty(value = "Beregn BPs andel underholdskostnad fra-dato") var beregnDatoFra: LocalDate? = null,
     @ApiModelProperty(value = "Beregn BPs andel underholdskostnad til-dato") var beregnDatoTil: LocalDate? = null,
@@ -87,9 +87,9 @@ data class ResultatBeregningBPsAndelUnderholdskostnad(
 
 @ApiModel(value = "Grunnlaget for beregning av BPs andel av underholdskostnad")
 data class ResultatGrunnlagBPsAndelUnderholdskostnad(
-    @ApiModelProperty(value = "Grunnlag inntekt bidragspliktig") var inntektBP: Double? = null,
-    @ApiModelProperty(value = "Grunnlag inntekt bidragsmottaker") var inntektBM: Double? = null,
-    @ApiModelProperty(value = "Grunnlag inntekt bidragsbarn") var inntektBB: Double? = null,
+    @ApiModelProperty(value = "Inntekt bidragspliktig") var inntektBP: Double? = null,
+    @ApiModelProperty(value = "Inntekt bidragsmottaker") var inntektBM: Double? = null,
+    @ApiModelProperty(value = "Inntekt bidragsbarn") var inntektBB: Double? = null,
     @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
