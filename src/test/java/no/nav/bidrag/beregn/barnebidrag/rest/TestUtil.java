@@ -19,6 +19,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPsAndelUnderholdsko
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnKostnadsberegnetBidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnSamvaersfradragGrunnlag;
@@ -34,17 +35,20 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntekterPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Periode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningBPsAndelUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningBidragsevne;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningKostnadsberegnetBidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningNettoBarnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningSamvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagBPsAndelUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagBidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagFaktiskUtgift;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagKostnadsberegnetBidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagNettoBarnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagSamvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeBPsAndelUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeBidragsevne;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeKostnadsberegnetBidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeNettoBarnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeSamvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeUnderholdskostnad;
@@ -58,13 +62,11 @@ import no.nav.bidrag.beregn.felles.dto.AvvikCore;
 import no.nav.bidrag.beregn.felles.dto.PeriodeCore;
 import no.nav.bidrag.beregn.felles.enums.SjablonInnholdNavn;
 import no.nav.bidrag.beregn.felles.enums.SjablonTallNavn;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragResultatCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftCore;
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore;
-import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatBeregningCore;
-import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatGrunnlagCore;
-import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore;
 
 public class TestUtil {
 
@@ -533,10 +535,11 @@ public class TestUtil {
 
   // Bygger opp BeregnUnderholdskostnadResultatCore
   public static BeregnUnderholdskostnadResultatCore dummyUnderholdskostnadResultatCore() {
-    var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeCore>();
-    bidragPeriodeResultatListe.add(new ResultatPeriodeCore(new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        new ResultatBeregningCore(100d),
-        new ResultatGrunnlagCore(9, "DO", "64", 1000d, 1000d, emptyList())));
+    var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore>();
+    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore(
+        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        new no.nav.bidrag.beregn.underholdskostnad.dto.ResultatBeregningCore(100d),
+        new no.nav.bidrag.beregn.underholdskostnad.dto.ResultatGrunnlagCore(9, "DO", "64", 1000d, 1000d, emptyList())));
     return new BeregnUnderholdskostnadResultatCore(bidragPeriodeResultatListe, emptyList());
   }
 
@@ -563,7 +566,8 @@ public class TestUtil {
   // Bygger opp BeregnBPsAndelUnderholdskostnadResultatCore
   public static BeregnBPsAndelUnderholdskostnadResultatCore dummyBPsAndelUnderholdskostnadResultatCore() {
     var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore>();
-    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore(new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore(
+        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore(10),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatGrunnlagCore(100000d, 100000d, 100000d, emptyList())));
     return new BeregnBPsAndelUnderholdskostnadResultatCore(bidragPeriodeResultatListe, emptyList());
@@ -606,6 +610,36 @@ public class TestUtil {
         "periodeDatoTil må være etter periodeDatoFra i inntektPeriodeListe: periodeDatoFra=2018-04-01, periodeDatoTil=2018-03-01",
         "DATO_FRA_ETTER_DATO_TIL"));
     return new BeregnSamvaersfradragResultatCore(emptyList(), avvikListe);
+  }
+
+  // Bygger opp BeregnKostnadsberegnetBidragResultat
+  public static BeregnKostnadsberegnetBidragResultat dummyKostnadsberegnetBidragResultat() {
+    var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeKostnadsberegnetBidrag>();
+    bidragPeriodeResultatListe
+        .add(new ResultatPeriodeKostnadsberegnetBidrag(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+            new ResultatBeregningKostnadsberegnetBidrag(100d),
+            new ResultatGrunnlagKostnadsberegnetBidrag(100d, 10, 100d)));
+    return new BeregnKostnadsberegnetBidragResultat(bidragPeriodeResultatListe);
+  }
+
+  // Bygger opp BeregnKostnadsberegnetBidragResultatCore
+  public static BeregnKostnadsberegnetBidragResultatCore dummyKostnadsberegnetBidragResultatCore() {
+    var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatPeriodeCore>();
+    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatPeriodeCore(
+        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatBeregningCore(100d),
+        new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatGrunnlagCore(100d, 10, 100d)));
+    return new BeregnKostnadsberegnetBidragResultatCore(bidragPeriodeResultatListe, emptyList());
+  }
+
+  // Bygger opp BeregnKostnadsberegnetBidragResultatCore med avvik
+  public static BeregnKostnadsberegnetBidragResultatCore dummyKostnadsberegnetBidragResultatCoreMedAvvik() {
+    var avvikListe = new ArrayList<AvvikCore>();
+    avvikListe.add(new AvvikCore("beregnDatoFra kan ikke være null", "NULL_VERDI_I_DATO"));
+    avvikListe.add(new AvvikCore(
+        "periodeDatoTil må være etter periodeDatoFra i underholdskostnadPeriodeListe: periodeDatoFra=2018-04-01, periodeDatoTil=2018-03-01",
+        "DATO_FRA_ETTER_DATO_TIL"));
+    return new BeregnKostnadsberegnetBidragResultatCore(emptyList(), avvikListe);
   }
 
   // Bygger opp liste av sjabloner av typen Sjablontall

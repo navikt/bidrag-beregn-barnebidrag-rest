@@ -22,5 +22,7 @@ data class BeregnBarnebidragResultat(
     @ApiModelProperty(value = "Beregn underholdskostnad resultat") var beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultat,
     @ApiModelProperty(
         value = "Beregn BPs andel av underholdskostnad resultat") var beregnBPAndelUnderholdskostnadResultat: BeregnBPsAndelUnderholdskostnadResultat,
-    @ApiModelProperty(value = "Beregn samværsfradrag resultat") var beregnSamvaersfradragResultat: BeregnSamvaersfradragResultat
+    @ApiModelProperty(value = "Beregn samværsfradrag resultat") var beregnSamvaersfradragResultat: BeregnSamvaersfradragResultat,
+    @ApiModelProperty(
+        value = "Beregn kostnadsberegnet bidrag resultat") var beregnKostnadsberegnetBidragResultat: BeregnKostnadsberegnetBidragResultat
 )
