@@ -22,6 +22,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnKostnadsberegnetBidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnSamvaersfradragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnUnderholdskostnadResultat;
@@ -38,6 +39,12 @@ import no.nav.bidrag.beregn.felles.enums.SjablonInnholdNavn;
 import no.nav.bidrag.beregn.felles.enums.SjablonNavn;
 import no.nav.bidrag.beregn.felles.enums.SjablonNokkelNavn;
 import no.nav.bidrag.beregn.felles.enums.SjablonTallNavn;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.KostnadsberegnetBidragCore;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BPsAndelUnderholdskostnadPeriodeCore;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragGrunnlagCore;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragResultatCore;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.SamvaersfradragPeriodeCore;
+import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.UnderholdskostnadPeriodeCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore;
@@ -64,6 +71,7 @@ public class BeregnBarnebidragService {
   private final UnderholdskostnadCore underholdskostnadCore;
   private final BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore;
   private final SamvaersfradragCore samvaersfradragCore;
+  private final KostnadsberegnetBidragCore kostnadsberegnetBidragCore;
 
   private HttpResponse<BeregnBidragsevneResultat> bidragsevneResultat;
   private HttpResponse<List<Sjablontall>> sjablonSjablontallResponse;
@@ -75,6 +83,7 @@ public class BeregnBarnebidragService {
   private BeregnUnderholdskostnadResultatCore underholdskostnadResultat;
   private BeregnBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultat;
   private BeregnSamvaersfradragResultatCore samvaersfradragResultat;
+  private BeregnKostnadsberegnetBidragResultatCore kostnadsberegnetBidragResultat;
 
   private final Map<String, String> sjablontallMap = new HashMap<>() {{
     put("0001", SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn());
@@ -123,13 +132,15 @@ public class BeregnBarnebidragService {
 
   public BeregnBarnebidragService(BidragsevneConsumer bidragsevneConsumer, SjablonConsumer sjablonConsumer,
       NettoBarnetilsynCore nettoBarnetilsynCore, UnderholdskostnadCore underholdskostnadCore,
-      BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore, SamvaersfradragCore samvaersfradragCore) {
+      BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore, SamvaersfradragCore samvaersfradragCore,
+      KostnadsberegnetBidragCore kostnadsberegnetBidragCore) {
     this.bidragsevneConsumer = bidragsevneConsumer;
     this.sjablonConsumer = sjablonConsumer;
     this.nettoBarnetilsynCore = nettoBarnetilsynCore;
     this.underholdskostnadCore = underholdskostnadCore;
     this.bpAndelUnderholdskostnadCore = bpAndelUnderholdskostnadCore;
     this.samvaersfradragCore = samvaersfradragCore;
+    this.kostnadsberegnetBidragCore = kostnadsberegnetBidragCore;
   }
 
   public HttpResponse<BeregnBarnebidragResultat> beregn(BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
@@ -164,11 +175,15 @@ public class BeregnBarnebidragService {
     // Kall beregning av samværsfradrag
     beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
 
+    // Kall beregning av kostnadsberegnet bidrag
+    beregnKostnadsberegnetBidrag(underholdskostnadGrunnlagTilCore);
+
     // Kall totalberegning
 
     return HttpResponse.from(HttpStatus.OK, new BeregnBarnebidragResultat(bidragsevneResultat.getResponseEntity().getBody(),
         new BeregnNettoBarnetilsynResultat(nettoBarnetilsynResultat), new BeregnUnderholdskostnadResultat(underholdskostnadResultat),
-        new BeregnBPsAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultat), new BeregnSamvaersfradragResultat(samvaersfradragResultat)));
+        new BeregnBPsAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultat), new BeregnSamvaersfradragResultat(samvaersfradragResultat),
+        new BeregnKostnadsberegnetBidragResultat(kostnadsberegnetBidragResultat)));
   }
 
   // Henter sjabloner
@@ -306,6 +321,62 @@ public class BeregnBarnebidragService {
     }
 
     LOGGER.debug("Samværsfradrag - resultat av beregning: {}", samvaersfradragResultat.getResultatPeriodeListe());
+  }
+
+  // Beregning av kostnadsberegnet bidrag
+  private void beregnKostnadsberegnetBidrag(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
+    // Bygger kostnadsberegnet bidrag grunnlag
+    var kostnadsberegnetBidragGrunnlag = byggKostnadsberegnetBidragGrunnlag(underholdskostnadGrunnlagTilCore);
+
+    // Kaller core-modulen for beregning av kostnadsberegnet bidrag
+    LOGGER.debug("Kostnadsberegnet bidrag - grunnlag for beregning: {}", kostnadsberegnetBidragGrunnlag);
+    kostnadsberegnetBidragResultat = kostnadsberegnetBidragCore.beregnKostnadsberegnetBidrag(kostnadsberegnetBidragGrunnlag);
+
+    if (!kostnadsberegnetBidragResultat.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet: " + System.lineSeparator()
+          + kostnadsberegnetBidragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Kostnadsberegnet bidrag - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + kostnadsberegnetBidragGrunnlag.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + kostnadsberegnetBidragGrunnlag.getBeregnDatoTil() + System.lineSeparator()
+          + "underholdskostnadPeriodeListe= " + kostnadsberegnetBidragGrunnlag.getUnderholdskostnadPeriodeListe() + System.lineSeparator()
+          + "bPsAndelUnderholdskostnadPeriodeListe= " + kostnadsberegnetBidragGrunnlag.getBPsAndelUnderholdskostnadPeriodeListe() +
+          System.lineSeparator()
+          + "samvaersfradragPeriodeListe= " + kostnadsberegnetBidragGrunnlag.getSamvaersfradragPeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet: "
+          + kostnadsberegnetBidragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Kostnadsberegnet bidrag - resultat av beregning: {}", kostnadsberegnetBidragResultat.getResultatPeriodeListe());
+  }
+
+  // Beregning av kostnadsberegnet bidrag
+  private BeregnKostnadsberegnetBidragGrunnlagCore byggKostnadsberegnetBidragGrunnlag(
+      BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
+    var underholdskostnadPeriodeCoreListe = new ArrayList<UnderholdskostnadPeriodeCore>();
+    for (var underholdskostnadPeriodeCore : underholdskostnadResultat.getResultatPeriodeListe()) {
+      underholdskostnadPeriodeCoreListe.add(new UnderholdskostnadPeriodeCore(
+          underholdskostnadPeriodeCore.getResultatDatoFraTil(),
+          underholdskostnadPeriodeCore.getResultatBeregning().getResultatBelopUnderholdskostnad()));
+    }
+
+    var bpAndelUnderholdskostnadPeriodeCoreListe = new ArrayList<BPsAndelUnderholdskostnadPeriodeCore>();
+    for (var bpAndelUnderholdskostnadPeriodeCore : bpAndelUnderholdskostnadResultat.getResultatPeriodeListe()) {
+      bpAndelUnderholdskostnadPeriodeCoreListe.add(new BPsAndelUnderholdskostnadPeriodeCore(
+          bpAndelUnderholdskostnadPeriodeCore.getResultatDatoFraTil(),
+          bpAndelUnderholdskostnadPeriodeCore.getResultatBeregning().getResultatAndelProsent()));
+    }
+
+    var samvaersfradragPeriodeCoreListe = new ArrayList<SamvaersfradragPeriodeCore>();
+    for (var samvaersfradragPeriodeCore : samvaersfradragResultat.getResultatPeriodeListe()) {
+      samvaersfradragPeriodeCoreListe.add(new SamvaersfradragPeriodeCore(
+          samvaersfradragPeriodeCore.getResultatDatoFraTil(), samvaersfradragPeriodeCore.getResultatBeregning().getResultatSamvaersfradragBelop()));
+    }
+
+    //TODO beregnDatoFra og bergnDatoTil må hentes fra et annet sted
+    return new BeregnKostnadsberegnetBidragGrunnlagCore(underholdskostnadGrunnlagTilCore.getBeregnDatoFra(),
+        underholdskostnadGrunnlagTilCore.getBeregnDatoTil(), underholdskostnadPeriodeCoreListe, bpAndelUnderholdskostnadPeriodeCoreListe,
+        samvaersfradragPeriodeCoreListe);
   }
 
   // Mapper sjabloner av typen sjablontall
