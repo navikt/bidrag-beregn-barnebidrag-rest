@@ -3,7 +3,6 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
-import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftPeriodeCore
@@ -15,22 +14,9 @@ import java.time.LocalDate
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en netto barnetilsyn beregning")
 data class BeregnNettoBarnetilsynGrunnlag(
-    @ApiModelProperty(value = "Beregn netto barnetilsyn fra-dato") var beregnDatoFra: LocalDate? = null,
-    @ApiModelProperty(value = "Beregn netto barnetilsyn til-dato") var beregnDatoTil: LocalDate? = null,
     @ApiModelProperty(
         value = "Periodisert liste over bidragsmottakers faktiske bruttoutgifter til tilsyn") val faktiskUtgiftPeriodeListe: List<FaktiskUtgiftPeriode>? = null
-) {
-
-  fun tilCore() = BeregnNettoBarnetilsynGrunnlagCore(
-      beregnDatoFra = if (beregnDatoFra != null) beregnDatoFra!! else throw UgyldigInputException("beregnDatoFra kan ikke være null"),
-      beregnDatoTil = if (beregnDatoTil != null) beregnDatoTil!! else throw UgyldigInputException("beregnDatoTil kan ikke være null"),
-
-      faktiskUtgiftPeriodeListe = if (faktiskUtgiftPeriodeListe != null) faktiskUtgiftPeriodeListe.map { it.tilCore() } else throw UgyldigInputException(
-          "faktiskUtgiftPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
-  )
-}
+)
 
 @ApiModel(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn")
 data class FaktiskUtgiftPeriode(
@@ -60,7 +46,8 @@ data class BeregnNettoBarnetilsynResultat(
 ) {
 
   constructor(beregnNettoBarnetilsynResultat: BeregnNettoBarnetilsynResultatCore) : this(
-      resultatPeriodeListe = beregnNettoBarnetilsynResultat.resultatPeriodeListe.map {ResultatPeriodeNettoBarnetilsyn(it)
+      resultatPeriodeListe = beregnNettoBarnetilsynResultat.resultatPeriodeListe.map {
+        ResultatPeriodeNettoBarnetilsyn(it)
       }
   )
 }
@@ -93,13 +80,14 @@ data class ResultatBeregningNettoBarnetilsyn(
 
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn")
 data class ResultatGrunnlagNettoBarnetilsyn(
-    @ApiModelProperty(value = "Liste over faktiske utgifter") var resultatGrunnlagFaktiskUtgiftListe: List<ResultatGrunnlagFaktiskUtgift> = emptyList(),
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+    @ApiModelProperty(
+        value = "Liste over faktiske utgifter") var resultatGrunnlagFaktiskUtgiftListe: List<ResultatGrunnlagFaktiskUtgift> = emptyList(),
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       resultatGrunnlagFaktiskUtgiftListe = resultatGrunnlag.faktiskUtgiftListe.map { ResultatGrunnlagFaktiskUtgift(it) },
-      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 

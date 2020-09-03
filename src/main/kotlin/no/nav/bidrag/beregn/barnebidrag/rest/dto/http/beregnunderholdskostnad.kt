@@ -3,49 +3,21 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
-import no.nav.bidrag.beregn.felles.dto.PeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.BarnetilsynMedStonadPeriodeCore
-import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ForpleiningUtgiftPeriodeCore
-import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore
-import java.time.LocalDate
-import java.util.Collections.singletonList
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en underholdskostnadberegning")
 data class BeregnUnderholdskostnadGrunnlag(
-    @ApiModelProperty(value = "Beregn underholdskostnad fra-dato") var beregnDatoFra: LocalDate? = null,
-    @ApiModelProperty(value = "Beregn underholdskostnad til-dato") var beregnDatoTil: LocalDate? = null,
-    @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var soknadBarnFodselsdato: LocalDate? = null,
     @ApiModelProperty(
         value = "Periodisert liste over bidragsmottakers barnetilsyn med stønad") val barnetilsynMedStonadPeriodeListe: List<BarnetilsynMedStonadPeriode>? = null,
     @ApiModelProperty(
         value = "Periodisert liste over bidragsmottakers utgifter til forpleining") val forpleiningUtgiftPeriodeListe: List<ForpleiningUtgiftPeriode>? = null
-) {
-
-  fun tilCore() = BeregnUnderholdskostnadGrunnlagCore(
-      beregnDatoFra = if (beregnDatoFra != null) beregnDatoFra!! else throw UgyldigInputException("beregnDatoFra kan ikke være null"),
-      beregnDatoTil = if (beregnDatoTil != null) beregnDatoTil!! else throw UgyldigInputException("beregnDatoTil kan ikke være null"),
-      soknadBarnFodselsdato = if (soknadBarnFodselsdato != null) soknadBarnFodselsdato!! else throw UgyldigInputException(
-          "soknadBarnFodselsdato kan ikke være null"),
-
-      barnetilsynMedStonadPeriodeListe = if (barnetilsynMedStonadPeriodeListe != null) barnetilsynMedStonadPeriodeListe.map { it.tilCore() }
-      else throw UgyldigInputException("barnetilsynMedStonadPeriodeListe kan ikke være null"),
-
-      //TODO Endre til emptyList
-      nettoBarnetilsynPeriodeListe = singletonList(
-          NettoBarnetilsynPeriodeCore(PeriodeCore(LocalDate.parse("2019-07-01"), LocalDate.parse("2020-01-01")), 1000.0)),
-
-      forpleiningUtgiftPeriodeListe = if (forpleiningUtgiftPeriodeListe != null) forpleiningUtgiftPeriodeListe.map { it.tilCore() }
-      else throw UgyldigInputException("forpleiningUtgiftPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
-  )
-}
+)
 
 @ApiModel(value = "Bidragsmottakers barnetilsyn med stønad")
 data class BarnetilsynMedStonadPeriode(
@@ -121,7 +93,7 @@ data class ResultatGrunnlagUnderholdskostnad(
     @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String? = null,
     @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: Double? = null,
     @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: Double? = null,
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
@@ -130,6 +102,6 @@ data class ResultatGrunnlagUnderholdskostnad(
       barnetilsynMedStonadStonadType = resultatGrunnlag.barnetilsynMedStonadStonadType,
       nettoBarnetilsynBelop = resultatGrunnlag.nettoBarnetilsynBelop,
       forpleiningUtgiftBelop = resultatGrunnlag.forpleiningUtgiftBelop,
-      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
