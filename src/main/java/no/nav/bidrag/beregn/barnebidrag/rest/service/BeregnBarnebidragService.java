@@ -5,6 +5,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +55,7 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCor
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore;
+import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore;
 import no.nav.bidrag.commons.web.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,17 +147,20 @@ public class BeregnBarnebidragService {
 
   public HttpResponse<BeregnBarnebidragResultat> beregn(BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
 
+    // Kontroll av felles inputdata
+    beregnBarnebidragGrunnlag.validerBarnebidragGrunnlag();
+
     // Ekstraher grunnlag for beregning av netto barnetilsyn. Her gjøres også kontroll av inputdata
-    var nettoBarnetilsynGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnNettoBarnetilsynGrunnlag().tilCore();
+    var nettoBarnetilsynGrunnlagTilCore = beregnBarnebidragGrunnlag.nettoBarnetilsynTilCore();
 
     // Ekstraher grunnlag for beregning av underholdskostnad. Her gjøres også kontroll av inputdata
-    var underholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnUnderholdskostnadGrunnlag().tilCore();
+    var underholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.underholdskostnadTilCore();
 
     // Ekstraher grunnlag for beregning av BPs andel av underholdskostnad. Her gjøres også kontroll av inputdata
-    var bpAndelUnderholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnBPAndelUnderholdskostnadGrunnlag().tilCore();
+    var bpAndelUnderholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.bpAndelUnderholdskostnadTilCore();
 
     // Ekstraher grunnlag for beregning av samværsfradrag. Her gjøres også kontroll av inputdata
-    var samvaersfradragGrunnlagTilCore = beregnBarnebidragGrunnlag.getBeregnSamvaersfradragGrunnlag().tilCore();
+    var samvaersfradragGrunnlagTilCore = beregnBarnebidragGrunnlag.samvaersfradragTilCore();
 
     // Hent sjabloner
     hentSjabloner();
@@ -167,7 +172,7 @@ public class BeregnBarnebidragService {
     beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCore);
 
     // Kall beregning av underholdskostnad
-    beregnUnderholdskostnad(underholdskostnadGrunnlagTilCore);
+    beregnUnderholdskostnad(beregnBarnebidragGrunnlag.getSoknadBarnPersonId(), underholdskostnadGrunnlagTilCore);
 
     // Kall beregning av BPs andel av underholdskostnad
     beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore);
@@ -176,7 +181,8 @@ public class BeregnBarnebidragService {
     beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
 
     // Kall beregning av kostnadsberegnet bidrag
-    beregnKostnadsberegnetBidrag(underholdskostnadGrunnlagTilCore);
+    beregnKostnadsberegnetBidrag(beregnBarnebidragGrunnlag.getBeregnDatoFra(), beregnBarnebidragGrunnlag.getBeregnDatoTil(),
+        underholdskostnadGrunnlagTilCore);
 
     // Kall totalberegning
 
@@ -242,15 +248,14 @@ public class BeregnBarnebidragService {
   }
 
   // Beregning av underholdskostnad
-  private void beregnUnderholdskostnad(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlag) {
+  private void beregnUnderholdskostnad(int soknadBarnPersonId, BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlag) {
     // Populerer liste over aktuelle sjabloner
     var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
     sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
     sjablonPeriodeListe.addAll(mapSjablonForbruksutgifter(sjablonForbruksutgifterResponse.getResponseEntity().getBody()));
     underholdskostnadGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
 
-    //TODO Legg til NettoBarnetilsynPeriodeCore fra netto barnetilsyn core-tjenesten
-    //underholdskostnadGrunnlag.setNettoBarnetilsynPeriodeListe(nettoBarnetilsynResultat.getResultatPeriodeListe().???);
+    underholdskostnadGrunnlag.setNettoBarnetilsynPeriodeListe(hentNettoBarnetilsynPeriodeResultat(soknadBarnPersonId));
 
     // Kaller core-modulen for beregning av underholdskostnad
     LOGGER.debug("Underholdskostnad - grunnlag for beregning: {}", underholdskostnadGrunnlag);
@@ -324,9 +329,11 @@ public class BeregnBarnebidragService {
   }
 
   // Beregning av kostnadsberegnet bidrag
-  private void beregnKostnadsberegnetBidrag(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
+  private void beregnKostnadsberegnetBidrag(LocalDate beregnDatoFra, LocalDate beregnDatoTil,
+      BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
     // Bygger kostnadsberegnet bidrag grunnlag
-    var kostnadsberegnetBidragGrunnlag = byggKostnadsberegnetBidragGrunnlag(underholdskostnadGrunnlagTilCore);
+    var kostnadsberegnetBidragGrunnlag =
+        byggKostnadsberegnetBidragGrunnlag(beregnDatoFra, beregnDatoTil, underholdskostnadGrunnlagTilCore);
 
     // Kaller core-modulen for beregning av kostnadsberegnet bidrag
     LOGGER.debug("Kostnadsberegnet bidrag - grunnlag for beregning: {}", kostnadsberegnetBidragGrunnlag);
@@ -350,8 +357,23 @@ public class BeregnBarnebidragService {
     LOGGER.debug("Kostnadsberegnet bidrag - resultat av beregning: {}", kostnadsberegnetBidragResultat.getResultatPeriodeListe());
   }
 
+  // Hent data fra netto barnetilsyn resultat som skal brukes som input til beregning av underholdskostnad
+  private List<NettoBarnetilsynPeriodeCore> hentNettoBarnetilsynPeriodeResultat(int soknadBarnPersonId) {
+    var nettoBarnetilsynPeriodeCoreListe = new ArrayList<NettoBarnetilsynPeriodeCore>();
+    for (var nettoBarnetilsynPeriodeCore : nettoBarnetilsynResultat.getResultatPeriodeListe()) {
+      for (var resultatBeregning : nettoBarnetilsynPeriodeCore.getResultatBeregningListe()) {
+        if (soknadBarnPersonId == resultatBeregning.getResultatSoknadsbarnPersonId()) {
+          nettoBarnetilsynPeriodeCoreListe.add(new NettoBarnetilsynPeriodeCore(
+              nettoBarnetilsynPeriodeCore.getResultatDatoFraTil(),
+              resultatBeregning.getResultatBelop()));
+        }
+      }
+    }
+    return nettoBarnetilsynPeriodeCoreListe;
+  }
+
   // Beregning av kostnadsberegnet bidrag
-  private BeregnKostnadsberegnetBidragGrunnlagCore byggKostnadsberegnetBidragGrunnlag(
+  private BeregnKostnadsberegnetBidragGrunnlagCore byggKostnadsberegnetBidragGrunnlag(LocalDate beregnDatoFra, LocalDate beregnDatoTil,
       BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
     var underholdskostnadPeriodeCoreListe = new ArrayList<UnderholdskostnadPeriodeCore>();
     for (var underholdskostnadPeriodeCore : underholdskostnadResultat.getResultatPeriodeListe()) {
@@ -373,10 +395,8 @@ public class BeregnBarnebidragService {
           samvaersfradragPeriodeCore.getResultatDatoFraTil(), samvaersfradragPeriodeCore.getResultatBeregning().getResultatSamvaersfradragBelop()));
     }
 
-    //TODO beregnDatoFra og bergnDatoTil må hentes fra et annet sted
-    return new BeregnKostnadsberegnetBidragGrunnlagCore(underholdskostnadGrunnlagTilCore.getBeregnDatoFra(),
-        underholdskostnadGrunnlagTilCore.getBeregnDatoTil(), underholdskostnadPeriodeCoreListe, bpAndelUnderholdskostnadPeriodeCoreListe,
-        samvaersfradragPeriodeCoreListe);
+    return new BeregnKostnadsberegnetBidragGrunnlagCore(beregnDatoFra, beregnDatoTil, underholdskostnadPeriodeCoreListe,
+        bpAndelUnderholdskostnadPeriodeCoreListe, samvaersfradragPeriodeCoreListe);
   }
 
   // Mapper sjabloner av typen sjablontall

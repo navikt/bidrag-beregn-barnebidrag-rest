@@ -3,36 +3,18 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
-import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.SamvaersklassePeriodeCore
-import java.time.LocalDate
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en samværsfradragberegning")
 data class BeregnSamvaersfradragGrunnlag(
-    @ApiModelProperty(value = "Beregn samværsfradrag fra-dato") var beregnDatoFra: LocalDate? = null,
-    @ApiModelProperty(value = "Beregn samværsfradrag til-dato") var beregnDatoTil: LocalDate? = null,
-    @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var soknadsbarnFodselsdato: LocalDate? = null,
     @ApiModelProperty(
         value = "Periodisert liste over bidragspliktiges samværsklasser") val samvaersklassePeriodeListe: List<SamvaersklassePeriode>? = null
-) {
-
-  fun tilCore() = BeregnSamvaersfradragGrunnlagCore(
-      beregnDatoFra = if (beregnDatoFra != null) beregnDatoFra!! else throw UgyldigInputException("beregnDatoFra kan ikke være null"),
-      beregnDatoTil = if (beregnDatoTil != null) beregnDatoTil!! else throw UgyldigInputException("beregnDatoTil kan ikke være null"),
-      soknadsbarnFodselsdato = if (soknadsbarnFodselsdato != null) soknadsbarnFodselsdato!! else throw UgyldigInputException(
-          "soknadsbarnFodselsdato kan ikke være null"),
-
-      samvaersklassePeriodeListe = if (samvaersklassePeriodeListe != null) samvaersklassePeriodeListe.map { it.tilCore() }
-      else throw UgyldigInputException("samvaersklassePeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
-  )
-}
+)
 
 @ApiModel(value = "Bidragspliktiges samværsklasse")
 data class SamvaersklassePeriode(
@@ -89,12 +71,12 @@ data class ResultatBeregningSamvaersfradrag(
 data class ResultatGrunnlagSamvaersfradrag(
     @ApiModelProperty(value = "Søknadsbarnets alder") var soknadBarnAlder: Int? = null,
     @ApiModelProperty(value = "Samværsklasse") var samvaersklasse: String? = null,
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       soknadBarnAlder = resultatGrunnlag.soknadBarnAlder,
       samvaersklasse = resultatGrunnlag.samvaersklasse,
-      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }

@@ -3,32 +3,17 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
-import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadResultatCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntekterPeriodeCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore
-import java.time.LocalDate
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en beregning av BPs andel av underholdskostnad")
 data class BeregnBPsAndelUnderholdskostnadGrunnlag(
-    @ApiModelProperty(value = "Beregn BPs andel underholdskostnad fra-dato") var beregnDatoFra: LocalDate? = null,
-    @ApiModelProperty(value = "Beregn BPs andel underholdskostnad til-dato") var beregnDatoTil: LocalDate? = null,
     @ApiModelProperty(value = "Periodisert liste over inntekter") val inntekterPeriodeListe: List<InntekterPeriode>? = null
-) {
-
-  fun tilCore() = BeregnBPsAndelUnderholdskostnadGrunnlagCore(
-      beregnDatoFra = if (beregnDatoFra != null) beregnDatoFra!! else throw UgyldigInputException("beregnDatoFra kan ikke være null"),
-      beregnDatoTil = if (beregnDatoTil != null) beregnDatoTil!! else throw UgyldigInputException("beregnDatoTil kan ikke være null"),
-
-      inntekterPeriodeListe = if (inntekterPeriodeListe != null) inntekterPeriodeListe.map { it.tilCore() }
-      else throw UgyldigInputException("inntekterPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
-  )
-}
+)
 
 @ApiModel(value = "Inntekter")
 data class InntekterPeriode(
@@ -90,13 +75,13 @@ data class ResultatGrunnlagBPsAndelUnderholdskostnad(
     @ApiModelProperty(value = "Inntekt bidragspliktig") var inntektBP: Double? = null,
     @ApiModelProperty(value = "Inntekt bidragsmottaker") var inntektBM: Double? = null,
     @ApiModelProperty(value = "Inntekt bidragsbarn") var inntektBB: Double? = null,
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       inntektBP = resultatGrunnlag.inntektBP,
       inntektBM = resultatGrunnlag.inntektBM,
       inntektBB = resultatGrunnlag.inntektBB,
-      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }

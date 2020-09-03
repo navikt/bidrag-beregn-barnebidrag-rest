@@ -335,7 +335,8 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataNettoBarnetilsyn() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftBelop(),
+            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+                TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftBelop(),
                 TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(), TestUtil.byggSamvaersfradragGrunnlag())))
         .withMessageContaining("faktiskUtgiftBelop kan ikke være null");
   }
@@ -345,10 +346,10 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataUnderholdskostnad() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
-                TestUtil.byggUnderholdskostnadGrunnlagUtenSoknadBarnFodselsdato(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
+            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1, TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
+                TestUtil.byggUnderholdskostnadGrunnlagUtenForpleiningUtgiftBelop(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
                 TestUtil.byggSamvaersfradragGrunnlag())))
-        .withMessageContaining("soknadBarnFodselsdato kan ikke være null");
+        .withMessageContaining("forpleiningUtgiftBelop kan ikke være null");
   }
 
   @Test
@@ -356,7 +357,8 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataBPsAndelUnderholdskostnad() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
+            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+                TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
                 TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlagUtenInntektBP(),
                 TestUtil.byggSamvaersfradragGrunnlag())))
         .withMessageContaining("inntektBP kan ikke være null");
@@ -367,9 +369,10 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataSamvaersfradrag() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
+            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+                TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
                 TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
-                TestUtil.byggSamvaersfradragGrunnlagUtenSoknadsbarnFodselsdato())))
-        .withMessageContaining("soknadsbarnFodselsdato kan ikke være null");
+                TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklasse())))
+        .withMessageContaining("samvaersklasse kan ikke være null");
   }
 }
