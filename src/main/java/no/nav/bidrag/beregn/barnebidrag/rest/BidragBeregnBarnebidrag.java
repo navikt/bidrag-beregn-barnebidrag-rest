@@ -1,7 +1,7 @@
 package no.nav.bidrag.beregn.barnebidrag.rest;
 
-import no.nav.bidrag.beregn.barnebidrag.rest.consumer.BidragsevneConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
+import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.KostnadsberegnetBidragCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
@@ -17,6 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class BidragBeregnBarnebidrag {
+
+  @Bean
+  public BidragsevneCore bidragsevneCore() {
+    return BidragsevneCore.getInstance();
+  }
 
   @Bean
   public NettoBarnetilsynCore nettoBarnetilsynCore() {
@@ -41,11 +46,6 @@ public class BidragBeregnBarnebidrag {
   @Bean
   public KostnadsberegnetBidragCore kostnadsberegnetBidragCore() {
     return KostnadsberegnetBidragCore.getInstance();
-  }
-
-  @Bean
-  public BidragsevneConsumer bidragsevneConsumer(@Value("${BIDRAGSEVNE_URL}") String bidragsevneBaseUrl, RestTemplate restTemplate) {
-    return new BidragsevneConsumer(restTemplate, bidragsevneBaseUrl);
   }
 
   @Bean

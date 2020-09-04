@@ -84,6 +84,46 @@ class DtoTest {
   }
 
   @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektPeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarBEInntektPeriodeListeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenInntektPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::bidragsevneTilCore)
+        .withMessage("inntektPeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når skatteklassePeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarBESkatteklassePeriodeListeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSkatteklassePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::bidragsevneTilCore)
+        .withMessage("skatteklassePeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bostatusPeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarBEBostatusPeriodeListeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenBostatusPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::bidragsevneTilCore)
+        .withMessage("bostatusPeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når antallBarnIEgetHusholdPeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarBEAntallBarnIEgetHusholdPeriodeListeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::bidragsevneTilCore)
+        .withMessage("antallBarnIEgetHusholdPeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når saerfradragPeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarBESaerfradragPeriodeListeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSaerfradragPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::bidragsevneTilCore)
+        .withMessage("saerfradragPeriodeListe kan ikke være null");
+  }
+
+  @Test
   @DisplayName("Skal kaste IllegalArgumentException når faktiskUtgiftPeriodeListe er null")
   void skalKasteIllegalArgumentExceptionNaarNBFaktiskUtgiftPeriodeListeErNull() {
     var grunnlag = TestUtil.byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeListe();
@@ -121,6 +161,176 @@ class DtoTest {
     var grunnlag = TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeListe();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::samvaersfradragTilCore)
         .withMessage("samvaersklassePeriodeListe kan ikke være null");
+  }
+
+
+  // Bidragsevne
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBEInntektDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenInntektDatoFraTil().getInntektPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("inntektDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarBEInntektDatoFraErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenInntektDatoFra().getInntektPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal ikke kaste exception når inntektDatoTil er null")
+  void skalIkkeKasteExceptionNaarBEInntektDatoTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenInntektDatoTil().getInntektPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektType er null")
+  void skalKasteIllegalArgumentExceptionNaarBEInntektTypeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenInntektType().getInntektPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("inntektType kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektBelop er null")
+  void skalKasteIllegalArgumentExceptionNaarBEInntektBelopErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenInntektBelop().getInntektPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("inntektBelop kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når skatteklasseDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBESkatteklasseDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSkatteklasseDatoFraTil().getSkatteklassePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("skatteklasseDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når skatteklasseDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarBESkatteklasseDatoFraErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSkatteklasseDatoFra().getSkatteklassePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal ikke kaste exception når skatteklasseDatoTil er null")
+  void skalIkkeKasteExceptionNaarBESkatteklasseDatoTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSkatteklasseDatoTil().getSkatteklassePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når skatteklasse er null")
+  void skalKasteIllegalArgumentExceptionNaarBESkatteklasseErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSkatteklasse().getSkatteklassePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("skatteklasse kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bostatusDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBEBostatusDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenBostatusDatoFraTil().getBostatusPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("bostatusDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bostatusDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarBEBostatusDatoFraErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenBostatusDatoFra().getBostatusPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal ikke kaste exception når bostatusDatoTil er null")
+  void skalIkkeKasteExceptionNaarBEBostatusDatoTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenBostatusDatoTil().getBostatusPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bostatusKode er null")
+  void skalKasteIllegalArgumentExceptionNaarBEBostatusKodeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenBostatusKode().getBostatusPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("bostatusKode kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når antallBarnIEgetHusholdDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBEAntallBarnIEgetHusholdDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdDatoFraTil().getAntallBarnIEgetHusholdPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("antallBarnIEgetHusholdDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når antallBarnIEgetHusholdDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarBEAntallBarnIEgetHusholdDatoFraErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdDatoFra().getAntallBarnIEgetHusholdPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal ikke kaste exception når antallBarnIEgetHusholdDatoTil er null")
+  void skalIkkeKasteExceptionNaarBEAntallBarnIEgetHusholdDatoTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdDatoTil().getAntallBarnIEgetHusholdPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når antallBarn er null")
+  void skalKasteIllegalArgumentExceptionNaarBEAntallBarnErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenAntallBarn().getAntallBarnIEgetHusholdPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("antallBarn kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når saerfradragDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBESaerfradragDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSaerfradragDatoFraTil().getSaerfradragPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("saerfradragDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når saerfradragDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarBESaerfradragDatoFraErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSaerfradragDatoFra().getSaerfradragPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal ikke kaste exception når saerfradragDatoTil er null")
+  void skalIkkeKasteExceptionNaarBESaerfradragDatoTilErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSaerfradragDatoTil().getSaerfradragPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("periodeDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når saerfradragKode er null")
+  void skalKasteIllegalArgumentExceptionNaarBESaerfradragKodeErNull() {
+    var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSaerfradragKode().getSaerfradragPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("saerfradragKode kan ikke være null");
   }
 
 
