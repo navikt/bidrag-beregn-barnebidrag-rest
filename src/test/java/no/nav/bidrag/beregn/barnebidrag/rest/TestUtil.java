@@ -56,16 +56,12 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeSamvaersfra
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.SaerfradragPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.SamvaersklassePeriode;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Sjablon;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.SjablonInnhold;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.SkatteklassePeriode;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneResultatCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.InntektCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadResultatCore;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
 import no.nav.bidrag.beregn.felles.dto.PeriodeCore;
-import no.nav.bidrag.beregn.felles.enums.SjablonInnholdNavn;
-import no.nav.bidrag.beregn.felles.enums.SjablonTallNavn;
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragResultatCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftCore;
@@ -619,9 +615,9 @@ public class TestUtil {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeBidragsevne>();
     bidragPeriodeResultatListe.add(new ResultatPeriodeBidragsevne(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new ResultatBeregningBidragsevne(100d, 100d),
-        new ResultatGrunnlagBidragsevne(singletonList(new Inntekt("LØNNSINNTEKT", 500000d)), 1, "MED_ANDRE", 1,
-            "HELT", singletonList(new Sjablon(SjablonTallNavn.TRYGDEAVGIFT_PROSENT.getNavn(), emptyList(),
-            singletonList(new SjablonInnhold(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), 8d)))))));
+        new ResultatGrunnlagBidragsevne(singletonList(new Inntekt("LØNNSINNTEKT", 500000d)), 1, "MED_ANDRE", 1, "HELT")));
+//        new ResultatGrunnlagBidragsevne(singletonList(new Inntekt("LØNNSINNTEKT", 500000d)), 1, "MED_ANDRE", 1, "HELT",
+//            emptyList()));
     return new BeregnBidragsevneResultat(bidragPeriodeResultatListe);
   }
 
