@@ -131,7 +131,7 @@ data class ResultatGrunnlagBidragsevne(
     @ApiModelProperty(value = "Bidragspliktiges bostatuskode") var bostatusKode: String,
     @ApiModelProperty(value = "Antall egne barn i bidragspliktiges husstand") var antallEgneBarnIHusstand: Int,
     @ApiModelProperty(value = "Bidragspliktiges særfradragkode") var saerfradragKode: String,
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       inntektListe = resultatGrunnlag.inntektListe.map { Inntekt(it) },
@@ -139,7 +139,7 @@ data class ResultatGrunnlagBidragsevne(
       bostatusKode = resultatGrunnlag.bostatusKode,
       antallEgneBarnIHusstand = resultatGrunnlag.antallEgneBarnIHusstand,
       saerfradragKode = resultatGrunnlag.saerfradragkode,
-      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 
