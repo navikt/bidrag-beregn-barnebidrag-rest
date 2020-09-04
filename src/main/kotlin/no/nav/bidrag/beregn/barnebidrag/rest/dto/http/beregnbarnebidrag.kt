@@ -3,6 +3,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
+import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagAltCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCore
@@ -45,6 +46,38 @@ data class BeregnBarnebidragGrunnlag(
     if (beregnSamvaersfradragGrunnlag != null) beregnSamvaersfradragGrunnlag!!
     else throw UgyldigInputException("beregnSamvaersfradragGrunnlag kan ikke være null")
   }
+
+  fun bidragsevneTilCore() = BeregnBidragsevneGrunnlagAltCore(
+      beregnDatoFra = beregnDatoFra!!,
+      beregnDatoTil = beregnDatoTil!!,
+
+      inntektPeriodeListe =
+      if (beregnBidragsevneGrunnlag!!.inntektPeriodeListe != null)
+        beregnBidragsevneGrunnlag!!.inntektPeriodeListe!!.map { it.tilCore() }
+      else throw UgyldigInputException("inntektPeriodeListe kan ikke være null"),
+
+      skatteklassePeriodeListe =
+      if (beregnBidragsevneGrunnlag!!.skatteklassePeriodeListe != null)
+        beregnBidragsevneGrunnlag!!.skatteklassePeriodeListe!!.map { it.tilCore() }
+      else throw UgyldigInputException("skatteklassePeriodeListe kan ikke være null"),
+
+      bostatusPeriodeListe =
+      if (beregnBidragsevneGrunnlag!!.bostatusPeriodeListe != null)
+        beregnBidragsevneGrunnlag!!.bostatusPeriodeListe!!.map { it.tilCore() }
+      else throw UgyldigInputException("bostatusPeriodeListe kan ikke være null"),
+
+      antallBarnIEgetHusholdPeriodeListe =
+      if (beregnBidragsevneGrunnlag!!.antallBarnIEgetHusholdPeriodeListe != null)
+        beregnBidragsevneGrunnlag!!.antallBarnIEgetHusholdPeriodeListe!!.map { it.tilCore() }
+      else throw UgyldigInputException("antallBarnIEgetHusholdPeriodeListe kan ikke være null"),
+
+      saerfradragPeriodeListe =
+      if (beregnBidragsevneGrunnlag!!.saerfradragPeriodeListe != null)
+        beregnBidragsevneGrunnlag!!.saerfradragPeriodeListe!!.map { it.tilCore() }
+      else throw UgyldigInputException("saerfradragPeriodeListe kan ikke være null"),
+
+      sjablonPeriodeListe = emptyList()
+  )
 
   fun nettoBarnetilsynTilCore() = BeregnNettoBarnetilsynGrunnlagCore(
       beregnDatoFra = beregnDatoFra!!,

@@ -23,6 +23,10 @@ public class SjablonConsumer {
   };
   private static final ParameterizedTypeReference<List<Samvaersfradrag>> SJABLON_SAMVAERSFRADRAG_LISTE = new ParameterizedTypeReference<>() {
   };
+  private static final ParameterizedTypeReference<List<Bidragsevne>> SJABLON_BIDRAGSEVNE_LISTE = new ParameterizedTypeReference<>() {
+  };
+  private static final ParameterizedTypeReference<List<TrinnvisSkattesats>> SJABLON_TRINNVIS_SKATTESATS_LISTE = new ParameterizedTypeReference<>() {
+  };
 
   private final RestTemplate restTemplate;
   private final String sjablonSjablontallUrl;
@@ -30,6 +34,8 @@ public class SjablonConsumer {
   private final String sjablonMaksTilsynUrl;
   private final String sjablonMaksFradragUrl;
   private final String sjablonSamvaersfradragUrl;
+  private final String sjablonBidragsevneUrl;
+  private final String sjablonTrinnvisSkattesatsUrl;
 
   public SjablonConsumer(RestTemplate restTemplate, String sjablonBaseUrl) {
     this.restTemplate = restTemplate;
@@ -38,6 +44,8 @@ public class SjablonConsumer {
     this.sjablonMaksTilsynUrl = sjablonBaseUrl + "/makstilsyn/all";
     this.sjablonMaksFradragUrl = sjablonBaseUrl + "/maksfradrag/all";
     this.sjablonSamvaersfradragUrl = sjablonBaseUrl + "/samvaersfradrag/all";
+    this.sjablonBidragsevneUrl = sjablonBaseUrl + "/bidragsevner/all";
+    this.sjablonTrinnvisSkattesatsUrl = sjablonBaseUrl + "/trinnvisskattesats/all";
   }
 
   public HttpResponse<List<Sjablontall>> hentSjablonSjablontall() {
@@ -95,6 +103,32 @@ public class SjablonConsumer {
       return new HttpResponse<>(sjablonResponse);
     } catch (RestClientResponseException exception) {
       LOGGER.error("hentSjablonSamvaersfradrag fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
+  }
+
+  public HttpResponse<List<Bidragsevne>> hentSjablonBidragsevne() {
+
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonBidragsevneUrl, HttpMethod.GET, null, SJABLON_BIDRAGSEVNE_LISTE);
+      LOGGER.info("hentSjablonBidragsevne fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonBidragsevne fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
+          exception.getMessage());
+      throw new SjablonConsumerException(exception);
+    }
+  }
+
+  public HttpResponse<List<TrinnvisSkattesats>> hentSjablonTrinnvisSkattesats() {
+
+    try {
+      var sjablonResponse = restTemplate.exchange(sjablonTrinnvisSkattesatsUrl, HttpMethod.GET, null, SJABLON_TRINNVIS_SKATTESATS_LISTE);
+      LOGGER.info("hentSjablonTrinnvisSkattesats fikk http status {} fra bidrag-sjablon", sjablonResponse.getStatusCode());
+      return new HttpResponse<>(sjablonResponse);
+    } catch (RestClientResponseException exception) {
+      LOGGER.error("hentSjablonTrinnvisSkattesats fikk følgende feilkode fra bidrag-sjablon: {}, med melding {}", exception.getStatusText(),
           exception.getMessage());
       throw new SjablonConsumerException(exception);
     }

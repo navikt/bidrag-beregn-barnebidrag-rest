@@ -72,7 +72,11 @@ class BeregnBarnebidragControllerTest {
         () -> assertThat(
             barnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(barnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvne())
+        () -> assertThat(
+            barnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultat25ProsentInntekt())
+            .isEqualTo(100d),
+        () -> assertThat(
+            barnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvneBelop())
             .isEqualTo(100d),
 
         () -> assertThat(barnebidragResultat.getBeregnNettoBarnetilsynResultat()).isNotNull(),

@@ -142,4 +142,58 @@ class SjablonConsumerTest {
 
     assertThatExceptionOfType(SjablonConsumerException.class).isThrownBy(() -> sjablonConsumer.hentSjablonMaksFradrag());
   }
+
+  @Test
+  @DisplayName("Skal hente liste av Bidragsevne-sjabloner når respons fra tjenesten er OK")
+  void skalHenteListeAvBidragsevneSjablonerNaarResponsFraTjenestenErOk() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Bidragsevne>>) any()))
+        .thenReturn(new ResponseEntity<>(TestUtil.dummySjablonBidragsevneListe(), HttpStatus.OK));
+    var sjablonResponse = sjablonConsumer.hentSjablonBidragsevne();
+
+    assertAll(
+        () -> assertThat(sjablonResponse).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().size()).isEqualTo(TestUtil.dummySjablonBidragsevneListe().size()),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().get(0).getBelopBoutgift())
+            .isEqualTo(TestUtil.dummySjablonBidragsevneListe().get(0).getBelopBoutgift())
+    );
+  }
+
+  @Test
+  @DisplayName("Skal kaste SjablonConsumerException når respons fra tjenesten ikke er OK for Bidragsevne")
+  void skalKasteRestClientExceptionNaarResponsFraTjenestenIkkeErOkForBidragsevne() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Bidragsevne>>) any()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+    assertThatExceptionOfType(SjablonConsumerException.class).isThrownBy(() -> sjablonConsumer.hentSjablonBidragsevne());
+  }
+
+  @Test
+  @DisplayName("Skal hente liste av TrinnvisSkattesats-sjabloner når respons fra tjenesten er OK")
+  void skalHenteListeAvTrinnvisSkattesatsSjablonerNaarResponsFraTjenestenErOk() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<TrinnvisSkattesats>>) any()))
+        .thenReturn(new ResponseEntity<>(TestUtil.dummySjablonTrinnvisSkattesatsListe(), HttpStatus.OK));
+    var sjablonResponse = sjablonConsumer.hentSjablonTrinnvisSkattesats();
+
+    assertAll(
+        () -> assertThat(sjablonResponse).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().size()).isEqualTo(TestUtil.dummySjablonTrinnvisSkattesatsListe().size()),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().get(0).getInntektgrense())
+            .isEqualTo(TestUtil.dummySjablonTrinnvisSkattesatsListe().get(0).getInntektgrense())
+    );
+  }
+
+  @Test
+  @DisplayName("Skal kaste SjablonConsumerException når respons fra tjenesten ikke er OK for TrinnvisSkattesats")
+  void skalKasteRestClientExceptionNaarResponsFraTjenestenIkkeErOkForTrinnvisSkattesats() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<TrinnvisSkattesats>>) any()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+    assertThatExceptionOfType(SjablonConsumerException.class).isThrownBy(() -> sjablonConsumer.hentSjablonTrinnvisSkattesats());
+  }
 }

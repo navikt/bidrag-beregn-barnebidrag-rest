@@ -9,11 +9,11 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.Collection;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
-import no.nav.bidrag.beregn.barnebidrag.rest.consumer.BidragsevneConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
+import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
+import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagAltCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.felles.dto.SjablonInnholdCore;
@@ -46,7 +46,7 @@ class BeregnBarnebidragServiceTest {
   @Mock
   private SjablonConsumer sjablonConsumerMock;
   @Mock
-  private BidragsevneConsumer bidragsevneConsumerMock;
+  private BidragsevneCore bidragsevneCoreMock;
   @Mock
   private NettoBarnetilsynCore nettoBarnetilsynCoreMock;
   @Mock
@@ -72,9 +72,11 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
 
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
@@ -110,6 +112,7 @@ class BeregnBarnebidragServiceTest {
   @Test
   @DisplayName("Skal ha korrekt sjablon-grunnlag når beregningsmodulen kalles")
   void skalHaKorrektSjablonGrunnlagNaarBeregningsmodulenKalles() {
+    var bidragsevneGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBidragsevneGrunnlagAltCore.class);
     var nettoBarnetilsynGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnNettoBarnetilsynGrunnlagCore.class);
     var underholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnUnderholdskostnadGrunnlagCore.class);
     var bpAndelUnderholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBPsAndelUnderholdskostnadGrunnlagCore.class);
@@ -121,9 +124,12 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
 
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(bidragsevneCoreMock.beregnBidragsevne(bidragsevneGrunnlagTilCoreCaptor.capture()))
+        .thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCoreCaptor.capture()))
         .thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(underholdskostnadGrunnlagTilCoreCaptor.capture()))
@@ -136,11 +142,14 @@ class BeregnBarnebidragServiceTest {
 
     var beregnBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag());
 
+    var bidragsevneGrunnlagTilCore = bidragsevneGrunnlagTilCoreCaptor.getValue();
     var nettoBarnetilsynGrunnlagTilCore = nettoBarnetilsynGrunnlagTilCoreCaptor.getValue();
     var underholdskostnadGrunnlagTilCore = underholdskostnadGrunnlagTilCoreCaptor.getValue();
     var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
     var samvaersfradragGrunnlagTilCore = samvaersfradragGrunnlagTilCoreCaptor.getValue();
 
+    var forventetAntallSjablonElementerBidragsevne = TestUtil.dummySjablonSjablontallListe().size() +
+        TestUtil.dummySjablonBidragsevneListe().size() + TestUtil.dummySjablonTrinnvisSkattesatsListe().size();
     var forventetAntallSjablonElementerNettoBarnetilsyn = TestUtil.dummySjablonSjablontallListe().size() +
         TestUtil.dummySjablonMaksFradragListe().size() + TestUtil.dummySjablonMaksTilsynListe().size();
     var forventetAntallSjablonElementerUnderholdskostnad =
@@ -151,6 +160,14 @@ class BeregnBarnebidragServiceTest {
     assertAll(
         () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
         () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
+
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat()).isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe())
+            .isNotNull(),
+        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe().size())
+            .isEqualTo(1),
+        () -> assertThat(bidragsevneGrunnlagTilCore.getSjablonPeriodeListe().size())
+            .isEqualTo(forventetAntallSjablonElementerBidragsevne),
 
         () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
         () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe())
@@ -225,6 +242,26 @@ class BeregnBarnebidragServiceTest {
   }
 
   @Test
+  @DisplayName("Skal kaste UgyldigInputException ved feil retur fra BidragsevneCore")
+  void skalKasteUgyldigInputExceptionVedFeilReturFraBidragsevneCore() {
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonForbruksutgifter())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+    when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCoreMedAvvik());
+
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .withMessageContaining("beregnDatoFra kan ikke være null")
+        .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
+  }
+
+  @Test
   @DisplayName("Skal kaste UgyldigInputException ved feil retur fra NettoBarnetilsynCore")
   void skalKasteUgyldigInputExceptionVedFeilReturFraNettoBarnetilsynCore() {
     when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
@@ -233,8 +270,10 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
@@ -252,8 +291,10 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCoreMedAvvik());
 
@@ -272,8 +313,10 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any()))
@@ -294,8 +337,10 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
@@ -316,8 +361,10 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
     when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
     when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(bidragsevneConsumerMock.hentBidragsevne(any(BeregnBidragsevneGrunnlag.class)))
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummyBidragsevneResultat()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
@@ -328,6 +375,17 @@ class BeregnBarnebidragServiceTest {
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException ved validering av inputdata - bidragsevne")
+  void skalKasteUgyldigInputExceptionVedValideringAvInputdataBidragsevne() {
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(() -> beregnBarnebidragService.beregn(
+            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+                TestUtil.byggBidragsevneGrunnlagUtenBostatusKode(), TestUtil.byggNettoBarnetilsynGrunnlag(),
+                TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(), TestUtil.byggSamvaersfradragGrunnlag())))
+        .withMessageContaining("bostatusKode kan ikke være null");
   }
 
   @Test
@@ -346,7 +404,8 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataUnderholdskostnad() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1, TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
+            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+                TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
                 TestUtil.byggUnderholdskostnadGrunnlagUtenForpleiningUtgiftBelop(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
                 TestUtil.byggSamvaersfradragGrunnlag())))
         .withMessageContaining("forpleiningUtgiftBelop kan ikke være null");
