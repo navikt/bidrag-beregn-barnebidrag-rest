@@ -92,7 +92,7 @@ data class ResultatGrunnlagUnderholdskostnad(
     @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String? = null,
     @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String? = null,
     @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: Double? = null,
-    @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: Double? = null,
+    @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: Double? = null
 //    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
@@ -101,7 +101,7 @@ data class ResultatGrunnlagUnderholdskostnad(
       barnetilsynMedStonadTilsynType = resultatGrunnlag.barnetilsynMedStonadTilsynType,
       barnetilsynMedStonadStonadType = resultatGrunnlag.barnetilsynMedStonadStonadType,
       nettoBarnetilsynBelop = resultatGrunnlag.nettoBarnetilsynBelop,
-      forpleiningUtgiftBelop = resultatGrunnlag.forpleiningUtgiftBelop,
+      forpleiningUtgiftBelop = resultatGrunnlag.forpleiningUtgiftBelop
 //      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }

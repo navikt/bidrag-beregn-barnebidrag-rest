@@ -74,14 +74,14 @@ data class ResultatBeregningBPsAndelUnderholdskostnad(
 data class ResultatGrunnlagBPsAndelUnderholdskostnad(
     @ApiModelProperty(value = "Inntekt bidragspliktig") var inntektBP: Double? = null,
     @ApiModelProperty(value = "Inntekt bidragsmottaker") var inntektBM: Double? = null,
-    @ApiModelProperty(value = "Inntekt bidragsbarn") var inntektBB: Double? = null,
+    @ApiModelProperty(value = "Inntekt bidragsbarn") var inntektBB: Double? = null
 //    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       inntektBP = resultatGrunnlag.inntektBP,
       inntektBM = resultatGrunnlag.inntektBM,
-      inntektBB = resultatGrunnlag.inntektBB,
+      inntektBB = resultatGrunnlag.inntektBB
 //      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }

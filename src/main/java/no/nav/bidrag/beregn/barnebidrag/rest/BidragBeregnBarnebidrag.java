@@ -49,6 +49,11 @@ public class BidragBeregnBarnebidrag {
   }
 
   @Bean
+  public BarnebidragCore barnebidragCore() {
+    return BarnebidragCore.getInstance();
+  }
+
+  @Bean
   public SjablonConsumer sjablonConsumer(@Value("${SJABLON_URL}") String sjablonBaseUrl, RestTemplate restTemplate) {
     return new SjablonConsumer(restTemplate, sjablonBaseUrl);
   }

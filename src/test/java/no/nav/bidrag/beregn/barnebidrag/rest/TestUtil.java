@@ -15,10 +15,21 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Samvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Sjablontall;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.TrinnvisSkattesats;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.AntallBarnIEgetHusholdPeriode;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggBM;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggBMCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggBMPeriode;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggBP;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggBPCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggBPPeriode;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggForsvaret;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggForsvaretCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilleggForsvaretPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BarnetilsynMedStonadPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPsAndelUnderholdskostnadGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPsAndelUnderholdskostnadResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultatCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnKostnadsberegnetBidragResultat;
@@ -26,6 +37,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynGrun
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnSamvaersfradragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnSamvaersfradragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnUnderholdskostnadGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnUnderholdskostnadResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BostatusPeriode;
@@ -36,12 +48,14 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntektPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntekterPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Periode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningBPsAndelUnderholdskostnad;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningBarnebidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningBidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningKostnadsberegnetBidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningNettoBarnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningSamvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagBPsAndelUnderholdskostnad;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagBarnebidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagBidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagFaktiskUtgift;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagKostnadsberegnetBidrag;
@@ -49,6 +63,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagNettoBarne
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagSamvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeBPsAndelUnderholdskostnad;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeBarnebidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeBidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeKostnadsberegnetBidrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeNettoBarnetilsyn;
@@ -70,85 +85,101 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResulta
 
 public class TestUtil {
 
-  // Barnebidrag
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlag() {
-    return byggBarnebidragGrunnlag("");
+  // Total barnebidrag
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnDatoFra() {
-    return byggBarnebidragGrunnlag("beregnDatoFra");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnDatoFra() {
+    return byggTotalBarnebidragGrunnlag("beregnDatoFra");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnDatoTil() {
-    return byggBarnebidragGrunnlag("beregnDatoTil");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnDatoTil() {
+    return byggTotalBarnebidragGrunnlag("beregnDatoTil");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSoknadBarnFodselsdato() {
-    return byggBarnebidragGrunnlag("soknadBarnFodselsdato");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenSoknadBarnFodselsdato() {
+    return byggTotalBarnebidragGrunnlag("soknadBarnFodselsdato");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSoknadBarnPersonId() {
-    return byggBarnebidragGrunnlag("soknadBarnPersonId");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenSoknadBarnPersonId() {
+    return byggTotalBarnebidragGrunnlag("soknadBarnPersonId");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnBidragsevneGrunnlag() {
-    return byggBarnebidragGrunnlag("beregnBidragsevneGrunnlag");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnBidragsevneGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("beregnBidragsevneGrunnlag");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnNettoBarnetilsynGrunnlag() {
-    return byggBarnebidragGrunnlag("beregnNettoBarnetilsynGrunnlag");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnNettoBarnetilsynGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("beregnNettoBarnetilsynGrunnlag");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnUnderholdskostnadGrunnlag() {
-    return byggBarnebidragGrunnlag("beregnUnderholdskostnadGrunnlag");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnUnderholdskostnadGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("beregnUnderholdskostnadGrunnlag");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnBPAndelUnderholdskostnadGrunnlag() {
-    return byggBarnebidragGrunnlag("beregnBPAndelUnderholdskostnadGrunnlag");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnBPAndelUnderholdskostnadGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("beregnBPAndelUnderholdskostnadGrunnlag");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBeregnSamvaersfradragGrunnlag() {
-    return byggBarnebidragGrunnlag("beregnSamvaersfradragGrunnlag");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnSamvaersfradragGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("beregnSamvaersfradragGrunnlag");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBidragsevneGrunnlagUtenInntektPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "inntektPeriodeListe", "", "", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnBarnebidragGrunnlag() {
+    return byggTotalBarnebidragGrunnlag("beregnBarnebidragGrunnlag");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBidragsevneGrunnlagUtenSkatteklassePeriodeListe() {
-    return byggBarnebidragGrunnlag("", "skatteklassePeriodeListe", "", "", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggBidragsevneGrunnlagUtenInntektPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "inntektPeriodeListe", "", "", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBidragsevneGrunnlagUtenBostatusPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "bostatusPeriodeListe", "", "", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggBidragsevneGrunnlagUtenSkatteklassePeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "skatteklassePeriodeListe", "", "", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "antallBarnIEgetHusholdPeriodeListe", "", "", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggBidragsevneGrunnlagUtenBostatusPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "bostatusPeriodeListe", "", "", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBidragsevneGrunnlagUtenSaerfradragPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "saerfradragPeriodeListe", "", "", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "antallBarnIEgetHusholdPeriodeListe", "", "", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "", "faktiskUtgiftPeriodeListe", "", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggBidragsevneGrunnlagUtenSaerfradragPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "saerfradragPeriodeListe", "", "", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggUnderholdskostnadGrunnlagUtenBarnetilsynMedStonadPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "", "", "barnetilsynMedStonadPeriodeListe", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "faktiskUtgiftPeriodeListe", "", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggUnderholdskostnadGrunnlagUtenForpleiningUtgiftPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "", "", "forpleiningUtgiftPeriodeListe", "", "");
+  public static BeregnTotalBarnebidragGrunnlag byggUnderholdskostnadGrunnlagUtenBarnetilsynMedStonadPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "barnetilsynMedStonadPeriodeListe", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggBPsAndelUnderholdskostnadGrunnlagUtenInntekterPeriodeListe() {
-    return byggBarnebidragGrunnlag("", "", "", "", "inntekterPeriodeListe", "");
+  public static BeregnTotalBarnebidragGrunnlag byggUnderholdskostnadGrunnlagUtenForpleiningUtgiftPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "forpleiningUtgiftPeriodeListe", "", "", "");
   }
 
-  public static BeregnBarnebidragGrunnlag byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeListe() {
-    return byggBarnebidragGrunnlag("", "", "", "", "", "samvaersklassePeriodeListe");
+  public static BeregnTotalBarnebidragGrunnlag byggBPsAndelUnderholdskostnadGrunnlagUtenInntekterPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "", "inntekterPeriodeListe", "", "");
+  }
+
+  public static BeregnTotalBarnebidragGrunnlag byggSamvaersfradragGrunnlagUtenSamvaersklassePeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "", "", "samvaersklassePeriodeListe", "");
+  }
+
+  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "", "", "", "barnetilleggBPPeriodeListe");
+  }
+
+  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "", "", "", "barnetilleggBMPeriodeListe");
+  }
+
+  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "", "", "", "barnetilleggForsvaretPeriodeListe");
   }
 
 
@@ -366,13 +397,79 @@ public class TestUtil {
   }
 
 
-  // Bygger opp BeregnBarnebidragGrunnlag (felles grunnlag for alle delberegninger)
-  private static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlag(String nullVerdi) {
-    return byggBarnebidragGrunnlag(nullVerdi, "", "", "", "", "");
+  //Barnebidrag
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlag() {
+    return byggBarnebidragGrunnlag("");
   }
 
-  private static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlag(String nullVerdi, String bidragsevneVerdi, String nettoBarnetilsynVerdi,
-      String underholdskostnadVerdi, String bpAndelUnderholdskostnadVerdi, String samvaersfradragVerdi) {
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPPeriodeDatoFraTil() {
+    return byggBarnebidragGrunnlag("barnetilleggBPPeriodeDatoFraTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPPeriodeDatoFra() {
+    return byggBarnebidragGrunnlag("barnetilleggBPPeriodeDatoFra");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPPeriodeDatoTil() {
+    return byggBarnebidragGrunnlag("barnetilleggBPPeriodeDatoTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPBelop() {
+    return byggBarnebidragGrunnlag("barnetilleggBPBelop");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPSkattProsent() {
+    return byggBarnebidragGrunnlag("barnetilleggBPSkattProsent");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMPeriodeDatoFraTil() {
+    return byggBarnebidragGrunnlag("barnetilleggBMPeriodeDatoFraTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMPeriodeDatoFra() {
+    return byggBarnebidragGrunnlag("barnetilleggBMPeriodeDatoFra");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMPeriodeDatoTil() {
+    return byggBarnebidragGrunnlag("barnetilleggBMPeriodeDatoTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMBelop() {
+    return byggBarnebidragGrunnlag("barnetilleggBMBelop");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMSkattProsent() {
+    return byggBarnebidragGrunnlag("barnetilleggBMSkattProsent");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretPeriodeDatoFraTil() {
+    return byggBarnebidragGrunnlag("barnetilleggForsvaretPeriodeDatoFraTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretPeriodeDatoFra() {
+    return byggBarnebidragGrunnlag("barnetilleggForsvaretPeriodeDatoFra");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretPeriodeDatoTil() {
+    return byggBarnebidragGrunnlag("barnetilleggForsvaretPeriodeDatoTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretAntallBarn() {
+    return byggBarnebidragGrunnlag("barnetilleggForsvaretAntallBarn");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretIPeriode() {
+    return byggBarnebidragGrunnlag("barnetilleggForsvaretIPeriode");
+  }
+
+
+  // Bygger opp BeregnTotalBarnebidragGrunnlag (felles grunnlag for alle delberegninger)
+  private static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag(String nullVerdi) {
+    return byggTotalBarnebidragGrunnlag(nullVerdi, "", "", "", "", "", "");
+  }
+
+  private static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag(String nullVerdi, String bidragsevneVerdi, String nettoBarnetilsynVerdi,
+      String underholdskostnadVerdi, String bpAndelUnderholdskostnadVerdi, String samvaersfradragVerdi, String barnebidragVerdi) {
     var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
     var beregnDatoTil = (nullVerdi.equals("beregnDatoTil") ? null : LocalDate.parse("2020-01-01"));
     var soknadBarnFodselsdato = (nullVerdi.equals("soknadBarnFodselsdato") ? null : LocalDate.parse("2010-01-01"));
@@ -386,9 +483,12 @@ public class TestUtil {
         : byggBPsAndelUnderholdskostnadGrunnlag(bpAndelUnderholdskostnadVerdi));
     var beregnSamvaersfradragGrunnlag = (nullVerdi.equals("beregnSamvaersfradragGrunnlag") ? null
         : byggSamvaersfradragGrunnlag(samvaersfradragVerdi));
+    var beregnBarnebidragGrunnlag = (nullVerdi.equals("beregnBarnebidragGrunnlag") ? null
+        : byggBarnebidragGrunnlag(barnebidragVerdi));
 
-    return new BeregnBarnebidragGrunnlag(beregnDatoFra, beregnDatoTil, soknadBarnFodselsdato, soknadBarnPersonId, beregnBidragsevneGrunnlag,
-        beregnNettoBarnetilsynGrunnlag, beregnUnderholdskostnadGrunnlag, beregnBPAndelUnderholdskostnadGrunnlag, beregnSamvaersfradragGrunnlag);
+    return new BeregnTotalBarnebidragGrunnlag(beregnDatoFra, beregnDatoTil, soknadBarnFodselsdato, soknadBarnPersonId, beregnBidragsevneGrunnlag,
+        beregnNettoBarnetilsynGrunnlag, beregnUnderholdskostnadGrunnlag, beregnBPAndelUnderholdskostnadGrunnlag, beregnSamvaersfradragGrunnlag,
+        beregnBarnebidragGrunnlag);
   }
 
 
@@ -610,6 +710,71 @@ public class TestUtil {
   }
 
 
+  // Bygger opp BarnebidragGrunnlag
+  private static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlag(String nullVerdi) {
+    var barnetilleggBPPeriodeDatoFra = (nullVerdi.equals("barnetilleggBPPeriodeDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var barnetilleggBPPeriodeDatoTil = (nullVerdi.equals("barnetilleggBPPeriodeDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var barnetilleggBPBelop = (nullVerdi.equals("barnetilleggBPBelop") ? null : 100d);
+    var barnetilleggBPSkattProsent = (nullVerdi.equals("barnetilleggBPSkattProsent") ? null : 25d);
+    var barnetilleggBMPeriodeDatoFra = (nullVerdi.equals("barnetilleggBMPeriodeDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var barnetilleggBMPeriodeDatoTil = (nullVerdi.equals("barnetilleggBMPeriodeDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var barnetilleggBMBelop = (nullVerdi.equals("barnetilleggBMBelop") ? null : 100d);
+    var barnetilleggBMSkattProsent = (nullVerdi.equals("barnetilleggBMSkattProsent") ? null : 25d);
+    var barnetilleggForsvaretPeriodeDatoFra = (nullVerdi.equals("barnetilleggForsvaretPeriodeDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var barnetilleggForsvaretPeriodeDatoTil = (nullVerdi.equals("barnetilleggForsvaretPeriodeDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var barnetilleggForsvaretAntallBarn = (nullVerdi.equals("barnetilleggForsvaretAntallBarn") ? null : 1);
+    var barnetilleggForsvaretIPeriode = (nullVerdi.equals("barnetilleggForsvaretIPeriode") ? null : true);
+
+    List<BarnetilleggBPPeriode> barnetilleggBPPeriodeListe;
+    if (nullVerdi.equals("barnetilleggBPPeriodeListe")) {
+      barnetilleggBPPeriodeListe = null;
+    } else {
+      BarnetilleggBPPeriode barnetilleggBPPeriode;
+      if (nullVerdi.equals("barnetilleggBPPeriodeDatoFraTil")) {
+        barnetilleggBPPeriode = new BarnetilleggBPPeriode(null, barnetilleggBPBelop, barnetilleggBPSkattProsent);
+      } else {
+        barnetilleggBPPeriode = new BarnetilleggBPPeriode(new Periode(barnetilleggBPPeriodeDatoFra, barnetilleggBPPeriodeDatoTil),
+            barnetilleggBPBelop, barnetilleggBPSkattProsent);
+      }
+      barnetilleggBPPeriodeListe = new ArrayList<>();
+      barnetilleggBPPeriodeListe.add(barnetilleggBPPeriode);
+    }
+
+    List<BarnetilleggBMPeriode> barnetilleggBMPeriodeListe;
+    if (nullVerdi.equals("barnetilleggBMPeriodeListe")) {
+      barnetilleggBMPeriodeListe = null;
+    } else {
+      BarnetilleggBMPeriode barnetilleggBMPeriode;
+      if (nullVerdi.equals("barnetilleggBMPeriodeDatoFraTil")) {
+        barnetilleggBMPeriode = new BarnetilleggBMPeriode(null, barnetilleggBMBelop, barnetilleggBMSkattProsent);
+      } else {
+        barnetilleggBMPeriode = new BarnetilleggBMPeriode(new Periode(barnetilleggBMPeriodeDatoFra, barnetilleggBMPeriodeDatoTil),
+            barnetilleggBMBelop, barnetilleggBMSkattProsent);
+      }
+      barnetilleggBMPeriodeListe = new ArrayList<>();
+      barnetilleggBMPeriodeListe.add(barnetilleggBMPeriode);
+    }
+
+    List<BarnetilleggForsvaretPeriode> barnetilleggForsvaretPeriodeListe;
+    if (nullVerdi.equals("barnetilleggForsvaretPeriodeListe")) {
+      barnetilleggForsvaretPeriodeListe = null;
+    } else {
+      BarnetilleggForsvaretPeriode barnetilleggForsvaretPeriode;
+      if (nullVerdi.equals("barnetilleggForsvaretPeriodeDatoFraTil")) {
+        barnetilleggForsvaretPeriode = new BarnetilleggForsvaretPeriode(null, barnetilleggForsvaretAntallBarn, barnetilleggForsvaretIPeriode);
+      } else {
+        barnetilleggForsvaretPeriode =
+            new BarnetilleggForsvaretPeriode(new Periode(barnetilleggForsvaretPeriodeDatoFra, barnetilleggForsvaretPeriodeDatoTil),
+            barnetilleggForsvaretAntallBarn, barnetilleggForsvaretIPeriode);
+      }
+      barnetilleggForsvaretPeriodeListe = new ArrayList<>();
+      barnetilleggForsvaretPeriodeListe.add(barnetilleggForsvaretPeriode);
+    }
+
+    return new BeregnBarnebidragGrunnlag(barnetilleggBPPeriodeListe, barnetilleggBMPeriodeListe, barnetilleggForsvaretPeriodeListe);
+  }
+
+
   // Bygger opp BeregnBidragsevneResultat
   public static BeregnBidragsevneResultat dummyBidragsevneResultat() {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeBidragsevne>();
@@ -798,6 +963,45 @@ public class TestUtil {
         "periodeDatoTil må være etter periodeDatoFra i underholdskostnadPeriodeListe: periodeDatoFra=2018-04-01, periodeDatoTil=2018-03-01",
         "DATO_FRA_ETTER_DATO_TIL"));
     return new BeregnKostnadsberegnetBidragResultatCore(emptyList(), avvikListe);
+  }
+
+
+  // Bygger opp BeregnBarnebidragResultat
+  public static BeregnBarnebidragResultat dummyBarnebidragResultat() {
+    var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeBarnebidrag>();
+    bidragPeriodeResultatListe
+        .add(new ResultatPeriodeBarnebidrag(
+            new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+            new ResultatBeregningBarnebidrag(100d),
+            new ResultatGrunnlagBarnebidrag(100d, 100d, 100d,
+                new BarnetilleggBP(100d, 25d),
+                new BarnetilleggBM(100d, 25d),
+                new BarnetilleggForsvaret(1, true))));
+    return new BeregnBarnebidragResultat(bidragPeriodeResultatListe);
+  }
+
+  // Bygger opp BeregnBarnebidragResultatCore
+  public static BeregnBarnebidragResultatCore dummyBarnebidragResultatCore() {
+    var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeCore>();
+    bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatPeriodeCore(
+        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        new no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatBeregningCore(100d),
+        new no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlagCore(100d, 100d, 100d,
+            new BarnetilleggBPCore(100d, 25d),
+            new BarnetilleggBMCore(100d, 25d),
+            new BarnetilleggForsvaretCore(true, 1),
+            emptyList())));
+    return new BeregnBarnebidragResultatCore(bidragPeriodeResultatListe, emptyList());
+  }
+
+  // Bygger opp BeregnBarnebidragResultatCore med avvik
+  public static BeregnBarnebidragResultatCore dummyBarnebidragResultatCoreMedAvvik() {
+    var avvikListe = new ArrayList<AvvikCore>();
+    avvikListe.add(new AvvikCore("beregnDatoFra kan ikke være null", "NULL_VERDI_I_DATO"));
+    avvikListe.add(new AvvikCore(
+        "periodeDatoTil må være etter periodeDatoFra i underholdskostnadPeriodeListe: periodeDatoFra=2018-04-01, periodeDatoTil=2018-03-01",
+        "DATO_FRA_ETTER_DATO_TIL"));
+    return new BeregnBarnebidragResultatCore(emptyList(), avvikListe);
   }
 
 

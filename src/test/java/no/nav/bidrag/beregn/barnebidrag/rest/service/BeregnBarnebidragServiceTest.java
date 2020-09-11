@@ -8,9 +8,11 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import no.nav.bidrag.beregn.barnebidrag.rest.BarnebidragCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlagCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagAltCore;
@@ -57,6 +59,8 @@ class BeregnBarnebidragServiceTest {
   private SamvaersfradragCore samvaersfradragCoreMock;
   @Mock
   private KostnadsberegnetBidragCore kostnadsberegnetBidragCoreMock;
+  @Mock
+  private BarnebidragCore barnebidragCoreMock;
 
   @BeforeEach
   void initMocks() {
@@ -82,29 +86,33 @@ class BeregnBarnebidragServiceTest {
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+    when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
 
-    var beregnBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag());
+    var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag());
 
     assertAll(
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBarnebidragResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe()
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe()
             .size()).isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()
             .size()).isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe()
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe()
+            .size()).isEqualTo(1),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBarnebidragResultat().getResultatPeriodeListe()
             .size()).isEqualTo(1)
     );
   }
@@ -117,6 +125,7 @@ class BeregnBarnebidragServiceTest {
     var underholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnUnderholdskostnadGrunnlagCore.class);
     var bpAndelUnderholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBPsAndelUnderholdskostnadGrunnlagCore.class);
     var samvaersfradragGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnSamvaersfradragGrunnlagCore.class);
+    var barnebidragGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBarnebidragGrunnlagCore.class);
 
     when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
@@ -139,14 +148,16 @@ class BeregnBarnebidragServiceTest {
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(samvaersfradragGrunnlagTilCoreCaptor.capture()))
         .thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+    when(barnebidragCoreMock.beregnBarnebidrag(barnebidragGrunnlagTilCoreCaptor.capture())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
 
-    var beregnBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag());
+    var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag());
 
     var bidragsevneGrunnlagTilCore = bidragsevneGrunnlagTilCoreCaptor.getValue();
     var nettoBarnetilsynGrunnlagTilCore = nettoBarnetilsynGrunnlagTilCoreCaptor.getValue();
     var underholdskostnadGrunnlagTilCore = underholdskostnadGrunnlagTilCoreCaptor.getValue();
     var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
     var samvaersfradragGrunnlagTilCore = samvaersfradragGrunnlagTilCoreCaptor.getValue();
+    var barnebidragGrunnlagTilCore = barnebidragGrunnlagTilCoreCaptor.getValue();
 
     var forventetAntallSjablonElementerBidragsevne = TestUtil.dummySjablonSjablontallListe().size() +
         TestUtil.dummySjablonBidragsevneListe().size() + TestUtil.dummySjablonTrinnvisSkattesatsListe().size();
@@ -156,56 +167,64 @@ class BeregnBarnebidragServiceTest {
         TestUtil.dummySjablonSjablontallListe().size() + TestUtil.dummySjablonForbruksutgifterListe().size();
     var forventetAntallSjablonElementerBPsAndelUnderholdskostnad = TestUtil.dummySjablonSjablontallListe().size();
     var forventetAntallSjablonElementerSamvaersfradrag = TestUtil.dummySjablonSamvaersfradragListe().size();
+    var forventetAntallSjablonElementerBarnebidrag = TestUtil.dummySjablonSjablontallListe().size();
 
     assertAll(
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
 
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe())
             .isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBidragsevneResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
         () -> assertThat(bidragsevneGrunnlagTilCore.getSjablonPeriodeListe().size())
             .isEqualTo(forventetAntallSjablonElementerBidragsevne),
 
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe())
             .isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
         () -> assertThat(nettoBarnetilsynGrunnlagTilCore.getSjablonPeriodeListe().size())
             .isEqualTo(forventetAntallSjablonElementerNettoBarnetilsyn),
 
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe())
             .isNotNull(),
         () -> assertThat(
-            beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size())
+            beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().size())
             .isEqualTo(forventetAntallSjablonElementerUnderholdskostnad),
 
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()
             .getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBPAndelUnderholdskostnadResultat()
             .getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().size())
             .isEqualTo(forventetAntallSjablonElementerBPsAndelUnderholdskostnad),
 
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat().getResultatPeriodeListe())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat().getResultatPeriodeListe())
             .isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat().getResultatPeriodeListe().size())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnSamvaersfradragResultat().getResultatPeriodeListe().size())
             .isEqualTo(1),
         () -> assertThat(samvaersfradragGrunnlagTilCore.getSjablonPeriodeListe().size()).isEqualTo(forventetAntallSjablonElementerSamvaersfradrag),
 
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat()).isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe())
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe())
             .isNotNull(),
-        () -> assertThat(beregnBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe()
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe()
             .size()).isEqualTo(1),
+
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBarnebidragResultat()).isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBarnebidragResultat().getResultatPeriodeListe())
+            .isNotNull(),
+        () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody().getBeregnBarnebidragResultat().getResultatPeriodeListe()
+            .size()).isEqualTo(1),
+        () -> assertThat(barnebidragGrunnlagTilCore.getSjablonPeriodeListe().size()).isEqualTo(forventetAntallSjablonElementerBarnebidrag),
 
         // Sjekk at det mappes ut riktig antall for en gitt sjablon av type Sjablontall
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().stream()
@@ -256,7 +275,7 @@ class BeregnBarnebidragServiceTest {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
-        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
   }
@@ -277,7 +296,7 @@ class BeregnBarnebidragServiceTest {
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
-        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
   }
@@ -299,7 +318,7 @@ class BeregnBarnebidragServiceTest {
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
-        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
   }
@@ -323,7 +342,7 @@ class BeregnBarnebidragServiceTest {
         .thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
-        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
   }
@@ -347,7 +366,7 @@ class BeregnBarnebidragServiceTest {
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
-        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
   }
@@ -372,7 +391,33 @@ class BeregnBarnebidragServiceTest {
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCoreMedAvvik());
 
     assertThatExceptionOfType(UgyldigInputException.class)
-        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggBarnebidragGrunnlag()))
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
+        .withMessageContaining("beregnDatoFra kan ikke være null")
+        .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException ved feil retur fra BarnebidragCore")
+  void skalKasteUgyldigInputExceptionVedFeilReturFraBarnebidragCore() {
+    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonForbruksutgifter())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+    when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
+    when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
+    when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
+    when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
+    when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
+    when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+    when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCoreMedAvvik());
+
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("beregnDatoFra kan ikke være null")
         .withMessageContaining("periodeDatoTil må være etter periodeDatoFra");
   }
@@ -382,9 +427,10 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataBidragsevne() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+            new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
                 TestUtil.byggBidragsevneGrunnlagUtenBostatusKode(), TestUtil.byggNettoBarnetilsynGrunnlag(),
-                TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(), TestUtil.byggSamvaersfradragGrunnlag())))
+                TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(), TestUtil.byggSamvaersfradragGrunnlag(),
+                TestUtil.byggBarnebidragGrunnlag())))
         .withMessageContaining("bostatusKode kan ikke være null");
   }
 
@@ -393,9 +439,10 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataNettoBarnetilsyn() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+            new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
                 TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlagUtenFaktiskUtgiftBelop(),
-                TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(), TestUtil.byggSamvaersfradragGrunnlag())))
+                TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(), TestUtil.byggSamvaersfradragGrunnlag(),
+                TestUtil.byggBarnebidragGrunnlag())))
         .withMessageContaining("faktiskUtgiftBelop kan ikke være null");
   }
 
@@ -404,10 +451,10 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataUnderholdskostnad() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+            new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
                 TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
                 TestUtil.byggUnderholdskostnadGrunnlagUtenForpleiningUtgiftBelop(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
-                TestUtil.byggSamvaersfradragGrunnlag())))
+                TestUtil.byggSamvaersfradragGrunnlag(), TestUtil.byggBarnebidragGrunnlag())))
         .withMessageContaining("forpleiningUtgiftBelop kan ikke være null");
   }
 
@@ -416,10 +463,10 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataBPsAndelUnderholdskostnad() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+            new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
                 TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
                 TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlagUtenInntektBP(),
-                TestUtil.byggSamvaersfradragGrunnlag())))
+                TestUtil.byggSamvaersfradragGrunnlag(), TestUtil.byggBarnebidragGrunnlag())))
         .withMessageContaining("inntektBP kan ikke være null");
   }
 
@@ -428,10 +475,22 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataSamvaersfradrag() {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
-            new BeregnBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+            new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
                 TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
                 TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
-                TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklasse())))
+                TestUtil.byggSamvaersfradragGrunnlagUtenSamvaersklasse(), TestUtil.byggBarnebidragGrunnlag())))
         .withMessageContaining("samvaersklasse kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException ved validering av inputdata - barnebidrag")
+  void skalKasteUgyldigInputExceptionVedValideringAvInputdataBarnebidrag() {
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(() -> beregnBarnebidragService.beregn(
+            new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), LocalDate.parse("2010-01-01"), 1,
+                TestUtil.byggBidragsevneGrunnlag(), TestUtil.byggNettoBarnetilsynGrunnlag(),
+                TestUtil.byggUnderholdskostnadGrunnlag(), TestUtil.byggBPsAndelUnderholdskostnadGrunnlag(),
+                TestUtil.byggSamvaersfradragGrunnlag(), TestUtil.byggBarnebidragGrunnlagUtenBarnetilleggBMBelop())))
+        .withMessageContaining("barnetilleggBMBelop kan ikke være null");
   }
 }

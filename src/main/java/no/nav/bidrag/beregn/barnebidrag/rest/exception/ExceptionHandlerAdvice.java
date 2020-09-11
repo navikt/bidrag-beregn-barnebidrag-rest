@@ -17,14 +17,6 @@ public class ExceptionHandlerAdvice {
   }
 
   @ExceptionHandler
-  public ResponseEntity<?> handleBidragsevneConsumerException(BidragsevneConsumerException exception) {
-    return ResponseEntity
-        .status(exception.getStatusCode())
-        .header("Error", errorMsg(exception, exception.getMeldingstekst()))
-        .build();
-  }
-
-  @ExceptionHandler
   public ResponseEntity<?> handleSjablonConsumerException(SjablonConsumerException exception) {
     return ResponseEntity
         .status(exception.getStatusCode())
