@@ -7,11 +7,10 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCor
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore
-import no.nav.bidrag.beregn.samvaersfradrag.dto.SamvaersklassePeriodeCore
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for en samværsfradragberegning")
-data class BeregnSamvaersfradragGrunnlag(
+@ApiModel(value = "Grunnlaget for en samværsfradragberegning for bidragspliktig")
+data class BeregnBPSamvaersfradragGrunnlag(
     @ApiModelProperty(
         value = "Periodisert liste over bidragspliktiges samværsklasser") val samvaersklassePeriodeListe: List<SamvaersklassePeriode>? = null
 )
@@ -19,15 +18,17 @@ data class BeregnSamvaersfradragGrunnlag(
 @ApiModel(value = "Bidragspliktiges samværsklasse")
 data class SamvaersklassePeriode(
     @ApiModelProperty(value = "Bidragspliktiges samværsklasse fra-til-dato") var samvaersklassePeriodeDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Bidragspliktiges samværsklasse navn") var samvaersklasse: String? = null
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var samvaersklasseSoknadsbarnPersonId: Int? = null,
+    @ApiModelProperty(value = "Bidragspliktiges samværsklasse id") var samvaersklasseId: String? = null
 ) {
 
-  fun tilCore() = SamvaersklassePeriodeCore(
-      samvaersklassePeriodeDatoFraTil = if (samvaersklassePeriodeDatoFraTil != null) samvaersklassePeriodeDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("samvaersklassePeriodeDatoFraTil kan ikke være null"),
-      samvaersklasse = if (samvaersklasse != null) samvaersklasse!!
-      else throw UgyldigInputException("samvaersklasse kan ikke være null"),
-  )
+  fun validerSamvaersklasse() {
+    if (samvaersklassePeriodeDatoFraTil != null) samvaersklassePeriodeDatoFraTil!!.valider("samvaersklasse")
+    else throw UgyldigInputException("samvaersklassePeriodeDatoFraTil kan ikke være null")
+
+    if (samvaersklasseSoknadsbarnPersonId == null) throw UgyldigInputException("samvaersklasseSoknadsbarnPersonId kan ikke være null")
+    if (samvaersklasseId == null) throw UgyldigInputException("samvaersklasseId kan ikke være null")
+  }
 }
 
 

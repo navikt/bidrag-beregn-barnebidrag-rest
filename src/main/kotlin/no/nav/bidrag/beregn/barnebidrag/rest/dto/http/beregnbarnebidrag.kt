@@ -8,62 +8,60 @@ import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
 @ApiModel(value = "Grunnlaget for en beregning av barnebidrag")
 data class BeregnBarnebidragGrunnlag(
     @ApiModelProperty(value = "Periodisert liste over bidragspliktiges barnetillegg")
-    val barnetilleggBPPeriodeListe: List<BarnetilleggBPPeriode>? = null,
+    val barnetilleggBPPeriodeListe: List<BarnetilleggPeriode>? = null,
     @ApiModelProperty(value = "Periodisert liste over bidragsmottakers barnetillegg")
-    val barnetilleggBMPeriodeListe: List<BarnetilleggBMPeriode>? = null,
+    val barnetilleggBMPeriodeListe: List<BarnetilleggPeriode>? = null,
     @ApiModelProperty(value = "Periodisert liste over bidragspliktiges barnetillegg fra forsvaret")
-    val barnetilleggForsvaretPeriodeListe: List<BarnetilleggForsvaretPeriode>? = null
+    val barnetilleggForsvaretPeriodeListe: List<BarnetilleggForsvaretPeriode>? = null,
+    @ApiModelProperty(value = "Periodisert liste over delt bosted for bidragspliktig")
+    val deltBostedBPPeriodeListe: List<DeltBostedBPPeriode>? = null
 )
 
-@ApiModel(value = "Bidragspliktiges barnetillegg")
-data class BarnetilleggBPPeriode(
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg fra-til-dato") var barnetilleggBPPeriodeDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg beløp") var barnetilleggBPBelop: Double? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg skatt prosent") var barnetilleggBPSkattProsent: Double? = null
+@ApiModel(value = "Barnetillegg")
+data class BarnetilleggPeriode(
+    @ApiModelProperty(value = "Barnetillegg fra-til-dato") var barnetilleggPeriodeDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var barnetilleggSoknadsbarnPersonId: Int? = null,
+    @ApiModelProperty(value = "Barnetillegg beløp") var barnetilleggBelop: Double? = null,
+    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: Double? = null
 ) {
 
-  fun tilCore() = BarnetilleggBPPeriodeCore(
-      barnetilleggBPDatoFraTil = if (barnetilleggBPPeriodeDatoFraTil != null) barnetilleggBPPeriodeDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("barnetilleggBPPeriodeDatoFraTil kan ikke være null"),
-      barnetilleggBPBelop = if (barnetilleggBPBelop != null) barnetilleggBPBelop!!
-      else throw UgyldigInputException("barnetilleggBPBelop kan ikke være null"),
-      barnetilleggBPSkattProsent = if (barnetilleggBPSkattProsent != null) barnetilleggBPSkattProsent!!
-      else throw UgyldigInputException("barnetilleggBPSkattProsent kan ikke være null")
-  )
-}
+  fun validerBarnetillegg(dataElement: String) {
+    if (barnetilleggPeriodeDatoFraTil != null) barnetilleggPeriodeDatoFraTil!!.valider("barnetillegg")
+    else throw UgyldigInputException(dataElement + "barnetilleggPeriodeDatoFraTil kan ikke være null")
 
-@ApiModel(value = "Bidragsmottakers barnetillegg")
-data class BarnetilleggBMPeriode(
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg fra-til-dato") var barnetilleggBMPeriodeDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg beløp") var barnetilleggBMBelop: Double? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg skatt prosent") var barnetilleggBMSkattProsent: Double? = null
-) {
-
-  fun tilCore() = BarnetilleggBMPeriodeCore(
-      barnetilleggBMDatoFraTil = if (barnetilleggBMPeriodeDatoFraTil != null) barnetilleggBMPeriodeDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("barnetilleggBMPeriodeDatoFraTil kan ikke være null"),
-      barnetilleggBMBelop = if (barnetilleggBMBelop != null) barnetilleggBMBelop!!
-      else throw UgyldigInputException("barnetilleggBMBelop kan ikke være null"),
-      barnetilleggBMSkattProsent = if (barnetilleggBMSkattProsent != null) barnetilleggBMSkattProsent!!
-      else throw UgyldigInputException("barnetilleggBMSkattProsent kan ikke være null")
-  )
+    if (barnetilleggSoknadsbarnPersonId == null) throw UgyldigInputException(dataElement + "barnetilleggSoknadsbarnPersonId kan ikke være null")
+    if (barnetilleggBelop == null) throw UgyldigInputException(dataElement + "barnetilleggBelop kan ikke være null")
+    if (barnetilleggSkattProsent == null) throw UgyldigInputException(dataElement + "barnetilleggSkattProsent kan ikke være null")
+  }
 }
 
 @ApiModel(value = "Bidragspliktiges barnetillegg fra forsvaret")
 data class BarnetilleggForsvaretPeriode(
     @ApiModelProperty(value = "Bidragspliktiges barnetillegg forsvaret fra-til-dato") var barnetilleggForsvaretDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg forsvaret antall barn") var barnetilleggForsvaretAntallBarn: Int? = null,
-    @ApiModelProperty(value = "Bidragspliktiges barnetillegg forsvaret periode-indikator") var barnetilleggForsvaretIPeriode: Boolean? = null
+    @ApiModelProperty(value = "Bidragspliktiges barnetillegg forsvaret antall barn") var barnetilleggForsvaretAntallBarn: Int? = null
 ) {
 
   fun tilCore() = BarnetilleggForsvaretPeriodeCore(
-      barnetilleggForsvaretDatoFraTil = if (barnetilleggForsvaretDatoFraTil != null) barnetilleggForsvaretDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("barnetilleggForsvaretPeriodeDatoFraTil kan ikke være null"),
-      barnetilleggForsvaretAntallBarn = if (barnetilleggForsvaretAntallBarn != null) barnetilleggForsvaretAntallBarn!!
-      else throw UgyldigInputException("barnetilleggForsvaretAntallBarn kan ikke være null"),
-      barnetilleggForsvaretIPeriode = if (barnetilleggForsvaretIPeriode != null) barnetilleggForsvaretIPeriode!!
-      else throw UgyldigInputException("barnetilleggForsvaretIPeriode kan ikke være null")
+      barnetilleggForsvaretDatoFraTil = if (barnetilleggForsvaretDatoFraTil != null) barnetilleggForsvaretDatoFraTil!!.tilCore(
+          "barnetilleggForsvaret") else throw UgyldigInputException("barnetilleggForsvaretPeriodeDatoFraTil kan ikke være null"),
+      barnetilleggForsvaretAntallBarn = if (barnetilleggForsvaretAntallBarn != null) barnetilleggForsvaretAntallBarn!! else throw UgyldigInputException(
+          "barnetilleggForsvaretAntallBarn kan ikke være null"),
+      true
   )
+}
+
+@ApiModel(value = "Delt bosted for bidragspliktig")
+data class DeltBostedBPPeriode(
+    @ApiModelProperty(value = "Delt bosted bidragspliktig fra-til-dato") var deltBostedPeriodeDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var deltBostedSoknadsbarnPersonId: Int? = null
+) {
+
+  fun validerDeltBosted() {
+    if (deltBostedPeriodeDatoFraTil != null) deltBostedPeriodeDatoFraTil!!.valider("deltBosted")
+    else throw UgyldigInputException("deltBostedPeriodeDatoFraTil kan ikke være null")
+
+    if (deltBostedSoknadsbarnPersonId == null) throw UgyldigInputException("deltBostedSoknadsbarnPersonId kan ikke være null")
+  }
 }
 
 // Resultat

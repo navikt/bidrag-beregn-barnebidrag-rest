@@ -3,16 +3,14 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
-import no.nav.bidrag.beregn.underholdskostnad.dto.BarnetilsynMedStonadPeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore
-import no.nav.bidrag.beregn.underholdskostnad.dto.ForpleiningUtgiftPeriodeCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for en underholdskostnadberegning")
-data class BeregnUnderholdskostnadGrunnlag(
+@ApiModel(value = "Grunnlaget for en underholdskostnadsberegning for bidragsmottaker")
+data class BeregnBMUnderholdskostnadGrunnlag(
     @ApiModelProperty(
         value = "Periodisert liste over bidragsmottakers barnetilsyn med stønad") val barnetilsynMedStonadPeriodeListe: List<BarnetilsynMedStonadPeriode>? = null,
     @ApiModelProperty(
@@ -22,32 +20,35 @@ data class BeregnUnderholdskostnadGrunnlag(
 @ApiModel(value = "Bidragsmottakers barnetilsyn med stønad")
 data class BarnetilsynMedStonadPeriode(
     @ApiModelProperty(value = "Bidragsmottakers barnetilsyn med stønad fra-til-dato") var barnetilsynMedStonadPeriodeDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var barnetilsynMedStonadSoknadsbarnPersonId: Int? = null,
     @ApiModelProperty(value = "Bidragsmottakers barnetilsyn med stønad tilsyn-type") var barnetilsynMedStonadTilsynType: String? = null,
     @ApiModelProperty(value = "Bidragsmottakers barnetilsyn med stønad stønad-type") var barnetilsynMedStonadStonadType: String? = null
 ) {
 
-  fun tilCore() = BarnetilsynMedStonadPeriodeCore(
-      barnetilsynMedStonadPeriodeDatoFraTil = if (barnetilsynMedStonadPeriodeDatoFraTil != null) barnetilsynMedStonadPeriodeDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("barnetilsynMedStonadPeriodeDatoFraTil kan ikke være null"),
-      barnetilsynMedStonadTilsynType = if (barnetilsynMedStonadTilsynType != null) barnetilsynMedStonadTilsynType!!
-      else throw UgyldigInputException("barnetilsynMedStonadTilsynType kan ikke være null"),
-      barnetilsynStonadStonadType = if (barnetilsynMedStonadStonadType != null) barnetilsynMedStonadStonadType!!
-      else throw UgyldigInputException("barnetilsynMedStonadStonadType kan ikke være null")
-  )
+  fun validerBarnetilsynMedStonad() {
+    if (barnetilsynMedStonadPeriodeDatoFraTil != null) barnetilsynMedStonadPeriodeDatoFraTil!!.valider("barnetilsynMedStonad")
+    else throw UgyldigInputException("barnetilsynMedStonadPeriodeDatoFraTil kan ikke være null")
+
+    if (barnetilsynMedStonadSoknadsbarnPersonId == null) throw UgyldigInputException("barnetilsynMedStonadSoknadsbarnPersonId kan ikke være null")
+    if (barnetilsynMedStonadTilsynType == null) throw UgyldigInputException("barnetilsynMedStonadTilsynType kan ikke være null")
+    if (barnetilsynMedStonadStonadType == null) throw UgyldigInputException("barnetilsynMedStonadStonadType kan ikke være null")
+  }
 }
 
 @ApiModel(value = "Bidragsmottakers utgifter til forpleining")
 data class ForpleiningUtgiftPeriode(
     @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining fra-til-dato") var forpleiningUtgiftPeriodeDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var forpleiningUtgiftSoknadsbarnPersonId: Int? = null,
     @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining beløp") var forpleiningUtgiftBelop: Double? = null
 ) {
 
-  fun tilCore() = ForpleiningUtgiftPeriodeCore(
-      forpleiningUtgiftPeriodeDatoFraTil = if (forpleiningUtgiftPeriodeDatoFraTil != null) forpleiningUtgiftPeriodeDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("forpleiningUtgiftPeriodeDatoFraTil kan ikke være null"),
-      forpleiningUtgiftBelop = if (forpleiningUtgiftBelop != null) forpleiningUtgiftBelop!!
-      else throw UgyldigInputException("forpleiningUtgiftBelop kan ikke være null")
-  )
+  fun validerForpleiningUtgift() {
+    if (forpleiningUtgiftPeriodeDatoFraTil != null) forpleiningUtgiftPeriodeDatoFraTil!!.valider("forpleiningUtgift")
+    else throw UgyldigInputException("forpleiningUtgiftPeriodeDatoFraTil kan ikke være null")
+
+    if (forpleiningUtgiftSoknadsbarnPersonId == null) throw UgyldigInputException("forpleiningUtgiftSoknadsbarnPersonId kan ikke være null")
+    if (forpleiningUtgiftBelop == null) throw UgyldigInputException("forpleiningUtgiftBelop kan ikke være null")
+  }
 }
 
 // Resultat

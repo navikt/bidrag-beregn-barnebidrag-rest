@@ -12,8 +12,8 @@ import no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore
 import java.time.LocalDate
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for en netto barnetilsyn beregning")
-data class BeregnNettoBarnetilsynGrunnlag(
+@ApiModel(value = "Grunnlaget for en netto barnetilsyn beregning for bidragsmottaker")
+data class BeregnBMNettoBarnetilsynGrunnlag(
     @ApiModelProperty(
         value = "Periodisert liste over bidragsmottakers faktiske bruttoutgifter til tilsyn") val faktiskUtgiftPeriodeListe: List<FaktiskUtgiftPeriode>? = null
 )
@@ -21,16 +21,14 @@ data class BeregnNettoBarnetilsynGrunnlag(
 @ApiModel(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn")
 data class FaktiskUtgiftPeriode(
     @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn fra-til-dato") var faktiskUtgiftPeriodeDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var faktiskUtgiftSoknadsbarnFodselsdato: LocalDate? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var faktiskUtgiftSoknadsbarnPersonId: Int? = null,
     @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: Double? = null
 ) {
 
   fun tilCore() = FaktiskUtgiftPeriodeCore(
-      faktiskUtgiftPeriodeDatoFraTil = if (faktiskUtgiftPeriodeDatoFraTil != null) faktiskUtgiftPeriodeDatoFraTil!!.tilCore() else throw UgyldigInputException(
-          "faktiskUtgiftPeriodeDatoFraTil kan ikke være null"),
-      faktiskUtgiftSoknadsbarnFodselsdato = if (faktiskUtgiftSoknadsbarnFodselsdato != null) faktiskUtgiftSoknadsbarnFodselsdato!! else throw UgyldigInputException(
-          "faktiskUtgiftSoknadsbarnFodselsdato kan ikke være null"),
+      faktiskUtgiftPeriodeDatoFraTil = if (faktiskUtgiftPeriodeDatoFraTil != null) faktiskUtgiftPeriodeDatoFraTil!!.tilCore(
+          "faktiskUtgift") else throw UgyldigInputException("faktiskUtgiftPeriodeDatoFraTil kan ikke være null"),
+      faktiskUtgiftSoknadsbarnFodselsdato = LocalDate.now(), //dummy-verdi
       faktiskUtgiftSoknadsbarnPersonId = if (faktiskUtgiftSoknadsbarnPersonId != null) faktiskUtgiftSoknadsbarnPersonId!! else throw UgyldigInputException(
           "faktiskUtgiftSoknadsbarnPersonId kan ikke være null"),
       faktiskUtgiftBelop = if (faktiskUtgiftBelop != null) faktiskUtgiftBelop!! else throw UgyldigInputException(

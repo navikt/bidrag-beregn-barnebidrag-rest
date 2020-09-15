@@ -3,6 +3,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
+import no.nav.bidrag.beregn.bidragsevne.dto.InntektPeriodeCore
 import no.nav.bidrag.beregn.felles.dto.PeriodeCore
 import no.nav.bidrag.beregn.felles.dto.SjablonCore
 import no.nav.bidrag.beregn.felles.dto.SjablonInnholdCore
@@ -61,8 +62,15 @@ data class Periode(
       periodeDatoTil = periode.periodeDatoTil
   )
 
-  fun tilCore() = PeriodeCore(
-      periodeDatoFra = if (periodeDatoFra != null) periodeDatoFra!! else throw UgyldigInputException("periodeDatoFra kan ikke være null"),
-      periodeDatoTil = if (periodeDatoTil != null) periodeDatoTil!! else throw UgyldigInputException("periodeDatoTil kan ikke være null")
+  fun tilCore(dataElement: String) = PeriodeCore(
+      periodeDatoFra = if (periodeDatoFra != null) periodeDatoFra!! else throw UgyldigInputException(
+          dataElement + "PeriodeDatoFra kan ikke være null"),
+      periodeDatoTil = if (periodeDatoTil != null) periodeDatoTil!! else throw UgyldigInputException(
+          dataElement + "PeriodeDatoTil kan ikke være null")
   )
+
+  fun valider(dataElement: String) {
+    if (periodeDatoFra == null) throw UgyldigInputException(dataElement + "PeriodeDatoFra kan ikke være null")
+    if (periodeDatoTil == null) throw UgyldigInputException(dataElement + "PeriodeDatoTil kan ikke være null")
+  }
 }

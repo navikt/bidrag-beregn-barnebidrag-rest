@@ -2,37 +2,10 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadResultatCore
-import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntekterPeriodeCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore
-
-// Grunnlag
-@ApiModel(value = "Grunnlaget for en beregning av BPs andel av underholdskostnad")
-data class BeregnBPsAndelUnderholdskostnadGrunnlag(
-    @ApiModelProperty(value = "Periodisert liste over inntekter") val inntekterPeriodeListe: List<InntekterPeriode>? = null
-)
-
-@ApiModel(value = "Inntekter")
-data class InntekterPeriode(
-    @ApiModelProperty(value = "Inntekter fra-til-dato") var inntekterPeriodeDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Inntekt bidragspliktig") var inntektBP: Double? = null,
-    @ApiModelProperty(value = "Inntekt bidragsmottaker") var inntektBM: Double? = null,
-    @ApiModelProperty(value = "Inntekt bidragsbarn") var inntektBB: Double? = null
-) {
-
-  fun tilCore() = InntekterPeriodeCore(
-      inntekterPeriodeDatoFraTil = if (inntekterPeriodeDatoFraTil != null) inntekterPeriodeDatoFraTil!!.tilCore()
-      else throw UgyldigInputException("inntekterPeriodeDatoFraTil kan ikke være null"),
-
-      inntektBP = if (inntektBP != null) inntektBP!! else throw UgyldigInputException("inntektBP kan ikke være null"),
-      inntektBM = if (inntektBM != null) inntektBM!! else throw UgyldigInputException("inntektBM kan ikke være null"),
-      inntektBB = if (inntektBB != null) inntektBB!! else throw UgyldigInputException("inntektBB kan ikke være null")
-  )
-}
-
 
 // Resultat
 @ApiModel(value = "Totalresultatet av beregning av BPs andel av underholdskostnad")
