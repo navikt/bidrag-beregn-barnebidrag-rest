@@ -22,7 +22,7 @@ data class Soknadsbarn(
   fun validerSoknadsbarn() {
     if (soknadsbarnFodselsdato == null) throw UgyldigInputException("soknadsbarnFodselsdato kan ikke være null")
     if (soknadsbarnPersonId == null) throw UgyldigInputException("soknadsbarnPersonId kan ikke være null")
-    if (inntektPeriodeListe != null) inntektPeriodeListe!!.map { it.valider("SB") } else throw UgyldigInputException(
+    if (inntektPeriodeListe != null) inntektPeriodeListe!!.map { it.validerInntekt("SB") } else throw UgyldigInputException(
         "SB inntektPeriodeListe kan ikke være null")
   }
 }

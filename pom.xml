@@ -22,12 +22,12 @@
     <!-- dependencies -->
     <bidrag-commons.version>0.4.2</bidrag-commons.version>
     <bidrag-commons-test.version>0.2.1</bidrag-commons-test.version>
-    <bidrag-beregn-felles.version>0.5.0</bidrag-beregn-felles.version>
-    <bidrag-beregn-barnebidrag.version>0.7.2</bidrag-beregn-barnebidrag.version>
+    <bidrag-beregn-felles.version>0.8.0</bidrag-beregn-felles.version>
+    <bidrag-beregn-barnebidrag-core.version>0.8.1</bidrag-beregn-barnebidrag-core.version>
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- language -->
-    <java.version>14</java.version>
+    <java.version>15</java.version>
     <kotlin.version>1.4.0</kotlin.version>
   </properties>
 
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>no.nav.bidrag</groupId>
       <artifactId>bidrag-beregn-barnebidrag-core</artifactId>
-      <version>${bidrag-beregn-barnebidrag.version}</version>
+      <version>${bidrag-beregn-barnebidrag-core.version}</version>
     </dependency>
 
     <dependency>

@@ -63,83 +63,96 @@ class BeregnBarnebidragControllerTest {
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
         () -> assertThat(totalBarnebidragResultat).isNotNull(),
 
-        () -> assertThat(totalBarnebidragResultat.getBeregnBidragsevneResultat()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultat25ProsentInntekt())
+            totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultat25ProsentInntekt())
             .isEqualTo(100d),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvneBelop())
+            totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvneBelop())
             .isEqualTo(100d),
 
-        () -> assertThat(totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().size())
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().size())
             .isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
-            .getResultatBelopNettoBarnetilsyn()).isEqualTo(100d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatSoknadsbarnPersonId()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatBelop()).isEqualTo(100d),
 
-        () -> assertThat(totalBarnebidragResultat.getBeregnUnderholdskostnadResultat()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatSoknadsbarnPersonId())
+            .isEqualTo(1),
+        () -> assertThat(
+            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatBelopUnderholdskostnad()).isEqualTo(100d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(100d),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
-                .getPeriodeDatoFra())
-            .isEqualTo(LocalDate.parse("2017-01-01")),
+            totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatSoknadsbarnPersonId())
+            .isEqualTo(1),
         () -> assertThat(
             totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
-                .getPeriodeDatoTil())
-            .isEqualTo(LocalDate.parse("2019-01-01")),
+                .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2017-01-01")),
+        () -> assertThat(
+            totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatAndelProsent()).isEqualTo(10),
+            .getResultatAndelProsent()).isEqualTo(10d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(100d),
 
-        () -> assertThat(totalBarnebidragResultat.getBeregnSamvaersfradragResultat()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatSoknadsbarnPersonId())
+            .isEqualTo(1),
+        () -> assertThat(
+            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatSamvaersfradragBelop()).isEqualTo(100d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(100d),
 
-        () -> assertThat(totalBarnebidragResultat.getBeregnKostnadsberegnetBidragResultat()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0)
+            .getResultatSoknadsbarnPersonId()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
             .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2017-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
             .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatKostnadsberegnetBidragBelop()).isEqualTo(100d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(100d),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
@@ -148,8 +161,12 @@ class BeregnBarnebidragControllerTest {
             .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
             .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatBarnebidragBelop()).isEqualTo(100d)
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatSoknadsbarnPersonId()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop()).isEqualTo(100d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("RESULTATKODE")
     );
   }
 

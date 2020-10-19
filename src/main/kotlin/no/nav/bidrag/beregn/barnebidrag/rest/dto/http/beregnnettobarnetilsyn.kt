@@ -3,6 +3,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
+import no.nav.bidrag.beregn.barnebidrag.rest.service.SoknadsbarnUtil
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftPeriodeCore
@@ -20,40 +21,39 @@ data class BeregnBMNettoBarnetilsynGrunnlag(
 
 @ApiModel(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn")
 data class FaktiskUtgiftPeriode(
-    @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn fra-til-dato") var faktiskUtgiftPeriodeDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn fra-til-dato") var faktiskUtgiftDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var faktiskUtgiftSoknadsbarnPersonId: Int? = null,
     @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: Double? = null
 ) {
 
-  fun tilCore() = FaktiskUtgiftPeriodeCore(
-      faktiskUtgiftPeriodeDatoFraTil = if (faktiskUtgiftPeriodeDatoFraTil != null) faktiskUtgiftPeriodeDatoFraTil!!.tilCore(
-          "faktiskUtgift") else throw UgyldigInputException("faktiskUtgiftPeriodeDatoFraTil kan ikke være null"),
-      faktiskUtgiftSoknadsbarnFodselsdato = LocalDate.now(), //dummy-verdi
+  fun tilCore(soknadsbarnMap: Map<Int, LocalDate>) = FaktiskUtgiftPeriodeCore(
+      faktiskUtgiftPeriodeDatoFraTil = if (faktiskUtgiftDatoFraTil != null) faktiskUtgiftDatoFraTil!!.tilCore(
+          "faktiskUtgift") else throw UgyldigInputException("faktiskUtgiftDatoFraTil kan ikke være null"),
       faktiskUtgiftSoknadsbarnPersonId = if (faktiskUtgiftSoknadsbarnPersonId != null) faktiskUtgiftSoknadsbarnPersonId!! else throw UgyldigInputException(
           "faktiskUtgiftSoknadsbarnPersonId kan ikke være null"),
       faktiskUtgiftBelop = if (faktiskUtgiftBelop != null) faktiskUtgiftBelop!! else throw UgyldigInputException(
-          "faktiskUtgiftBelop kan ikke være null")
+          "faktiskUtgiftBelop kan ikke være null"),
+      faktiskUtgiftSoknadsbarnFodselsdato = SoknadsbarnUtil.hentFodselsdatoForId(faktiskUtgiftSoknadsbarnPersonId, soknadsbarnMap) ?: throw UgyldigInputException(
+          "Søknadsbarn med id $faktiskUtgiftSoknadsbarnPersonId har ingen korresponderende fødselsdato i soknadsbarnListe")
   )
 }
 
 // Resultat
-@ApiModel(value = "Totalresultatet av beregning av netto barnetilsyn")
-data class BeregnNettoBarnetilsynResultat(
+@ApiModel(value = "Resultatet av en netto barnetilsyn beregning for bidragsmottaker")
+data class BeregnBMNettoBarnetilsynResultat(
     @ApiModelProperty(
         value = "Periodisert liste over resultat av beregning av netto barnetilsyn") var resultatPeriodeListe: List<ResultatPeriodeNettoBarnetilsyn> = emptyList()
 ) {
 
   constructor(beregnNettoBarnetilsynResultat: BeregnNettoBarnetilsynResultatCore) : this(
-      resultatPeriodeListe = beregnNettoBarnetilsynResultat.resultatPeriodeListe.map {
-        ResultatPeriodeNettoBarnetilsyn(it)
-      }
+      resultatPeriodeListe = beregnNettoBarnetilsynResultat.resultatPeriodeListe.map { ResultatPeriodeNettoBarnetilsyn(it) }
   )
 }
 
-@ApiModel(value = "Resultatet av beregning av netto barnetilsyn for en gitt periode")
+@ApiModel(value = "Resultatet av beregning av netto barnetilsyn for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeNettoBarnetilsyn(
     @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregningListe: List<ResultatBeregningNettoBarnetilsyn> = emptyList(),
+    @ApiModelProperty(value = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningNettoBarnetilsyn> = emptyList(),
     @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagNettoBarnetilsyn? = null
 ) {
 
@@ -67,38 +67,38 @@ data class ResultatPeriodeNettoBarnetilsyn(
 @ApiModel(value = "Resultatet av beregning av netto barnetilsyn")
 data class ResultatBeregningNettoBarnetilsyn(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beløp netto barnetilsyn") var resultatBelopNettoBarnetilsyn: Double = 0.0
+    @ApiModelProperty(value = "Beløp netto barnetilsyn") var resultatBelop: Double = 0.0
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
       resultatSoknadsbarnPersonId = resultatBeregning.resultatSoknadsbarnPersonId,
-      resultatBelopNettoBarnetilsyn = resultatBeregning.resultatBelop
+      resultatBelop = resultatBeregning.resultatBelop
   )
 }
 
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn")
 data class ResultatGrunnlagNettoBarnetilsyn(
     @ApiModelProperty(
-        value = "Liste over faktiske utgifter") var resultatGrunnlagFaktiskUtgiftListe: List<ResultatGrunnlagFaktiskUtgift> = emptyList()
+        value = "Liste over faktiske utgifter") var faktiskUtgiftListe: List<FaktiskUtgift> = emptyList()
 //    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
-      resultatGrunnlagFaktiskUtgiftListe = resultatGrunnlag.faktiskUtgiftListe.map { ResultatGrunnlagFaktiskUtgift(it) }
+      faktiskUtgiftListe = resultatGrunnlag.faktiskUtgiftListe.map { FaktiskUtgift(it) }
 //      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn - faktisk utgift")
-data class ResultatGrunnlagFaktiskUtgift(
+data class FaktiskUtgift(
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadsbarnPersonId: Int = 0,
     @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var soknadsbarnFodselsdato: LocalDate? = null,
-    @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadsbarnPersonId: Int? = null,
     @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: Double? = null
 ) {
 
   constructor(faktiskUtgift: FaktiskUtgiftCore) : this(
-      soknadsbarnFodselsdato = faktiskUtgift.soknadsbarnFodselsdato,
-      soknadsbarnPersonId = faktiskUtgift.soknadsbarnPersonId,
+      soknadsbarnPersonId = faktiskUtgift.faktiskUtgiftSoknadsbarnPersonId,
+      soknadsbarnFodselsdato = faktiskUtgift.faktiskUtgiftSoknadsbarnFodselsdato,
       faktiskUtgiftBelop = faktiskUtgift.faktiskUtgiftBelop
   )
 }
