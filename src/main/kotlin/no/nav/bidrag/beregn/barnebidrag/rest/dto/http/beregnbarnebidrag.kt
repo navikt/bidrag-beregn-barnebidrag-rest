@@ -28,7 +28,7 @@ data class BeregnBarnebidragGrunnlag(
     val deltBostedBPPeriodeListe: List<DeltBostedBPPeriode>? = null
 )
 
-@ApiModel(value = "Barnetillegg BM/BP")
+@ApiModel(value = "Barnetillegg BM og BP")
 data class BarnetilleggPeriode(
     @ApiModelProperty(value = "Barnetillegg fra-til-dato") var barnetilleggDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var barnetilleggSoknadsbarnPersonId: Int? = null,
