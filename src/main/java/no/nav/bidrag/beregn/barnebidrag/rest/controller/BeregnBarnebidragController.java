@@ -1,7 +1,7 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.controller;
 
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +20,9 @@ public class BeregnBarnebidragController {
   }
 
   @PostMapping(path = "/barnebidrag")
-  public ResponseEntity<BeregnBarnebidragResultat> beregnBarnebidrag(@RequestBody BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
-    var beregnBarnebidragResultat = beregnBarnebidragService.beregn(beregnBarnebidragGrunnlag);
-    return new ResponseEntity<>(beregnBarnebidragResultat.getResponseEntity().getBody(),
-        beregnBarnebidragResultat.getResponseEntity().getStatusCode());
+  public ResponseEntity<BeregnTotalBarnebidragResultat> beregnTotalBarnebidrag(@RequestBody BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+    var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(beregnTotalBarnebidragGrunnlag);
+    return new ResponseEntity<>(beregnTotalBarnebidragResultat.getResponseEntity().getBody(),
+        beregnTotalBarnebidragResultat.getResponseEntity().getStatusCode());
   }
 }

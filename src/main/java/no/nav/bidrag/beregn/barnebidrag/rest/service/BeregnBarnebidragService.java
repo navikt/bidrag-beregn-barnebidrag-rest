@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
+import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
+import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragResultatCore;
+import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevnePeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Bidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Forbruksutgifter;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksFradrag;
@@ -20,21 +24,25 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Samvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Sjablontall;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.TrinnvisSkattesats;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPsAndelUnderholdskostnadResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBMNettoBarnetilsynResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBMUnderholdskostnadResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPAndelUnderholdskostnadResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPBidragsevneResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPKostnadsberegnetBidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPSamvaersfradragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBidragsevneResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnKostnadsberegnetBidragResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnNettoBarnetilsynResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnSamvaersfradragResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnUnderholdskostnadResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Soknadsbarn;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
-import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagAltCore;
+import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneResultatCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadResultatCore;
+import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektPeriodeCore;
+import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.UnderholdskostnadPeriodeCore;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
 import no.nav.bidrag.beregn.felles.dto.PeriodeCore;
 import no.nav.bidrag.beregn.felles.dto.SjablonInnholdCore;
@@ -49,16 +57,18 @@ import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BPsAndelUnderholdskostnad
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragGrunnlagCore;
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragResultatCore;
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.SamvaersfradragPeriodeCore;
-import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.UnderholdskostnadPeriodeCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore;
 import no.nav.bidrag.beregn.samvaersfradrag.SamvaersfradragCore;
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCore;
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCore;
+import no.nav.bidrag.beregn.samvaersfradrag.dto.SamvaersklassePeriodeCore;
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
+import no.nav.bidrag.beregn.underholdskostnad.dto.BarnetilsynMedStonadPeriodeCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResultatCore;
+import no.nav.bidrag.beregn.underholdskostnad.dto.ForpleiningUtgiftPeriodeCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore;
 import no.nav.bidrag.commons.web.HttpResponse;
 import org.slf4j.Logger;
@@ -71,6 +81,12 @@ public class BeregnBarnebidragService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BeregnBarnebidragService.class);
 
+  private static final String BIDRAGSEVNE = "Bidragsevne";
+  private static final String NETTO_BARNETILSYN = "NettoBarnetilsyn";
+  private static final String UNDERHOLDSKOSTAND = "Underholdskostnad";
+  private static final String BP_ANDEL_UNDERHOLDSKOSTAND = "BPsAndelUnderholdskostnad";
+  private static final String BARNEBIDRAG = "Barnebidrag";
+
   private final SjablonConsumer sjablonConsumer;
   private final BidragsevneCore bidragsevneCore;
   private final NettoBarnetilsynCore nettoBarnetilsynCore;
@@ -78,6 +94,7 @@ public class BeregnBarnebidragService {
   private final BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore;
   private final SamvaersfradragCore samvaersfradragCore;
   private final KostnadsberegnetBidragCore kostnadsberegnetBidragCore;
+  private final BarnebidragCore barnebidragCore;
 
   private HttpResponse<List<Sjablontall>> sjablonSjablontallResponse;
   private HttpResponse<List<Forbruksutgifter>> sjablonForbruksutgifterResponse;
@@ -86,62 +103,33 @@ public class BeregnBarnebidragService {
   private HttpResponse<List<Samvaersfradrag>> sjablonSamvaersfradragResponse;
   private HttpResponse<List<Bidragsevne>> sjablonBidragsevneResponse;
   private HttpResponse<List<TrinnvisSkattesats>> sjablonTrinnvisSkattesatsResponse;
-  private BeregnBidragsevneResultatCore bidragsevneResultat;
-  private BeregnNettoBarnetilsynResultatCore nettoBarnetilsynResultat;
-  private BeregnUnderholdskostnadResultatCore underholdskostnadResultat;
-  private BeregnBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultat;
-  private BeregnSamvaersfradragResultatCore samvaersfradragResultat;
-  private BeregnKostnadsberegnetBidragResultatCore kostnadsberegnetBidragResultat;
 
-  private final Map<String, String> sjablontallMap = new HashMap<>() {{
-    put("0001", SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn());
-    put("0002", SjablonTallNavn.ORDINAER_SMAABARNSTILLEGG_BELOP.getNavn());
-    put("0003", SjablonTallNavn.BOUTGIFTER_BIDRAGSBARN_BELOP.getNavn());
-    put("0004", SjablonTallNavn.FORDEL_SKATTEKLASSE2_BELOP.getNavn());
-    put("0005", SjablonTallNavn.FORSKUDDSSATS_BELOP.getNavn());
-    put("0006", SjablonTallNavn.INNSLAG_KAPITALINNTEKT_BELOP.getNavn());
-    put("0007", SjablonTallNavn.INNTEKTSINTERVALL_TILLEGGSBIDRAG_BELOP.getNavn());
-    put("0008", SjablonTallNavn.MAKS_INNTEKT_BP_PROSENT.getNavn());
-    put("0009", SjablonTallNavn.HOY_INNTEKT_BP_MULTIPLIKATOR.getNavn());
-    put("0010", SjablonTallNavn.INNTEKT_BB_MULTIPLIKATOR.getNavn());
-    put("0011", SjablonTallNavn.MAKS_BIDRAG_MULTIPLIKATOR.getNavn());
-    put("0012", SjablonTallNavn.MAKS_INNTEKT_BB_MULTIPLIKATOR.getNavn());
-    put("0013", SjablonTallNavn.MAKS_INNTEKT_FORSKUDD_MOTTAKER_MULTIPLIKATOR.getNavn());
-    put("0014", SjablonTallNavn.NEDRE_INNTEKTSGRENSE_GEBYR_BELOP.getNavn());
-    put("0015", SjablonTallNavn.SKATT_ALMINNELIG_INNTEKT_PROSENT.getNavn());
-    put("0016", SjablonTallNavn.TILLEGGSBIDRAG_PROSENT.getNavn());
-    put("0017", SjablonTallNavn.TRYGDEAVGIFT_PROSENT.getNavn());
-    put("0018", SjablonTallNavn.BARNETILLEGG_SKATT_PROSENT.getNavn());
-    put("0019", SjablonTallNavn.UNDERHOLD_EGNE_BARN_I_HUSSTAND_BELOP.getNavn());
-    put("0020", SjablonTallNavn.ENDRING_BIDRAG_GRENSE_PROSENT.getNavn());
-    put("0021", SjablonTallNavn.BARNETILLEGG_FORSVARET_FORSTE_BARN_BELOP.getNavn());
-    put("0022", SjablonTallNavn.BARNETILLEGG_FORSVARET_OVRIGE_BARN_BELOP.getNavn());
-    put("0023", SjablonTallNavn.MINSTEFRADRAG_INNTEKT_BELOP.getNavn());
-    put("0024", SjablonTallNavn.GJENNOMSNITT_VIRKEDAGER_PR_MAANED_ANTALL.getNavn());
-    put("0025", SjablonTallNavn.MINSTEFRADRAG_INNTEKT_PROSENT.getNavn());
-    put("0026", SjablonTallNavn.DAGLIG_SATS_BARNETILLEGG_BELOP.getNavn());
-    put("0027", SjablonTallNavn.PERSONFRADRAG_KLASSE1_BELOP.getNavn());
-    put("0028", SjablonTallNavn.PERSONFRADRAG_KLASSE2_BELOP.getNavn());
-    put("0029", SjablonTallNavn.KONTANTSTOTTE_BELOP.getNavn());
-    put("0030", SjablonTallNavn.OVRE_INNTEKTSGRENSE_IKKE_I_SKATTEPOSISJON_BELOP.getNavn());
-    put("0031", SjablonTallNavn.NEDRE_INNTEKTSGRENSE_FULL_SKATTEPOSISJON_BELOP.getNavn());
-    put("0032", SjablonTallNavn.EKSTRA_SMAABARNSTILLEGG_BELOP.getNavn());
-    put("0033", SjablonTallNavn.OVRE_INNTEKTSGRENSE_FULLT_FORSKUDD_BELOP.getNavn());
-    put("0034", SjablonTallNavn.OVRE_INNTEKTSGRENSE_75PROSENT_FORSKUDD_EN_BELOP.getNavn());
-    put("0035", SjablonTallNavn.OVRE_INNTEKTSGRENSE_75PROSENT_FORSKUDD_GS_BELOP.getNavn());
-    put("0036", SjablonTallNavn.INNTEKTSINTERVALL_FORSKUDD_BELOP.getNavn());
-    put("0037", SjablonTallNavn.OVRE_GRENSE_SAERTILSKUDD_BELOP.getNavn());
-    put("0038", SjablonTallNavn.FORSKUDDSSATS_75PROSENT_BELOP.getNavn());
-    put("0039", SjablonTallNavn.FORDEL_SAERFRADRAG_BELOP.getNavn());
-    put("0040", SjablonTallNavn.SKATTESATS_ALMINNELIG_INNTEKT_PROSENT.getNavn());
-    put("0041", SjablonTallNavn.FORHOYET_BARNETRYGD_BELOP.getNavn());
-    put("0100", SjablonTallNavn.FASTSETTELSESGEBYR_BELOP.getNavn());
-  }};
+  private BeregnBidragsevneGrunnlagCore bidragsevneGrunnlagTilCore;
+  private BeregnNettoBarnetilsynGrunnlagCore nettoBarnetilsynGrunnlagTilCore;
+  private List<BeregnUnderholdskostnadGrunnlagCore> underholdskostnadGrunnlagTilCoreListe;
+  private List<BeregnBPsAndelUnderholdskostnadGrunnlagCore> bPAndelUnderholdskostnadGrunnlagTilCoreListe;
+  private List<BeregnSamvaersfradragGrunnlagCore> samvaersfradragGrunnlagTilCoreListe;
+  private List<BeregnKostnadsberegnetBidragGrunnlagCore> kostnadsberegnetBidragGrunnlagTilCoreListe;
+  private BeregnBarnebidragGrunnlagCore barnebidragGrunnlagTilCore;
+
+  private BeregnBidragsevneResultatCore bidragsevneResultatFraCore;
+  private BeregnNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore;
+  private BeregnUnderholdskostnadResultatCore underholdskostnadResultatFraCore;
+  private BeregnBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore;
+  private BeregnSamvaersfradragResultatCore samvaersfradragResultatFraCore;
+  private BeregnKostnadsberegnetBidragResultatCore kostnadsberegnetBidragResultatFraCore;
+  private BeregnBarnebidragResultatCore barnebidragResultatFraCore;
+
+  private LocalDate beregnDatoFra;
+  private LocalDate beregnDatoTil;
+
+  private Map<Integer, LocalDate> soknadsbarnMap;
+  private final Map<String, SjablonTallNavn> sjablontallMap = new HashMap<>();
 
   public BeregnBarnebidragService(SjablonConsumer sjablonConsumer, BidragsevneCore bidragsevneCore,
       NettoBarnetilsynCore nettoBarnetilsynCore, UnderholdskostnadCore underholdskostnadCore,
       BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore, SamvaersfradragCore samvaersfradragCore,
-      KostnadsberegnetBidragCore kostnadsberegnetBidragCore) {
+      KostnadsberegnetBidragCore kostnadsberegnetBidragCore, BarnebidragCore barnebidragCore) {
     this.sjablonConsumer = sjablonConsumer;
     this.bidragsevneCore = bidragsevneCore;
     this.nettoBarnetilsynCore = nettoBarnetilsynCore;
@@ -149,57 +137,601 @@ public class BeregnBarnebidragService {
     this.bpAndelUnderholdskostnadCore = bpAndelUnderholdskostnadCore;
     this.samvaersfradragCore = samvaersfradragCore;
     this.kostnadsberegnetBidragCore = kostnadsberegnetBidragCore;
+    this.barnebidragCore = barnebidragCore;
   }
 
-  public HttpResponse<BeregnBarnebidragResultat> beregn(BeregnBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+  public HttpResponse<BeregnTotalBarnebidragResultat> beregn(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
 
     // Kontroll av felles inputdata
-    beregnBarnebidragGrunnlag.validerBarnebidragGrunnlag();
+    beregnTotalBarnebidragGrunnlag.validerTotalBarnebidragGrunnlag();
+    beregnTotalBarnebidragGrunnlag.validerSoknadsbarn();
+    beregnTotalBarnebidragGrunnlag.validerInntekt();
 
-    // Ekstraher grunnlag for beregning av bidragsevne. Her gjøres også kontroll av inputdata
-    var bidragsevneGrunnlagTilCore = beregnBarnebidragGrunnlag.bidragsevneTilCore();
+    // Initierer variable
+    initier(beregnTotalBarnebidragGrunnlag);
 
-    // Ekstraher grunnlag for beregning av netto barnetilsyn. Her gjøres også kontroll av inputdata
-    var nettoBarnetilsynGrunnlagTilCore = beregnBarnebidragGrunnlag.nettoBarnetilsynTilCore();
-
-    // Ekstraher grunnlag for beregning av underholdskostnad. Her gjøres også kontroll av inputdata
-    var underholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.underholdskostnadTilCore();
-
-    // Ekstraher grunnlag for beregning av BPs andel av underholdskostnad. Her gjøres også kontroll av inputdata
-    var bpAndelUnderholdskostnadGrunnlagTilCore = beregnBarnebidragGrunnlag.bpAndelUnderholdskostnadTilCore();
-
-    // Ekstraher grunnlag for beregning av samværsfradrag. Her gjøres også kontroll av inputdata
-    var samvaersfradragGrunnlagTilCore = beregnBarnebidragGrunnlag.samvaersfradragTilCore();
-
-    // Hent sjabloner
+    // Henter sjabloner
     hentSjabloner();
 
-    // Kall beregning av bidragsevne
-    beregnBidragsevne(bidragsevneGrunnlagTilCore);
+    // Bygger grunnlag til core og utfører delberegninger
+    utfoerDelberegninger(beregnTotalBarnebidragGrunnlag);
 
-    // Kall beregning av netto barnetilsyn
-    beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCore);
-
-    // Kall beregning av underholdskostnad
-    beregnUnderholdskostnad(beregnBarnebidragGrunnlag.getSoknadBarnPersonId(), underholdskostnadGrunnlagTilCore);
-
-    // Kall beregning av BPs andel av underholdskostnad
-    beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore);
-
-    // Kall beregning av samværsfradrag
-    beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
-
-    // Kall beregning av kostnadsberegnet bidrag
-    beregnKostnadsberegnetBidrag(beregnBarnebidragGrunnlag.getBeregnDatoFra(), beregnBarnebidragGrunnlag.getBeregnDatoTil(),
-        underholdskostnadGrunnlagTilCore);
-
-    // Kall totalberegning
-
-    return HttpResponse.from(HttpStatus.OK, new BeregnBarnebidragResultat(new BeregnBidragsevneResultat(bidragsevneResultat),
-        new BeregnNettoBarnetilsynResultat(nettoBarnetilsynResultat), new BeregnUnderholdskostnadResultat(underholdskostnadResultat),
-        new BeregnBPsAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultat), new BeregnSamvaersfradragResultat(samvaersfradragResultat),
-        new BeregnKostnadsberegnetBidragResultat(kostnadsberegnetBidragResultat)));
+    // Bygger responsobjekt
+    return HttpResponse.from(HttpStatus.OK, new BeregnTotalBarnebidragResultat(
+        new BeregnBPBidragsevneResultat(bidragsevneResultatFraCore),
+        new BeregnBMNettoBarnetilsynResultat(nettoBarnetilsynResultatFraCore),
+        new BeregnBMUnderholdskostnadResultat(underholdskostnadResultatFraCore),
+        new BeregnBPAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultatFraCore),
+        new BeregnBPSamvaersfradragResultat(samvaersfradragResultatFraCore),
+        new BeregnBPKostnadsberegnetBidragResultat(kostnadsberegnetBidragResultatFraCore),
+        new BeregnBarnebidragResultat(barnebidragResultatFraCore)));
   }
+
+  //==================================================================================================================================================
+
+  // Initierer variable
+  private void initier(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+    // Initier beregnDatoFra og beregnDatoTil
+    beregnDatoFra = beregnTotalBarnebidragGrunnlag.getBeregnDatoFra();
+    beregnDatoTil = beregnTotalBarnebidragGrunnlag.getBeregnDatoTil();
+
+    // Lager en map for sjablontall (id og navn)
+    for (SjablonTallNavn sjablonTallNavn : SjablonTallNavn.values()) {
+      sjablontallMap.put(sjablonTallNavn.getId(), sjablonTallNavn);
+    }
+
+    // Lager en map for søknadsbarn id og fødselsdato
+    soknadsbarnMap = beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe().stream()
+        .collect(Collectors.toMap(Soknadsbarn::getSoknadsbarnPersonId, Soknadsbarn::getSoknadsbarnFodselsdato));
+  }
+
+  //==================================================================================================================================================
+
+  // Bygger grunnlag til core og kaller delberegninger
+  private void utfoerDelberegninger(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // ++ Bidragsevne
+    byggBidragsevneGrunnlagTilCore(beregnTotalBarnebidragGrunnlag);
+    beregnBidragsevne();
+
+    // ++ Netto barnetilsyn
+    byggNettoBarnetilsynGrunnlagTilCore(beregnTotalBarnebidragGrunnlag);
+    beregnNettoBarnetilsyn();
+
+    // ++ Underholdskostnad
+    utfoerDelberegningUnderholdskostnad(beregnTotalBarnebidragGrunnlag);
+
+    // ++ BPs andel av underholdskostnad
+    utfoerDelberegningBPAndelUnderholdskostnad(beregnTotalBarnebidragGrunnlag);
+
+    // ++ Samværsfradrag
+    utfoerDelberegningSamvaersfradrag(beregnTotalBarnebidragGrunnlag);
+
+    // ++ Kostnadsberegnet bidrag
+    utfoerDelberegningKostnadsberegnetBidrag(beregnTotalBarnebidragGrunnlag);
+
+    // ++ Barnebidrag (totalberegning)
+    byggBarnebidragGrunnlagTilCore(beregnTotalBarnebidragGrunnlag);
+    beregnBarnebidrag();
+  }
+
+  // Delberegning underholdskostnad
+  private void utfoerDelberegningUnderholdskostnad(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Validerer input
+    beregnTotalBarnebidragGrunnlag.validerUnderholdskostnad();
+
+    // Bygger opp liste med grunnlag for hvert søknadsbarn
+    underholdskostnadGrunnlagTilCoreListe = new ArrayList<>();
+    beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe()
+        .forEach(soknadsbarn -> underholdskostnadGrunnlagTilCoreListe
+            .add(byggUnderholdskostnadGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, soknadsbarn.getSoknadsbarnPersonId())));
+
+    // Kaller beregning for hvert søknadsbarn
+    underholdskostnadGrunnlagTilCoreListe
+        .forEach(this::beregnUnderholdskostnad);
+  }
+
+  // Delberegning BPs andel av underholdskostnad
+  private void utfoerDelberegningBPAndelUnderholdskostnad(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Bygger opp liste med grunnlag for hvert søknadsbarn
+    bPAndelUnderholdskostnadGrunnlagTilCoreListe = new ArrayList<>();
+    beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe()
+        .forEach(soknadsbarn -> bPAndelUnderholdskostnadGrunnlagTilCoreListe
+            .add(byggBPAndelUnderholdskostnadGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, soknadsbarn.getSoknadsbarnPersonId())));
+
+    // Kaller beregning for hvert søknadsbarn
+    bPAndelUnderholdskostnadGrunnlagTilCoreListe
+        .forEach(this::beregnBPsAndelUnderholdskostnad);
+  }
+
+  // Delberegning samværsfradrag
+  private void utfoerDelberegningSamvaersfradrag(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Validerer input
+    beregnTotalBarnebidragGrunnlag.validerSamvaersfradrag();
+
+    // Bygger opp liste med grunnlag for hvert søknadsbarn
+    samvaersfradragGrunnlagTilCoreListe = new ArrayList<>();
+    beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe()
+        .forEach(soknadsbarn -> samvaersfradragGrunnlagTilCoreListe
+            .add(byggSamvaersfradragGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, soknadsbarn.getSoknadsbarnPersonId())));
+
+    // Kaller beregning for hvert søknadsbarn
+    samvaersfradragGrunnlagTilCoreListe
+        .forEach(this::beregnSamvaersfradrag);
+  }
+
+  // Delberegning kostnadsberegnet bidrag
+  private void utfoerDelberegningKostnadsberegnetBidrag(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Bygger opp liste med grunnlag for hvert søknadsbarn
+    kostnadsberegnetBidragGrunnlagTilCoreListe = new ArrayList<>();
+    beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe()
+        .forEach(soknadsbarn -> kostnadsberegnetBidragGrunnlagTilCoreListe
+            .add(byggKostnadsberegnetBidragGrunnlagTilCore(soknadsbarn.getSoknadsbarnPersonId())));
+
+    // Kaller beregning for hvert søknadsbarn
+    kostnadsberegnetBidragGrunnlagTilCoreListe
+        .forEach(this::beregnKostnadsberegnetBidrag);
+  }
+
+  //==================================================================================================================================================
+
+  // Bygger grunnlag til core for beregning av bidragsevne
+  private void byggBidragsevneGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Hent aktuelle sjabloner
+    var sjablonPeriodeCoreListe = new ArrayList<SjablonPeriodeCore>();
+    sjablonPeriodeCoreListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody(), BIDRAGSEVNE));
+    sjablonPeriodeCoreListe.addAll(mapSjablonBidragsevne(sjablonBidragsevneResponse.getResponseEntity().getBody()));
+    sjablonPeriodeCoreListe.addAll(mapSjablonTrinnvisSkattesats(sjablonTrinnvisSkattesatsResponse.getResponseEntity().getBody()));
+
+    // Bygg grunnlag for beregning av bidragsevne. Her gjøres også kontroll av inputdata
+    bidragsevneGrunnlagTilCore = beregnTotalBarnebidragGrunnlag.bidragsevneTilCore(sjablonPeriodeCoreListe);
+  }
+
+  // Bygger grunnlag til core for beregning av netto barnetilsyn
+  private void byggNettoBarnetilsynGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Hent aktuelle sjabloner
+    var sjablonPeriodeCoreListe = new ArrayList<SjablonPeriodeCore>();
+    sjablonPeriodeCoreListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody(), NETTO_BARNETILSYN));
+    sjablonPeriodeCoreListe.addAll(mapSjablonMaksTilsyn(sjablonMaksTilsynResponse.getResponseEntity().getBody()));
+    sjablonPeriodeCoreListe.addAll(mapSjablonMaksFradrag(sjablonMaksFradragResponse.getResponseEntity().getBody()));
+
+    // Bygg grunnlag for beregning av netto barnetilsyn. Her gjøres også kontroll av inputdata
+    nettoBarnetilsynGrunnlagTilCore = beregnTotalBarnebidragGrunnlag.nettoBarnetilsynTilCore(soknadsbarnMap, sjablonPeriodeCoreListe);
+  }
+
+  // Bygger grunnlag til core for beregning av underholdskostnad
+  private BeregnUnderholdskostnadGrunnlagCore byggUnderholdskostnadGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
+      Integer soknadsbarnPersonId) {
+
+    // Løp gjennom BarnetilsynMedStonadPeriodeListe og bygg opp ny liste til core med riktig PersonId
+    var barnetilsynMedStonadPeriodeCoreListe =
+        beregnTotalBarnebidragGrunnlag.getBeregnBMUnderholdskostnadGrunnlag().getBarnetilsynMedStonadPeriodeListe()
+            .stream()
+            .filter(bMSPeriode -> bMSPeriode.getBarnetilsynMedStonadSoknadsbarnPersonId().equals(soknadsbarnPersonId))
+            .map(bMSPeriode -> new BarnetilsynMedStonadPeriodeCore(
+                new PeriodeCore(bMSPeriode.getBarnetilsynMedStonadDatoFraTil().getPeriodeDatoFra(),
+                    bMSPeriode.getBarnetilsynMedStonadDatoFraTil().getPeriodeDatoTil()),
+                bMSPeriode.getBarnetilsynMedStonadTilsynType(), bMSPeriode.getBarnetilsynMedStonadStonadType()))
+            .collect(toList());
+
+    // Løp gjennom output fra beregning av netto barnetilsyn og byggg opp ny input-liste til core
+    var nettoBarnetilsynPeriodeCoreListe = new ArrayList<NettoBarnetilsynPeriodeCore>();
+    for (var nettoBarnetilsynPeriodeCore : nettoBarnetilsynResultatFraCore.getResultatPeriodeListe()) {
+      for (var resultatBeregning : nettoBarnetilsynPeriodeCore.getResultatBeregningListe()) {
+        if (soknadsbarnPersonId == resultatBeregning.getResultatSoknadsbarnPersonId()) {
+          nettoBarnetilsynPeriodeCoreListe.add(new NettoBarnetilsynPeriodeCore(
+              nettoBarnetilsynPeriodeCore.getResultatDatoFraTil(),
+              resultatBeregning.getResultatBelop()));
+        }
+      }
+    }
+
+    // Løp gjennom ForpleiningUtgiftPeriodeListe og bygg opp ny liste til core med riktig PersonId
+    var forpleiningUtgiftPeriodeCoreListe =
+        beregnTotalBarnebidragGrunnlag.getBeregnBMUnderholdskostnadGrunnlag().getForpleiningUtgiftPeriodeListe()
+            .stream()
+            .filter(fUPeriode -> fUPeriode.getForpleiningUtgiftSoknadsbarnPersonId().equals(soknadsbarnPersonId))
+            .map(fUPeriode -> new ForpleiningUtgiftPeriodeCore(
+                new PeriodeCore(fUPeriode.getForpleiningUtgiftDatoFraTil().getPeriodeDatoFra(),
+                    fUPeriode.getForpleiningUtgiftDatoFraTil().getPeriodeDatoTil()),
+                fUPeriode.getForpleiningUtgiftBelop()))
+            .collect(toList());
+
+    // Hent aktuelle sjabloner
+    var sjablonPeriodeCoreListe = new ArrayList<SjablonPeriodeCore>();
+    sjablonPeriodeCoreListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody(), UNDERHOLDSKOSTAND));
+    sjablonPeriodeCoreListe.addAll(mapSjablonForbruksutgifter(sjablonForbruksutgifterResponse.getResponseEntity().getBody()));
+
+    // Bygg core-objekt
+    return new BeregnUnderholdskostnadGrunnlagCore(
+        soknadsbarnPersonId,
+        beregnDatoFra,
+        beregnDatoTil,
+        SoknadsbarnUtil.hentFodselsdatoForId(soknadsbarnPersonId, soknadsbarnMap),
+        barnetilsynMedStonadPeriodeCoreListe,
+        nettoBarnetilsynPeriodeCoreListe,
+        forpleiningUtgiftPeriodeCoreListe,
+        sjablonPeriodeCoreListe
+    );
+  }
+
+  // Bygger grunnlag til core for beregning av BPs andel av underholdskostnad
+  private BeregnBPsAndelUnderholdskostnadGrunnlagCore byggBPAndelUnderholdskostnadGrunnlagTilCore(
+      BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag, Integer soknadsbarnPersonId) {
+
+    // Løp gjennom output fra beregning av underholdskostnad og bygg opp ny input-liste til core
+    var underholdskostnadPeriodeCoreListe =
+        underholdskostnadResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .filter(resultat -> resultat.getSoknadsbarnPersonId() == soknadsbarnPersonId)
+            .map(resultat -> new UnderholdskostnadPeriodeCore(
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatBelopUnderholdskostnad()))
+            .collect(toList());
+
+    // Bygg liste over BPs inntekter til core
+    var inntektBPPeriodeCoreListe =
+        beregnTotalBarnebidragGrunnlag.getInntektBPBMGrunnlag().getInntektBPPeriodeListe()
+            .stream()
+            .map(inntektBPPeriode -> new InntektPeriodeCore(
+                new PeriodeCore(inntektBPPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
+                    inntektBPPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
+                inntektBPPeriode.getInntektType(), inntektBPPeriode.getInntektBelop()))
+            .collect(toList());
+
+    // Bygg liste over BMs inntekter til core
+    var inntektBMPeriodeCoreListe =
+        beregnTotalBarnebidragGrunnlag.getInntektBPBMGrunnlag().getInntektBMPeriodeListe()
+            .stream()
+            .map(inntektBMPeriode -> new InntektPeriodeCore(
+                new PeriodeCore(inntektBMPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
+                    inntektBMPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
+                inntektBMPeriode.getInntektType(), inntektBMPeriode.getInntektBelop()))
+            .collect(toList());
+
+    // Bygg liste over SBs inntekter til core
+    var soknadsbarn =
+        beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe()
+            .stream()
+            .filter(sb -> sb.getSoknadsbarnPersonId().equals(soknadsbarnPersonId))
+            .findFirst();
+
+    List<InntektPeriodeCore> inntektSBPeriodeCoreListe;
+    if (soknadsbarn.isPresent()) {
+      inntektSBPeriodeCoreListe = soknadsbarn.get().getInntektPeriodeListe()
+          .stream()
+          .map(inntektSBPeriode -> new InntektPeriodeCore(
+              new PeriodeCore(inntektSBPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
+                  inntektSBPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
+              inntektSBPeriode.getInntektType(), inntektSBPeriode.getInntektBelop()))
+          .collect(toList());
+    } else {
+      throw new UgyldigInputException("Fant ikke søknadsbarn med id " + soknadsbarnPersonId + " i soknadsbarnListe");
+    }
+
+    // Hent aktuelle sjabloner
+    var sjablonPeriodeCoreListe = new ArrayList<>(
+        mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody(), BP_ANDEL_UNDERHOLDSKOSTAND));
+
+    // Bygg core-objekt
+    return new BeregnBPsAndelUnderholdskostnadGrunnlagCore(
+        beregnDatoFra,
+        beregnDatoTil,
+        soknadsbarnPersonId,
+        underholdskostnadPeriodeCoreListe,
+        inntektBPPeriodeCoreListe,
+        inntektBMPeriodeCoreListe,
+        inntektSBPeriodeCoreListe,
+        sjablonPeriodeCoreListe
+    );
+  }
+
+  // Bygger grunnlag til core for beregning av samværsfradrag
+  private BeregnSamvaersfradragGrunnlagCore byggSamvaersfradragGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
+      Integer soknadsbarnPersonId) {
+
+    // Løp gjennom SamværsklassePeriodeListe og bygg opp ny liste til core med riktig PersonId
+    var samvaersklassePeriodeCoreListe =
+        beregnTotalBarnebidragGrunnlag.getBeregnBPSamvaersfradragGrunnlag().getSamvaersklassePeriodeListe()
+            .stream()
+            .filter(samvaersklassePeriode -> samvaersklassePeriode.getSamvaersklasseSoknadsbarnPersonId().equals(soknadsbarnPersonId))
+            .map(samvaersklassePeriode -> new SamvaersklassePeriodeCore(
+                new PeriodeCore(samvaersklassePeriode.getSamvaersklasseDatoFraTil().getPeriodeDatoFra(),
+                    samvaersklassePeriode.getSamvaersklasseDatoFraTil().getPeriodeDatoTil()),
+                samvaersklassePeriode.getSamvaersklasseId()))
+            .collect(toList());
+
+    // Hent aktuelle sjabloner
+    var sjablonPeriodeCoreListe = new ArrayList<>(mapSjablonSamvaersfradrag(sjablonSamvaersfradragResponse.getResponseEntity().getBody()));
+
+    // Bygg core-objekt
+    return new BeregnSamvaersfradragGrunnlagCore(
+        beregnDatoFra,
+        beregnDatoTil,
+        soknadsbarnPersonId,
+        SoknadsbarnUtil.hentFodselsdatoForId(soknadsbarnPersonId, soknadsbarnMap),
+        samvaersklassePeriodeCoreListe,
+        sjablonPeriodeCoreListe
+    );
+  }
+
+  // Bygger grunnlag til core for beregning av kostnadsberegnet bidrag
+  private BeregnKostnadsberegnetBidragGrunnlagCore byggKostnadsberegnetBidragGrunnlagTilCore(Integer soknadsbarnPersonId) {
+
+    // Løp gjennom output fra beregning av underholdskostnad og bygg opp ny input-liste til core
+    var underholdskostnadPeriodeCoreListe =
+        underholdskostnadResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .filter(resultat -> resultat.getSoknadsbarnPersonId() == soknadsbarnPersonId)
+            .map(resultat -> new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.UnderholdskostnadPeriodeCore(
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatBelopUnderholdskostnad()))
+            .collect(toList());
+
+    // Løp gjennom output fra beregning av BPs andel av underholdskostnad og bygg opp ny input-liste til core
+    var bPAndelUnderholdskostnadPeriodeCoreListe =
+        bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .filter(resultat -> resultat.getSoknadsbarnPersonId() == soknadsbarnPersonId)
+            .map(resultat -> new BPsAndelUnderholdskostnadPeriodeCore(
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatAndelProsent()))
+            .collect(toList());
+
+    // Løp gjennom output fra beregning av samværsfradrag og bygg opp ny input-liste til core
+    var samvaersfradragPeriodeCoreListe =
+        samvaersfradragResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .filter(resultat -> resultat.getSoknadsbarnPersonId() == soknadsbarnPersonId)
+            .map(resultat -> new SamvaersfradragPeriodeCore(
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatSamvaersfradragBelop()))
+            .collect(toList());
+
+    // Bygg core-objekt
+    return new BeregnKostnadsberegnetBidragGrunnlagCore(
+        beregnDatoFra,
+        beregnDatoTil,
+        soknadsbarnPersonId,
+        underholdskostnadPeriodeCoreListe,
+        bPAndelUnderholdskostnadPeriodeCoreListe,
+        samvaersfradragPeriodeCoreListe
+    );
+  }
+
+  // Bygger grunnlag til core for beregning av barnebidrag
+  private void byggBarnebidragGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    // Løp gjennom output fra beregning av bidragsevne og bygg opp ny input-liste til core
+    var bidragsevnePeriodeCoreListe =
+        bidragsevneResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .map(resultat -> new BidragsevnePeriodeCore(
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatEvneBelop(), resultat.getResultatBeregning().getResultat25ProsentInntekt()))
+            .collect(toList());
+
+    // Løp gjennom output fra beregning av BPs andel underholdskostnad og bygg opp ny input-liste til core
+    var bPAndelUnderholdskostnadPeriodeCoreListe =
+        bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .map(resultat -> new no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadPeriodeCore(
+                resultat.getSoknadsbarnPersonId(),
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatAndelProsent(), resultat.getResultatBeregning().getResultatAndelBelop()))
+            .collect(toList());
+
+    // Løp gjennom output fra beregning av samværsfradrag og bygg opp ny input-liste til core
+    var samvaersfradragPeriodeCoreListe =
+        samvaersfradragResultatFraCore.getResultatPeriodeListe()
+            .stream()
+            .map(resultat -> new no.nav.bidrag.beregn.barnebidrag.dto.SamvaersfradragPeriodeCore(
+                resultat.getSoknadsbarnPersonId(),
+                new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
+                    resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
+                resultat.getResultatBeregning().getResultatSamvaersfradragBelop()))
+            .collect(toList());
+
+    // Hent aktuelle sjabloner
+    var sjablonPeriodeCoreListe = mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody(), BARNEBIDRAG);
+
+    // Bygg grunnlag for beregning av barnebidrag. Her gjøres også kontroll av inputdata
+    barnebidragGrunnlagTilCore = beregnTotalBarnebidragGrunnlag.barnebidragTilCore(bidragsevnePeriodeCoreListe,
+        bPAndelUnderholdskostnadPeriodeCoreListe, samvaersfradragPeriodeCoreListe, sjablonPeriodeCoreListe);
+  }
+
+  //==================================================================================================================================================
+
+  // Kaller core for beregning av bidragsevne
+  private void beregnBidragsevne() {
+
+    // Kaller core-modulen for beregning av bidragsevne
+    LOGGER.debug("Bidragsevne - grunnlag for beregning: {}", bidragsevneGrunnlagTilCore);
+    bidragsevneResultatFraCore = bidragsevneCore.beregnBidragsevne(bidragsevneGrunnlagTilCore);
+
+    if (!bidragsevneResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet: " + System.lineSeparator()
+          + bidragsevneResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Bidragsevne - grunnlag for beregning:" + System.lineSeparator()
+          + "beregnDatoFra= " + bidragsevneGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + bidragsevneGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "antallBarnIEgetHusholdPeriodeListe= " + bidragsevneGrunnlagTilCore.getAntallBarnIEgetHusholdPeriodeListe() + System.lineSeparator()
+          + "bostatusPeriodeListe= " + bidragsevneGrunnlagTilCore.getBostatusPeriodeListe() + System.lineSeparator()
+          + "inntektPeriodeListe= " + bidragsevneGrunnlagTilCore.getInntektPeriodeListe() + System.lineSeparator()
+          + "særfradragPeriodeListe= " + bidragsevneGrunnlagTilCore.getSaerfradragPeriodeListe() + System.lineSeparator()
+          + "skatteklassePeriodeListe= " + bidragsevneGrunnlagTilCore.getSkatteklassePeriodeListe());
+      throw new UgyldigInputException("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet: "
+          + bidragsevneResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Bidragsevne - resultat av beregning: {}", bidragsevneResultatFraCore.getResultatPeriodeListe());
+  }
+
+  // Kaller core for beregning av netto barnetilsyn
+  private void beregnNettoBarnetilsyn() {
+
+    // Kaller core-modulen for beregning av netto barnetilsyn
+    LOGGER.debug("Netto barnetilsyn - grunnlag for beregning: {}", nettoBarnetilsynGrunnlagTilCore);
+    nettoBarnetilsynResultatFraCore = nettoBarnetilsynCore.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCore);
+
+    if (!nettoBarnetilsynResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: " + System.lineSeparator()
+          + nettoBarnetilsynResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Netto barnetilsyn - grunnlag for beregning:" + System.lineSeparator()
+          + "beregnDatoFra= " + nettoBarnetilsynGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + nettoBarnetilsynGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "faktiskUtgiftPeriodeListe= " + nettoBarnetilsynGrunnlagTilCore.getFaktiskUtgiftPeriodeListe());
+      throw new UgyldigInputException("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: "
+          + nettoBarnetilsynResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Netto barnetilsyn - resultat av beregning: {}", nettoBarnetilsynResultatFraCore.getResultatPeriodeListe());
+  }
+
+  // Kaller core for beregning av underholdskostnad
+  private void beregnUnderholdskostnad(BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
+
+    // Kaller core-modulen for beregning av underholdskostnad
+    LOGGER.debug("Underholdskostnad - grunnlag for beregning: {}", underholdskostnadGrunnlagTilCore);
+    underholdskostnadResultatFraCore = underholdskostnadCore.beregnUnderholdskostnad(underholdskostnadGrunnlagTilCore);
+
+    if (!underholdskostnadResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
+          + underholdskostnadResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + underholdskostnadGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + underholdskostnadGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "soknadsbarnPersonId= " + underholdskostnadGrunnlagTilCore.getSoknadsbarnPersonId() + System.lineSeparator()
+          + "soknadBarnFodselsdato= " + underholdskostnadGrunnlagTilCore.getSoknadBarnFodselsdato() + System.lineSeparator()
+          + "barneTilsynMedStonadPeriodeListe= " + underholdskostnadGrunnlagTilCore.getBarnetilsynMedStonadPeriodeListe() + System.lineSeparator()
+          + "forpleiningUtgiftPeriodeListe= " + underholdskostnadGrunnlagTilCore.getForpleiningUtgiftPeriodeListe() + System.lineSeparator()
+          + "nettoBarnetilsynPeriodeListe= " + underholdskostnadGrunnlagTilCore.getNettoBarnetilsynPeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: "
+          + underholdskostnadResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Underholdskostnad - resultat av beregning: {}", underholdskostnadResultatFraCore.getResultatPeriodeListe());
+  }
+
+  // Kaller core for beregning av BPs andel av underholdskostnad
+  private void beregnBPsAndelUnderholdskostnad(BeregnBPsAndelUnderholdskostnadGrunnlagCore bpAndelUnderholdskostnadGrunnlagTilCore) {
+
+    // Kaller core-modulen for beregning av BPs andel av underholdskostnad
+    LOGGER.debug("BPs andel av underholdskostnad - grunnlag for beregning: {}", bpAndelUnderholdskostnadGrunnlagTilCore);
+    bpAndelUnderholdskostnadResultatFraCore = bpAndelUnderholdskostnadCore.beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore);
+
+    if (!bpAndelUnderholdskostnadResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
+          + bpAndelUnderholdskostnadResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("BPs andel av underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + bpAndelUnderholdskostnadGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + bpAndelUnderholdskostnadGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "soknadsbarnPersonId= " + bpAndelUnderholdskostnadGrunnlagTilCore.getSoknadsbarnPersonId() + System.lineSeparator()
+          + "underholdskostnadPeriodeListe= " + bpAndelUnderholdskostnadGrunnlagTilCore.getUnderholdskostnadPeriodeListe() + System.lineSeparator()
+          + "inntektBPPeriodeListe= " + bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBPPeriodeListe() + System.lineSeparator()
+          + "inntektBMPeriodeListe= " + bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe() + System.lineSeparator()
+          + "inntektBBPeriodeListe= " + bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBBPeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet: "
+          + bpAndelUnderholdskostnadResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("BPs andel av underholdskostnad - resultat av beregning: {}", bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe());
+  }
+
+  // Kaller core for beregning av samværsfradrag
+  private void beregnSamvaersfradrag(BeregnSamvaersfradragGrunnlagCore samvaersfradragGrunnlagTilCore) {
+
+    // Kaller core-modulen for beregning av samværsfradrag
+    LOGGER.debug("Samværsfradrag - grunnlag for beregning: {}", samvaersfradragGrunnlagTilCore);
+    samvaersfradragResultatFraCore = samvaersfradragCore.beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
+
+    if (!samvaersfradragResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: " + System.lineSeparator()
+          + samvaersfradragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Samværsfradrag - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + samvaersfradragGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + samvaersfradragGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "soknadsbarnPersonId= " + samvaersfradragGrunnlagTilCore.getSoknadsbarnPersonId() + System.lineSeparator()
+          + "soknadsbarnFodselsdato= " + samvaersfradragGrunnlagTilCore.getSoknadsbarnFodselsdato() + System.lineSeparator()
+          + "samvaersklassePeriodeListe= " + samvaersfradragGrunnlagTilCore.getSamvaersklassePeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: "
+          + samvaersfradragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Samværsfradrag - resultat av beregning: {}", samvaersfradragResultatFraCore.getResultatPeriodeListe());
+  }
+
+  // Kaller core for beregning av kostnadsberegnet bidrag
+  private void beregnKostnadsberegnetBidrag(BeregnKostnadsberegnetBidragGrunnlagCore kostnadsberegnetBidragGrunnlagTilCore) {
+
+    // Kaller core-modulen for beregning av kostnadsberegnet bidrag
+    LOGGER.debug("Kostnadsberegnet bidrag - grunnlag for beregning: {}", kostnadsberegnetBidragGrunnlagTilCore);
+    kostnadsberegnetBidragResultatFraCore = kostnadsberegnetBidragCore.beregnKostnadsberegnetBidrag(kostnadsberegnetBidragGrunnlagTilCore);
+
+    if (!kostnadsberegnetBidragResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet: " + System.lineSeparator()
+          + kostnadsberegnetBidragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Kostnadsberegnet bidrag - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + kostnadsberegnetBidragGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + kostnadsberegnetBidragGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "soknadsbarnPersonId= " + kostnadsberegnetBidragGrunnlagTilCore.getSoknadsbarnPersonId() + System.lineSeparator()
+          + "underholdskostnadPeriodeListe= " + kostnadsberegnetBidragGrunnlagTilCore.getUnderholdskostnadPeriodeListe() + System.lineSeparator()
+          + "bPsAndelUnderholdskostnadPeriodeListe= " + kostnadsberegnetBidragGrunnlagTilCore.getBPsAndelUnderholdskostnadPeriodeListe() +
+          System.lineSeparator()
+          + "samvaersfradragPeriodeListe= " + kostnadsberegnetBidragGrunnlagTilCore.getSamvaersfradragPeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet: "
+          + kostnadsberegnetBidragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Kostnadsberegnet bidrag - resultat av beregning: {}", kostnadsberegnetBidragResultatFraCore.getResultatPeriodeListe());
+  }
+
+  // Kaller core for beregning av barnebidrag
+  private void beregnBarnebidrag() {
+
+    // Kaller core-modulen for beregning av barnebidrag
+    LOGGER.debug("Barnebidrag - grunnlag for beregning: {}", barnebidragGrunnlagTilCore);
+    barnebidragResultatFraCore = barnebidragCore.beregnBarnebidrag(barnebidragGrunnlagTilCore);
+
+    if (!barnebidragResultatFraCore.getAvvikListe().isEmpty()) {
+      LOGGER.error("Ugyldig input ved beregning av barnebidrag. Følgende avvik ble funnet: " + System.lineSeparator()
+          + barnebidragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
+          .collect(Collectors.joining(System.lineSeparator())));
+      LOGGER.info("Barnebidrag - grunnlag for beregning: " + System.lineSeparator()
+          + "beregnDatoFra= " + barnebidragGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
+          + "beregnDatoTil= " + barnebidragGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
+          + "bidragsevnePeriodeListe= " + barnebidragGrunnlagTilCore.getBidragsevnePeriodeListe() + System.lineSeparator()
+          + "bPsAndelUnderholdskostnadPeriodeListe= " + barnebidragGrunnlagTilCore.getBPsAndelUnderholdskostnadPeriodeListe() + System.lineSeparator()
+          + "samvaersfradragPeriodeListe= " + barnebidragGrunnlagTilCore.getSamvaersfradragPeriodeListe() + System.lineSeparator()
+          + "deltBostedPeriodeListe= " + barnebidragGrunnlagTilCore.getDeltBostedPeriodeListe() + System.lineSeparator()
+          + "barnetilleggBPPeriodeListe= " + barnebidragGrunnlagTilCore.getBarnetilleggBPPeriodeListe() + System.lineSeparator()
+          + "barnetilleggBMPeriodeListe= " + barnebidragGrunnlagTilCore.getBarnetilleggBMPeriodeListe() + System.lineSeparator()
+          + "barnetilleggForsvaretPeriodeListe= " + barnebidragGrunnlagTilCore.getBarnetilleggForsvaretPeriodeListe() + System.lineSeparator());
+      throw new UgyldigInputException("Ugyldig input ved beregning av barnebidrag. Følgende avvik ble funnet: "
+          + barnebidragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
+    }
+
+    LOGGER.debug("Barnebidrag - resultat av beregning: {}", barnebidragResultatFraCore.getResultatPeriodeListe());
+  }
+
+  //==================================================================================================================================================
 
   // Henter sjabloner
   private void hentSjabloner() {
@@ -232,308 +764,120 @@ public class BeregnBarnebidragService {
     LOGGER.debug("Antall sjabloner hentet av type Trinnvis skattesats: {}", sjablonTrinnvisSkattesatsResponse.getResponseEntity().getBody().size());
   }
 
-  // Beregning av bidragsevne
-  private void beregnBidragsevne(BeregnBidragsevneGrunnlagAltCore bidragsevneGrunnlag) {
-    // Populerer liste over aktuelle sjabloner
-    var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
-    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonBidragsevne(sjablonBidragsevneResponse.getResponseEntity().getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonTrinnvisSkattesats(sjablonTrinnvisSkattesatsResponse.getResponseEntity().getBody()));
-    bidragsevneGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
-
-    // Kaller core-modulen for beregning av bidragsevne
-    LOGGER.debug("Bidragsevne - grunnlag for beregning: {}", bidragsevneGrunnlag);
-    bidragsevneResultat = bidragsevneCore.beregnBidragsevne(bidragsevneGrunnlag);
-
-    if (!bidragsevneResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet: " + System.lineSeparator()
-          + bidragsevneResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
-      LOGGER.info("Bidragsevne - grunnlag for beregning:" + System.lineSeparator()
-          + "beregnDatoFra= " + bidragsevneGrunnlag.getBeregnDatoFra() + System.lineSeparator()
-          + "beregnDatoTil= " + bidragsevneGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "antallBarnIEgetHusholdPeriodeListe= " + bidragsevneGrunnlag.getAntallBarnIEgetHusholdPeriodeListe() + System.lineSeparator()
-          + "bostatusPeriodeListe= " + bidragsevneGrunnlag.getBostatusPeriodeListe() + System.lineSeparator()
-          + "inntektPeriodeListe= " + bidragsevneGrunnlag.getInntektPeriodeListe() + System.lineSeparator()
-          + "særfradragPeriodeListe= " + bidragsevneGrunnlag.getSaerfradragPeriodeListe() + System.lineSeparator()
-          + "skatteklassePeriodeListe= " + bidragsevneGrunnlag.getSkatteklassePeriodeListe());
-      throw new UgyldigInputException("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet: "
-          + bidragsevneResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
-    }
-
-    LOGGER.debug("Bidragsevne - resultat av beregning: {}", bidragsevneResultat.getResultatPeriodeListe());
-  }
-
-  // Beregning av netto barnetilsyn
-  private void beregnNettoBarnetilsyn(BeregnNettoBarnetilsynGrunnlagCore nettoBarnetilsynGrunnlag) {
-    // Populerer liste over aktuelle sjabloner
-    var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
-    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonMaksTilsyn(sjablonMaksTilsynResponse.getResponseEntity().getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonMaksFradrag(sjablonMaksFradragResponse.getResponseEntity().getBody()));
-    nettoBarnetilsynGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
-
-    // Kaller core-modulen for beregning av netto barnetilsyn
-    LOGGER.debug("Netto barnetilsyn - grunnlag for beregning: {}", nettoBarnetilsynGrunnlag);
-    nettoBarnetilsynResultat = nettoBarnetilsynCore.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlag);
-
-    if (!nettoBarnetilsynResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: " + System.lineSeparator()
-          + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
-      LOGGER.info("Netto barnetilsyn - grunnlag for beregning:" + System.lineSeparator()
-          + "beregnDatoFra= " + nettoBarnetilsynGrunnlag.getBeregnDatoFra() + System.lineSeparator()
-          + "beregnDatoTil= " + nettoBarnetilsynGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "faktiskUtgiftPeriodeListe= " + nettoBarnetilsynGrunnlag.getFaktiskUtgiftPeriodeListe());
-      throw new UgyldigInputException("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: "
-          + nettoBarnetilsynResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
-    }
-
-    LOGGER.debug("Netto barnetilsyn - resultat av beregning: {}", nettoBarnetilsynResultat.getResultatPeriodeListe());
-  }
-
-  // Beregning av underholdskostnad
-  private void beregnUnderholdskostnad(int soknadBarnPersonId, BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlag) {
-    // Populerer liste over aktuelle sjabloner
-    var sjablonPeriodeListe = new ArrayList<SjablonPeriodeCore>();
-    sjablonPeriodeListe.addAll(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
-    sjablonPeriodeListe.addAll(mapSjablonForbruksutgifter(sjablonForbruksutgifterResponse.getResponseEntity().getBody()));
-    underholdskostnadGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
-
-    underholdskostnadGrunnlag.setNettoBarnetilsynPeriodeListe(hentNettoBarnetilsynPeriodeResultat(soknadBarnPersonId));
-
-    // Kaller core-modulen for beregning av underholdskostnad
-    LOGGER.debug("Underholdskostnad - grunnlag for beregning: {}", underholdskostnadGrunnlag);
-    underholdskostnadResultat = underholdskostnadCore.beregnUnderholdskostnad(underholdskostnadGrunnlag);
-
-    if (!underholdskostnadResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
-          + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
-      LOGGER.info("Underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
-          + "beregnDatoFra= " + underholdskostnadGrunnlag.getBeregnDatoFra() + System.lineSeparator()
-          + "beregnDatoTil= " + underholdskostnadGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "soknadBarnFodselsdato= " + underholdskostnadGrunnlag.getSoknadBarnFodselsdato() + System.lineSeparator()
-          + "barneTilsynMedStonadPeriodeListe= " + underholdskostnadGrunnlag.getBarnetilsynMedStonadPeriodeListe() + System.lineSeparator()
-          + "forpleiningUtgiftPeriodeListe= " + underholdskostnadGrunnlag.getForpleiningUtgiftPeriodeListe() + System.lineSeparator()
-          + "nettoBarnetilsynPeriodeListe= " + underholdskostnadGrunnlag.getNettoBarnetilsynPeriodeListe() + System.lineSeparator());
-      throw new UgyldigInputException("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: "
-          + underholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
-    }
-
-    LOGGER.debug("Underholdskostnad - resultat av beregning: {}", underholdskostnadResultat.getResultatPeriodeListe());
-  }
-
-  // Beregning av BPs andel av underholdskostnad
-  private void beregnBPsAndelUnderholdskostnad(BeregnBPsAndelUnderholdskostnadGrunnlagCore bpAndelUnderholdskostnadGrunnlag) {
-    // Populerer liste over aktuelle sjabloner
-    var sjablonPeriodeListe = new ArrayList<>(mapSjablonSjablontall(sjablonSjablontallResponse.getResponseEntity().getBody()));
-    bpAndelUnderholdskostnadGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
-
-    // Kaller core-modulen for beregning av BPs andel av underholdskostnad
-    LOGGER.debug("BPs andel av underholdskostnad - grunnlag for beregning: {}", bpAndelUnderholdskostnadGrunnlag);
-    bpAndelUnderholdskostnadResultat = bpAndelUnderholdskostnadCore.beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlag);
-
-    if (!bpAndelUnderholdskostnadResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
-          + bpAndelUnderholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
-          .collect(Collectors.joining(System.lineSeparator())));
-      LOGGER.info("BPs andel av underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
-          + "beregnDatoFra= " + bpAndelUnderholdskostnadGrunnlag.getBeregnDatoFra() + System.lineSeparator()
-          + "beregnDatoTil= " + bpAndelUnderholdskostnadGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "inntekterPeriodeListe= " + bpAndelUnderholdskostnadGrunnlag.getInntekterPeriodeListe() + System.lineSeparator());
-      throw new UgyldigInputException("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet: "
-          + bpAndelUnderholdskostnadResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
-    }
-
-    LOGGER.debug("BPs andel av underholdskostnad - resultat av beregning: {}", bpAndelUnderholdskostnadResultat.getResultatPeriodeListe());
-  }
-
-  // Beregning av samværsfradrag
-  private void beregnSamvaersfradrag(BeregnSamvaersfradragGrunnlagCore samvaersfradragGrunnlag) {
-    // Populerer liste over aktuelle sjabloner
-    var sjablonPeriodeListe = new ArrayList<>(mapSjablonSamvaersfradrag(sjablonSamvaersfradragResponse.getResponseEntity().getBody()));
-    samvaersfradragGrunnlag.setSjablonPeriodeListe(sjablonPeriodeListe);
-
-    // Kaller core-modulen for beregning av samværsfradrag
-    LOGGER.debug("Samværsfradrag - grunnlag for beregning: {}", samvaersfradragGrunnlag);
-    samvaersfradragResultat = samvaersfradragCore.beregnSamvaersfradrag(samvaersfradragGrunnlag);
-
-    if (!samvaersfradragResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: " + System.lineSeparator()
-          + samvaersfradragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
-      LOGGER.info("Samværsfradrag - grunnlag for beregning: " + System.lineSeparator()
-          + "beregnDatoFra= " + samvaersfradragGrunnlag.getBeregnDatoFra() + System.lineSeparator()
-          + "beregnDatoTil= " + samvaersfradragGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "soknadsbarnFodselsdato= " + samvaersfradragGrunnlag.getSoknadsbarnFodselsdato() + System.lineSeparator()
-          + "samvaersklassePeriodeListe= " + samvaersfradragGrunnlag.getSamvaersklassePeriodeListe() + System.lineSeparator());
-      throw new UgyldigInputException("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: "
-          + samvaersfradragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
-    }
-
-    LOGGER.debug("Samværsfradrag - resultat av beregning: {}", samvaersfradragResultat.getResultatPeriodeListe());
-  }
-
-  // Beregning av kostnadsberegnet bidrag
-  private void beregnKostnadsberegnetBidrag(LocalDate beregnDatoFra, LocalDate beregnDatoTil,
-      BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
-    // Bygger kostnadsberegnet bidrag grunnlag
-    var kostnadsberegnetBidragGrunnlag =
-        byggKostnadsberegnetBidragGrunnlag(beregnDatoFra, beregnDatoTil, underholdskostnadGrunnlagTilCore);
-
-    // Kaller core-modulen for beregning av kostnadsberegnet bidrag
-    LOGGER.debug("Kostnadsberegnet bidrag - grunnlag for beregning: {}", kostnadsberegnetBidragGrunnlag);
-    kostnadsberegnetBidragResultat = kostnadsberegnetBidragCore.beregnKostnadsberegnetBidrag(kostnadsberegnetBidragGrunnlag);
-
-    if (!kostnadsberegnetBidragResultat.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet: " + System.lineSeparator()
-          + kostnadsberegnetBidragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
-          .collect(Collectors.joining(System.lineSeparator())));
-      LOGGER.info("Kostnadsberegnet bidrag - grunnlag for beregning: " + System.lineSeparator()
-          + "beregnDatoFra= " + kostnadsberegnetBidragGrunnlag.getBeregnDatoFra() + System.lineSeparator()
-          + "beregnDatoTil= " + kostnadsberegnetBidragGrunnlag.getBeregnDatoTil() + System.lineSeparator()
-          + "underholdskostnadPeriodeListe= " + kostnadsberegnetBidragGrunnlag.getUnderholdskostnadPeriodeListe() + System.lineSeparator()
-          + "bPsAndelUnderholdskostnadPeriodeListe= " + kostnadsberegnetBidragGrunnlag.getBPsAndelUnderholdskostnadPeriodeListe() +
-          System.lineSeparator()
-          + "samvaersfradragPeriodeListe= " + kostnadsberegnetBidragGrunnlag.getSamvaersfradragPeriodeListe() + System.lineSeparator());
-      throw new UgyldigInputException("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet: "
-          + kostnadsberegnetBidragResultat.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining("; ")));
-    }
-
-    LOGGER.debug("Kostnadsberegnet bidrag - resultat av beregning: {}", kostnadsberegnetBidragResultat.getResultatPeriodeListe());
-  }
-
-  // Hent data fra netto barnetilsyn resultat som skal brukes som input til beregning av underholdskostnad
-  private List<NettoBarnetilsynPeriodeCore> hentNettoBarnetilsynPeriodeResultat(int soknadBarnPersonId) {
-    var nettoBarnetilsynPeriodeCoreListe = new ArrayList<NettoBarnetilsynPeriodeCore>();
-    for (var nettoBarnetilsynPeriodeCore : nettoBarnetilsynResultat.getResultatPeriodeListe()) {
-      for (var resultatBeregning : nettoBarnetilsynPeriodeCore.getResultatBeregningListe()) {
-        if (soknadBarnPersonId == resultatBeregning.getResultatSoknadsbarnPersonId()) {
-          nettoBarnetilsynPeriodeCoreListe.add(new NettoBarnetilsynPeriodeCore(
-              nettoBarnetilsynPeriodeCore.getResultatDatoFraTil(),
-              resultatBeregning.getResultatBelop()));
-        }
-      }
-    }
-    return nettoBarnetilsynPeriodeCoreListe;
-  }
-
-  // Beregning av kostnadsberegnet bidrag
-  private BeregnKostnadsberegnetBidragGrunnlagCore byggKostnadsberegnetBidragGrunnlag(LocalDate beregnDatoFra, LocalDate beregnDatoTil,
-      BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
-    var underholdskostnadPeriodeCoreListe = new ArrayList<UnderholdskostnadPeriodeCore>();
-    for (var underholdskostnadPeriodeCore : underholdskostnadResultat.getResultatPeriodeListe()) {
-      underholdskostnadPeriodeCoreListe.add(new UnderholdskostnadPeriodeCore(
-          underholdskostnadPeriodeCore.getResultatDatoFraTil(),
-          underholdskostnadPeriodeCore.getResultatBeregning().getResultatBelopUnderholdskostnad()));
-    }
-
-    var bpAndelUnderholdskostnadPeriodeCoreListe = new ArrayList<BPsAndelUnderholdskostnadPeriodeCore>();
-    for (var bpAndelUnderholdskostnadPeriodeCore : bpAndelUnderholdskostnadResultat.getResultatPeriodeListe()) {
-      bpAndelUnderholdskostnadPeriodeCoreListe.add(new BPsAndelUnderholdskostnadPeriodeCore(
-          bpAndelUnderholdskostnadPeriodeCore.getResultatDatoFraTil(),
-          bpAndelUnderholdskostnadPeriodeCore.getResultatBeregning().getResultatAndelProsent()));
-    }
-
-    var samvaersfradragPeriodeCoreListe = new ArrayList<SamvaersfradragPeriodeCore>();
-    for (var samvaersfradragPeriodeCore : samvaersfradragResultat.getResultatPeriodeListe()) {
-      samvaersfradragPeriodeCoreListe.add(new SamvaersfradragPeriodeCore(
-          samvaersfradragPeriodeCore.getResultatDatoFraTil(), samvaersfradragPeriodeCore.getResultatBeregning().getResultatSamvaersfradragBelop()));
-    }
-
-    return new BeregnKostnadsberegnetBidragGrunnlagCore(beregnDatoFra, beregnDatoTil, underholdskostnadPeriodeCoreListe,
-        bpAndelUnderholdskostnadPeriodeCoreListe, samvaersfradragPeriodeCoreListe);
-  }
-
   // Mapper sjabloner av typen sjablontall
-  private List<SjablonPeriodeCore> mapSjablonSjablontall(List<Sjablontall> sjablonSjablontallListe) {
+  // Filtrerer bort de sjablonene som ikke brukes i den aktuelle delberegningen og de som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
+  private List<SjablonPeriodeCore> mapSjablonSjablontall(List<Sjablontall> sjablonSjablontallListe, String delberegning) {
     return sjablonSjablontallListe
         .stream()
-        .map(sSL -> new SjablonPeriodeCore(
-            new PeriodeCore(sSL.getDatoFom(), sSL.getDatoTom()),
-            sjablontallMap.getOrDefault(sSL.getTypeSjablon(), sSL.getTypeSjablon()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> filtrerSjablonTall(sjablontallMap.getOrDefault(sjablon.getTypeSjablon(), SjablonTallNavn.DUMMY), delberegning))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
+            sjablontallMap.getOrDefault(sjablon.getTypeSjablon(), SjablonTallNavn.DUMMY).getNavn(),
             emptyList(),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sSL.getVerdi().doubleValue()))))
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sjablon.getVerdi().doubleValue()))))
         .collect(toList());
   }
 
   // Mapper sjabloner av typen forbruksutgifter
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   private List<SjablonPeriodeCore> mapSjablonForbruksutgifter(List<Forbruksutgifter> sjablonForbruksutgifterListe) {
-
     return sjablonForbruksutgifterListe
         .stream()
-        .map(sFL -> new SjablonPeriodeCore(
-            new PeriodeCore(sFL.getDatoFom(), sFL.getDatoTom()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.FORBRUKSUTGIFTER.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sFL.getAlderTom().toString())),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.FORBRUK_TOTAL_BELOP.getNavn(), sFL.getBelopForbrukTot().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sjablon.getAlderTom().toString())),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.FORBRUK_TOTAL_BELOP.getNavn(), sjablon.getBelopForbrukTot().doubleValue()))))
         .collect(toList());
   }
 
   // Mapper sjabloner av typen maks tilsyn
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   private List<SjablonPeriodeCore> mapSjablonMaksTilsyn(List<MaksTilsyn> sjablonMaksTilsynListe) {
-
     return sjablonMaksTilsynListe
         .stream()
-        .map(sMTL -> new SjablonPeriodeCore(
-            new PeriodeCore(sMTL.getDatoFom(), sMTL.getDatoTom()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.MAKS_TILSYN.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMTL.getAntBarnTom().toString())),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_TILSYN_BELOP.getNavn(), sMTL.getMaksBelopTilsyn().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sjablon.getAntBarnTom().toString())),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_TILSYN_BELOP.getNavn(), sjablon.getMaksBelopTilsyn().doubleValue()))))
         .collect(toList());
   }
 
   // Mapper sjabloner av typen maks fradrag
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   private List<SjablonPeriodeCore> mapSjablonMaksFradrag(List<MaksFradrag> sjablonMaksFradragListe) {
-
     return sjablonMaksFradragListe
         .stream()
-        .map(sMFL -> new SjablonPeriodeCore(
-            new PeriodeCore(sMFL.getDatoFom(), sMFL.getDatoTom()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.MAKS_FRADRAG.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sMFL.getAntBarnTom().toString())),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sMFL.getMaksBelopFradrag().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sjablon.getAntBarnTom().toString())),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sjablon.getMaksBelopFradrag().doubleValue()))))
         .collect(toList());
   }
 
   // Mapper sjabloner av typen samværsfradrag
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   private List<SjablonPeriodeCore> mapSjablonSamvaersfradrag(List<Samvaersfradrag> sjablonSamvaersfradragListe) {
-
     return sjablonSamvaersfradragListe
         .stream()
-        .map(sSL -> new SjablonPeriodeCore(
-            new PeriodeCore(sSL.getDatoFom(), sSL.getDatoTom()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.SAMVAERSFRADRAG.getNavn(),
-            asList(new SjablonNokkelCore(SjablonNokkelNavn.SAMVAERSKLASSE.getNavn(), sSL.getSamvaersklasse()),
-                new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sSL.getAlderTom().toString())),
-            asList(new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_DAGER_TOM.getNavn(), sSL.getAntDagerTom().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_NETTER_TOM.getNavn(), sSL.getAntNetterTom().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.FRADRAG_BELOP.getNavn(), sSL.getBelopFradrag().doubleValue()))))
+            asList(new SjablonNokkelCore(SjablonNokkelNavn.SAMVAERSKLASSE.getNavn(), sjablon.getSamvaersklasse()),
+                new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sjablon.getAlderTom().toString())),
+            asList(new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_DAGER_TOM.getNavn(), sjablon.getAntDagerTom().doubleValue()),
+                new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_NETTER_TOM.getNavn(), sjablon.getAntNetterTom().doubleValue()),
+                new SjablonInnholdCore(SjablonInnholdNavn.FRADRAG_BELOP.getNavn(), sjablon.getBelopFradrag().doubleValue()))))
         .collect(toList());
   }
 
   // Mapper sjabloner av typen bidragsevne
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   private List<SjablonPeriodeCore> mapSjablonBidragsevne(List<Bidragsevne> sjablonBidragsevneListe) {
-
     return sjablonBidragsevneListe
         .stream()
-        .map(sBL -> new SjablonPeriodeCore(
-            new PeriodeCore(sBL.getDatoFom(), sBL.getDatoTom()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.BIDRAGSEVNE.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.BOSTATUS.getNavn(), sBL.getBostatus())),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.BOUTGIFT_BELOP.getNavn(), sBL.getBelopBoutgift().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.UNDERHOLD_BELOP.getNavn(), sBL.getBelopUnderhold().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.BOSTATUS.getNavn(), sjablon.getBostatus())),
+            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.BOUTGIFT_BELOP.getNavn(), sjablon.getBelopBoutgift().doubleValue()),
+                new SjablonInnholdCore(SjablonInnholdNavn.UNDERHOLD_BELOP.getNavn(), sjablon.getBelopUnderhold().doubleValue()))))
         .collect(toList());
   }
 
   // Mapper sjabloner av typen trinnvis skattesats
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   private List<SjablonPeriodeCore> mapSjablonTrinnvisSkattesats(List<TrinnvisSkattesats> sjablonTrinnvisSkattesatsListe) {
-
     return sjablonTrinnvisSkattesatsListe
         .stream()
-        .map(sTSL -> new SjablonPeriodeCore(
-            new PeriodeCore(sTSL.getDatoFom(), sTSL.getDatoTom()),
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.TRINNVIS_SKATTESATS.getNavn(),
             emptyList(),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.INNTEKTSGRENSE_BELOP.getNavn(), sTSL.getInntektgrense().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.SKATTESATS_PROSENT.getNavn(), sTSL.getSats().doubleValue()))))
+            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.INNTEKTSGRENSE_BELOP.getNavn(), sjablon.getInntektgrense().doubleValue()),
+                new SjablonInnholdCore(SjablonInnholdNavn.SKATTESATS_PROSENT.getNavn(), sjablon.getSats().doubleValue()))))
         .collect(toList());
+  }
+
+  // Sjekker om en type SjablonTall er i bruk for en delberegning
+  private boolean filtrerSjablonTall(SjablonTallNavn sjablonTallNavn, String delberegning) {
+
+    return switch (delberegning) {
+      case BIDRAGSEVNE -> sjablonTallNavn.getBidragsevne();
+      case NETTO_BARNETILSYN -> sjablonTallNavn.getNettoBarnetilsyn();
+      case UNDERHOLDSKOSTAND -> sjablonTallNavn.getUnderholdskostnad();
+      case BP_ANDEL_UNDERHOLDSKOSTAND -> sjablonTallNavn.getBpAndelUnderholdskostnad();
+      case BARNEBIDRAG -> sjablonTallNavn.getBarnebidrag();
+      default -> false;
+    };
   }
 }

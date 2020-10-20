@@ -2,150 +2,192 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadCore
+import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggCore
+import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggForsvaretPeriodeCore
+import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggPeriodeCore
+import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragResultatCore
+import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevneCore
+import no.nav.bidrag.beregn.barnebidrag.dto.DeltBostedPeriodeCore
+import no.nav.bidrag.beregn.barnebidrag.dto.GrunnlagBeregningPerBarnCore
+import no.nav.bidrag.beregn.barnebidrag.dto.GrunnlagBeregningPeriodisertCore
+import no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore
+import no.nav.bidrag.beregn.barnebidrag.dto.ResultatPeriodeCore
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
-import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagAltCore
-import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore
-import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore
-import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCore
-import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore
-import java.time.LocalDate
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for en barnebidragsberegning")
+@ApiModel(value = "Grunnlaget for en beregning av barnebidrag")
 data class BeregnBarnebidragGrunnlag(
-    @ApiModelProperty(value = "Beregn fra-dato") var beregnDatoFra: LocalDate? = null,
-    @ApiModelProperty(value = "Beregn til-dato") var beregnDatoTil: LocalDate? = null,
-    @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var soknadBarnFodselsdato: LocalDate? = null,
-    @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadBarnPersonId: Int? = null,
-    @ApiModelProperty(value = "Beregn bidragsevne grunnlag") var beregnBidragsevneGrunnlag: BeregnBidragsevneGrunnlag? = null,
-    @ApiModelProperty(value = "Beregn netto barnetilsyn grunnlag") var beregnNettoBarnetilsynGrunnlag: BeregnNettoBarnetilsynGrunnlag? = null,
-    @ApiModelProperty(value = "Beregn underholdskostnad grunnlag") var beregnUnderholdskostnadGrunnlag: BeregnUnderholdskostnadGrunnlag? = null,
-    @ApiModelProperty(
-        value = "Beregn BPs andel av underholdskostnad grunnlag") var beregnBPAndelUnderholdskostnadGrunnlag: BeregnBPsAndelUnderholdskostnadGrunnlag? = null,
-    @ApiModelProperty(value = "Beregn samværsfradrag grunnlag") var beregnSamvaersfradragGrunnlag: BeregnSamvaersfradragGrunnlag? = null
+    @ApiModelProperty(value = "Periodisert liste over bidragspliktiges barnetillegg")
+    val barnetilleggBPPeriodeListe: List<BarnetilleggPeriode>? = null,
+    @ApiModelProperty(value = "Periodisert liste over bidragsmottakers barnetillegg")
+    val barnetilleggBMPeriodeListe: List<BarnetilleggPeriode>? = null,
+    @ApiModelProperty(value = "Periodisert liste over bidragspliktiges barnetillegg fra forsvaret")
+    val barnetilleggForsvaretBPPeriodeListe: List<BarnetilleggForsvaretBPPeriode>? = null,
+    @ApiModelProperty(value = "Periodisert liste over delt bosted for bidragspliktig")
+    val deltBostedBPPeriodeListe: List<DeltBostedBPPeriode>? = null
+)
+
+@ApiModel(value = "Barnetillegg BM og BP")
+data class BarnetilleggPeriode(
+    @ApiModelProperty(value = "Barnetillegg fra-til-dato") var barnetilleggDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var barnetilleggSoknadsbarnPersonId: Int? = null,
+    @ApiModelProperty(value = "Barnetillegg bruttobeløp") var barnetilleggBruttoBelop: Double? = null,
+    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: Double? = null
 ) {
 
-  fun validerBarnebidragGrunnlag() {
-    if (beregnDatoFra != null) beregnDatoFra!! else throw UgyldigInputException("beregnDatoFra kan ikke være null")
-    if (beregnDatoTil != null) beregnDatoTil!! else throw UgyldigInputException("beregnDatoTil kan ikke være null")
-    if (soknadBarnFodselsdato != null) soknadBarnFodselsdato!! else throw UgyldigInputException("soknadBarnFodselsdato kan ikke være null")
-    if (soknadBarnPersonId != null) soknadBarnPersonId!! else throw UgyldigInputException("soknadBarnPersonId kan ikke være null")
-
-    if (beregnBidragsevneGrunnlag != null) beregnBidragsevneGrunnlag!!
-    else throw UgyldigInputException("beregnBidragsevneGrunnlag kan ikke være null")
-
-    if (beregnNettoBarnetilsynGrunnlag != null) beregnNettoBarnetilsynGrunnlag!!
-    else throw UgyldigInputException("beregnNettoBarnetilsynGrunnlag kan ikke være null")
-
-    if (beregnUnderholdskostnadGrunnlag != null) beregnUnderholdskostnadGrunnlag!!
-    else throw UgyldigInputException("beregnUnderholdskostnadGrunnlag kan ikke være null")
-
-    if (beregnBPAndelUnderholdskostnadGrunnlag != null) beregnBPAndelUnderholdskostnadGrunnlag!!
-    else throw UgyldigInputException("beregnBPAndelUnderholdskostnadGrunnlag kan ikke være null")
-
-    if (beregnSamvaersfradragGrunnlag != null) beregnSamvaersfradragGrunnlag!!
-    else throw UgyldigInputException("beregnSamvaersfradragGrunnlag kan ikke være null")
-  }
-
-  fun bidragsevneTilCore() = BeregnBidragsevneGrunnlagAltCore(
-      beregnDatoFra = beregnDatoFra!!,
-      beregnDatoTil = beregnDatoTil!!,
-
-      inntektPeriodeListe =
-      if (beregnBidragsevneGrunnlag!!.inntektPeriodeListe != null)
-        beregnBidragsevneGrunnlag!!.inntektPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("inntektPeriodeListe kan ikke være null"),
-
-      skatteklassePeriodeListe =
-      if (beregnBidragsevneGrunnlag!!.skatteklassePeriodeListe != null)
-        beregnBidragsevneGrunnlag!!.skatteklassePeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("skatteklassePeriodeListe kan ikke være null"),
-
-      bostatusPeriodeListe =
-      if (beregnBidragsevneGrunnlag!!.bostatusPeriodeListe != null)
-        beregnBidragsevneGrunnlag!!.bostatusPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("bostatusPeriodeListe kan ikke være null"),
-
-      antallBarnIEgetHusholdPeriodeListe =
-      if (beregnBidragsevneGrunnlag!!.antallBarnIEgetHusholdPeriodeListe != null)
-        beregnBidragsevneGrunnlag!!.antallBarnIEgetHusholdPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("antallBarnIEgetHusholdPeriodeListe kan ikke være null"),
-
-      saerfradragPeriodeListe =
-      if (beregnBidragsevneGrunnlag!!.saerfradragPeriodeListe != null)
-        beregnBidragsevneGrunnlag!!.saerfradragPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("saerfradragPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
+  fun tilCore(dataElement: String) = BarnetilleggPeriodeCore(
+      soknadsbarnPersonId = if (barnetilleggSoknadsbarnPersonId != null) barnetilleggSoknadsbarnPersonId!! else throw UgyldigInputException(
+          "$dataElement barnetilleggSoknadsbarnPersonId kan ikke være null"),
+      barnetilleggDatoFraTil = if (barnetilleggDatoFraTil != null) barnetilleggDatoFraTil!!.tilCore(
+          "$dataElement barnetillegg") else throw UgyldigInputException("$dataElement barnetilleggDatoFraTil kan ikke være null"),
+      barnetilleggBelop = if (barnetilleggBruttoBelop != null) barnetilleggBruttoBelop!! else throw UgyldigInputException(
+          "$dataElement barnetilleggBruttoBelop kan ikke være null"),
+      barnetilleggSkattProsent = if (barnetilleggSkattProsent != null) barnetilleggSkattProsent!! else throw UgyldigInputException(
+          "$dataElement barnetilleggSkattProsent kan ikke være null")
   )
+}
 
-  fun nettoBarnetilsynTilCore() = BeregnNettoBarnetilsynGrunnlagCore(
-      beregnDatoFra = beregnDatoFra!!,
-      beregnDatoTil = beregnDatoTil!!,
+@ApiModel(value = "Bidragspliktiges barnetillegg fra forsvaret")
+data class BarnetilleggForsvaretBPPeriode(
+    @ApiModelProperty(value = "Barnetillegg forsvaret fra-til-dato") var barnetilleggForsvaretDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Barnetillegg forsvaret i periode true/false") var barnetilleggForsvaretIPeriode: Boolean? = null
+) {
 
-      faktiskUtgiftPeriodeListe =
-      if (beregnNettoBarnetilsynGrunnlag!!.faktiskUtgiftPeriodeListe != null)
-        beregnNettoBarnetilsynGrunnlag!!.faktiskUtgiftPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("faktiskUtgiftPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
+  fun tilCore() = BarnetilleggForsvaretPeriodeCore(
+      barnetilleggForsvaretDatoFraTil = if (barnetilleggForsvaretDatoFraTil != null) barnetilleggForsvaretDatoFraTil!!.tilCore(
+          "barnetilleggForsvaret") else throw UgyldigInputException("barnetilleggForsvaretDatoFraTil kan ikke være null"),
+      barnetilleggForsvaretIPeriode = if (barnetilleggForsvaretIPeriode != null) barnetilleggForsvaretIPeriode!! else throw UgyldigInputException(
+          "barnetilleggForsvaretIPeriode kan ikke være null")
   )
+}
 
-  fun underholdskostnadTilCore() = BeregnUnderholdskostnadGrunnlagCore(
-      beregnDatoFra = beregnDatoFra!!,
-      beregnDatoTil = beregnDatoTil!!,
-      soknadBarnFodselsdato = soknadBarnFodselsdato!!,
+@ApiModel(value = "Delt bosted for bidragspliktig")
+data class DeltBostedBPPeriode(
+    @ApiModelProperty(value = "Delt bosted fra-til-dato") var deltBostedDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var deltBostedSoknadsbarnPersonId: Int? = null,
+    @ApiModelProperty(value = "Delt bosted i periode true/false") var deltBostedIPeriode: Boolean? = null
+) {
 
-      barnetilsynMedStonadPeriodeListe =
-      if (beregnUnderholdskostnadGrunnlag!!.barnetilsynMedStonadPeriodeListe != null)
-        beregnUnderholdskostnadGrunnlag!!.barnetilsynMedStonadPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("barnetilsynMedStonadPeriodeListe kan ikke være null"),
-
-      nettoBarnetilsynPeriodeListe = emptyList(),
-
-      forpleiningUtgiftPeriodeListe =
-      if (beregnUnderholdskostnadGrunnlag!!.forpleiningUtgiftPeriodeListe != null)
-        beregnUnderholdskostnadGrunnlag!!.forpleiningUtgiftPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("forpleiningUtgiftPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
-  )
-
-  fun bpAndelUnderholdskostnadTilCore() = BeregnBPsAndelUnderholdskostnadGrunnlagCore(
-      beregnDatoFra = beregnDatoFra!!,
-      beregnDatoTil = beregnDatoTil!!,
-
-      inntekterPeriodeListe =
-      if (beregnBPAndelUnderholdskostnadGrunnlag!!.inntekterPeriodeListe != null)
-        beregnBPAndelUnderholdskostnadGrunnlag!!.inntekterPeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("inntekterPeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
-  )
-
-  fun samvaersfradragTilCore() = BeregnSamvaersfradragGrunnlagCore(
-      beregnDatoFra = beregnDatoFra!!,
-      beregnDatoTil = beregnDatoTil!!,
-      soknadsbarnFodselsdato = soknadBarnFodselsdato!!,
-
-      samvaersklassePeriodeListe =
-      if (beregnSamvaersfradragGrunnlag!!.samvaersklassePeriodeListe != null)
-        beregnSamvaersfradragGrunnlag!!.samvaersklassePeriodeListe!!.map { it.tilCore() }
-      else throw UgyldigInputException("samvaersklassePeriodeListe kan ikke være null"),
-
-      sjablonPeriodeListe = emptyList()
+  fun tilCore() = DeltBostedPeriodeCore(
+      soknadsbarnPersonId = if (deltBostedSoknadsbarnPersonId != null) deltBostedSoknadsbarnPersonId!! else throw UgyldigInputException(
+          "deltBostedSoknadsbarnPersonId kan ikke være null"),
+      deltBostedDatoFraTil = if (deltBostedDatoFraTil != null) deltBostedDatoFraTil!!.tilCore(
+          "deltBosted") else throw UgyldigInputException("deltBostedDatoFraTil kan ikke være null"),
+      deltBostedIPeriode = if (deltBostedIPeriode != null) deltBostedIPeriode!! else throw UgyldigInputException(
+          "deltBostedIPeriode kan ikke være null")
   )
 }
 
 // Resultat
-@ApiModel(value = "Resultatet av en barnebidragsberegning")
+@ApiModel(value = "Resultatet av en beregning av barnebidrag")
 data class BeregnBarnebidragResultat(
-    @ApiModelProperty(value = "Beregn bidragsevne resultat") var beregnBidragsevneResultat: BeregnBidragsevneResultat,
-    @ApiModelProperty(value = "Beregn netto barnetilsyn resultat") var beregnNettoBarnetilsynResultat: BeregnNettoBarnetilsynResultat,
-    @ApiModelProperty(value = "Beregn underholdskostnad resultat") var beregnUnderholdskostnadResultat: BeregnUnderholdskostnadResultat,
     @ApiModelProperty(
-        value = "Beregn BPs andel av underholdskostnad resultat") var beregnBPAndelUnderholdskostnadResultat: BeregnBPsAndelUnderholdskostnadResultat,
-    @ApiModelProperty(value = "Beregn samværsfradrag resultat") var beregnSamvaersfradragResultat: BeregnSamvaersfradragResultat,
-    @ApiModelProperty(
-        value = "Beregn kostnadsberegnet bidrag resultat") var beregnKostnadsberegnetBidragResultat: BeregnKostnadsberegnetBidragResultat
-)
+        value = "Periodisert liste over resultat av beregning av barnebidrag") var resultatPeriodeListe: List<ResultatPeriodeBarnebidrag> = emptyList()
+) {
+
+  constructor(beregnBarnebidragResultat: BeregnBarnebidragResultatCore) : this(
+      resultatPeriodeListe = beregnBarnebidragResultat.resultatPeriodeListe.map { ResultatPeriodeBarnebidrag(it) }
+  )
+}
+
+@ApiModel(value = "Resultatet av beregning av barnebidrag for et søknadsbarn for en gitt periode")
+data class ResultatPeriodeBarnebidrag(
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningBarnebidrag> = emptyList(),
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagBarnebidrag? = null
+) {
+
+  constructor(resultatPeriode: ResultatPeriodeCore) : this(
+      resultatDatoFraTil = Periode(resultatPeriode.resultatDatoFraTil),
+      resultatBeregningListe = resultatPeriode.resultatBeregningListe.map { ResultatBeregningBarnebidrag(it) },
+      resultatGrunnlag = ResultatGrunnlagBarnebidrag(resultatPeriode.resultatGrunnlag)
+  )
+}
+
+@ApiModel(value = "Resultatet av beregning av barnebidrag")
+data class ResultatBeregningBarnebidrag(
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
+    @ApiModelProperty(value = "Beløp barnebidrag") var resultatBelop: Double = 0.0,
+    @ApiModelProperty(value = "Resultatkode barnebidrag") var resultatKode: String? = null
+) {
+
+  constructor(resultatBeregning: ResultatBeregningCore) : this(
+      resultatSoknadsbarnPersonId = resultatBeregning.soknadsbarnPersonId,
+      resultatBelop = resultatBeregning.resultatBarnebidragBelop,
+      resultatKode = resultatBeregning.resultatkode
+  )
+}
+
+@ApiModel(value = "Grunnlaget for beregning av barnebidrag")
+data class ResultatGrunnlagBarnebidrag(
+    @ApiModelProperty(value = "Bidragsevne") var bidragsevne: BidragsevneGrunnlag? = null,
+    @ApiModelProperty(value = "Grunnlag per barn liste") var resultatGrunnlagPerBarnListe: List<ResultatGrunnlagPerBarn> = emptyList(),
+    @ApiModelProperty(value = "Barnetillegg forsvaret") var barnetilleggForsvaret: Boolean? = null
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+) {
+
+  constructor(resultatGrunnlag: GrunnlagBeregningPeriodisertCore) : this(
+      bidragsevne = BidragsevneGrunnlag(resultatGrunnlag.bidragsevne),
+      resultatGrunnlagPerBarnListe = resultatGrunnlag.grunnlagPerBarnListe.map { ResultatGrunnlagPerBarn(it) },
+      barnetilleggForsvaret = resultatGrunnlag.barnetilleggForsvaret
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+  )
+}
+
+@ApiModel(value = "Grunnlaget for beregning - bidragsevne")
+data class BidragsevneGrunnlag(
+    @ApiModelProperty(value = "Bidragsevne beløp") var bidragsevneBelop: Double? = null,
+    @ApiModelProperty(value = "Bidragsevne 25 prosent inntekt") var bidragsevne25ProsentInntekt: Double? = null
+) {
+
+  constructor(bidragsevne: BidragsevneCore) : this(
+      bidragsevneBelop = bidragsevne.bidragsevneBelop,
+      bidragsevne25ProsentInntekt = bidragsevne.tjuefemProsentInntekt
+  )
+}
+
+@ApiModel(value = "Grunnlaget for beregning av barnebidrag per barn")
+data class ResultatGrunnlagPerBarn(
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
+    @ApiModelProperty(value = "Samværsfradrag beløp") var samvaersfradragBelop: Double? = null,
+    @ApiModelProperty(value = "BPs andel underholdskostnad") var bpAndelUnderholdskostnad: BPAndelUnderholdskostnad? = null,
+    @ApiModelProperty(value = "Barnetillegg bidragspliktig") var barnetilleggBP: Barnetillegg? = null,
+    @ApiModelProperty(value = "Barnetillegg bidragsmottaker") var barnetilleggBM: Barnetillegg? = null,
+    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean? = null
+) {
+
+  constructor(resultatGrunnlagPerBarn: GrunnlagBeregningPerBarnCore) : this(
+      resultatSoknadsbarnPersonId = resultatGrunnlagPerBarn.soknadsbarnPersonId,
+      samvaersfradragBelop = resultatGrunnlagPerBarn.samvaersfradrag,
+      bpAndelUnderholdskostnad = BPAndelUnderholdskostnad(resultatGrunnlagPerBarn.bPsAndelUnderholdskostnad),
+      barnetilleggBP = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBP),
+      barnetilleggBM = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBM),
+      deltBosted = resultatGrunnlagPerBarn.deltBosted
+//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+  )
+}
+
+@ApiModel(value = "Grunnlaget for beregning - BPs andel underholdskostnad")
+data class BPAndelUnderholdskostnad(
+    @ApiModelProperty(value = "Resultatandel prosent") var resultatAndelProsent: Double? = null,
+    @ApiModelProperty(value = "Resultatandel beløp") var resultatAndelBelop: Double? = null
+) {
+
+  constructor(bpAndelUnderholdskostnad: BPsAndelUnderholdskostnadCore) : this(
+      resultatAndelProsent = bpAndelUnderholdskostnad.bPsAndelUnderholdskostnadProsent,
+      resultatAndelBelop = bpAndelUnderholdskostnad.bPsAndelUnderholdskostnadBelop
+  )
+}
+
+@ApiModel(value = "Grunnlaget for beregning - barnetillegg")
+data class Barnetillegg(
+    @ApiModelProperty(value = "Barnetillegg beløp") var barnetilleggBelop: Double? = null,
+    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: Double? = null
+) {
+
+  constructor(barnetillegg: BarnetilleggCore) : this(
+      barnetilleggBelop = barnetillegg.barnetilleggBelop,
+      barnetilleggSkattProsent = barnetillegg.barnetilleggSkattProsent
+  )
+}
