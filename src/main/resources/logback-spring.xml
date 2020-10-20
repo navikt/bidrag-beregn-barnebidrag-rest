@@ -26,9 +26,9 @@
         </appender>
     </springProfile>
 
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="stdout_json" />
     </root>
 
-    <logger name="no.nav.bidrag.beregn.barnebidrag.rest" level="INFO"/>
+    <logger name="no.nav.bidrag.beregn.barnebidrag.rest" level="DEBUG"/>
 </configuration>
