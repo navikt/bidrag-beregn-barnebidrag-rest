@@ -171,12 +171,14 @@ data class ResultatGrunnlagPerBarn(
 @ApiModel(value = "Grunnlaget for beregning - BPs andel underholdskostnad")
 data class BPAndelUnderholdskostnad(
     @ApiModelProperty(value = "Resultatandel prosent") var resultatAndelProsent: Double? = null,
-    @ApiModelProperty(value = "Resultatandel beløp") var resultatAndelBelop: Double? = null
+    @ApiModelProperty(value = "Resultatandel beløp") var resultatAndelBelop: Double? = null,
+    @ApiModelProperty(value = "Barnet er selvforsørget") var barnetErSelvforsorget: Boolean? = null
 ) {
 
   constructor(bpAndelUnderholdskostnad: BPsAndelUnderholdskostnadCore) : this(
       resultatAndelProsent = bpAndelUnderholdskostnad.bPsAndelUnderholdskostnadProsent,
-      resultatAndelBelop = bpAndelUnderholdskostnad.bPsAndelUnderholdskostnadBelop
+      resultatAndelBelop = bpAndelUnderholdskostnad.bPsAndelUnderholdskostnadBelop,
+      barnetErSelvforsorget = bpAndelUnderholdskostnad.barnetErSelvforsorget
   )
 }
 

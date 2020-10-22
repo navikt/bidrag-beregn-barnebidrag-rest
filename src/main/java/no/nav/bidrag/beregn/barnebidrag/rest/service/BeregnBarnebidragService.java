@@ -530,7 +530,8 @@ public class BeregnBarnebidragService {
                 resultat.getSoknadsbarnPersonId(),
                 new PeriodeCore(resultat.getResultatDatoFraTil().getPeriodeDatoFra(),
                     resultat.getResultatDatoFraTil().getPeriodeDatoTil()),
-                resultat.getResultatBeregning().getResultatAndelProsent(), resultat.getResultatBeregning().getResultatAndelBelop()))
+                resultat.getResultatBeregning().getResultatAndelProsent(), resultat.getResultatBeregning().getResultatAndelBelop(),
+                resultat.getResultatBeregning().getBarnetErSelvforsorget()))
             .collect(toList());
 
     // Løp gjennom output fra beregning av samværsfradrag og bygg opp ny input-liste til core
