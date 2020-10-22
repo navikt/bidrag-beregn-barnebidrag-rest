@@ -993,7 +993,7 @@ public class TestUtil {
     bidragPeriodeResultatListe
         .add(new ResultatPeriodeBPAndelUnderholdskostnad(1,
             new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-            new ResultatBeregningBPAndelUnderholdskostnad(10d, 100d),
+            new ResultatBeregningBPAndelUnderholdskostnad(10d, 100d, false),
             new ResultatGrunnlagBPAndelUnderholdskostnad(100d, singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", 100000d)),
                 singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", 100000d)), singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", 100000d)))));
     return new BeregnBPAndelUnderholdskostnadResultat(bidragPeriodeResultatListe);
@@ -1004,7 +1004,7 @@ public class TestUtil {
     var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore>();
     bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore(1,
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore(10d, 100d),
+        new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore(10d, 100d, false),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatGrunnlagCore(100d,
             singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", 100000d)),
             singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", 100000d)),
@@ -1095,7 +1095,7 @@ public class TestUtil {
         singletonList(new ResultatBeregningBarnebidrag(1, 100d, "RESULTATKODE")),
         new ResultatGrunnlagBarnebidrag(new BidragsevneGrunnlag(100d, 100d),
             singletonList(new ResultatGrunnlagPerBarn(1, 100d,
-                new BPAndelUnderholdskostnad(10d, 100d),
+                new BPAndelUnderholdskostnad(10d, 100d, false),
                 new Barnetillegg(100d, 25d),
                 new Barnetillegg(100d, 25d),
                 true)),
@@ -1111,7 +1111,7 @@ public class TestUtil {
         singletonList(new no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore(1, 100d, "RESULTATKODE")),
         new GrunnlagBeregningPeriodisertCore(new BidragsevneCore(100d, 100d),
             singletonList(new GrunnlagBeregningPerBarnCore(1,
-                new BPsAndelUnderholdskostnadCore(10d, 100d),
+                new BPsAndelUnderholdskostnadCore(10d, 100d, false),
                 100d, true,
                 new BarnetilleggCore(100d, 25d),
                 new BarnetilleggCore(100d, 25d))),
