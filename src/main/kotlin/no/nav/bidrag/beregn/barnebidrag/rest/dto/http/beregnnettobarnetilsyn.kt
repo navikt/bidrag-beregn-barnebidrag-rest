@@ -92,13 +92,13 @@ data class ResultatGrunnlagNettoBarnetilsyn(
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn - faktisk utgift")
 data class FaktiskUtgift(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Søknadsbarnets fødselsdato") var soknadsbarnFodselsdato: LocalDate? = null,
+    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
     @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: Double? = null
 ) {
 
   constructor(faktiskUtgift: FaktiskUtgiftCore) : this(
       soknadsbarnPersonId = faktiskUtgift.faktiskUtgiftSoknadsbarnPersonId,
-      soknadsbarnFodselsdato = faktiskUtgift.faktiskUtgiftSoknadsbarnFodselsdato,
+      soknadsbarnAlder = faktiskUtgift.soknadsbarnAlder,
       faktiskUtgiftBelop = faktiskUtgift.faktiskUtgiftBelop
   )
 }

@@ -929,7 +929,7 @@ public class TestUtil {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeNettoBarnetilsyn>();
     bidragPeriodeResultatListe.add(new ResultatPeriodeNettoBarnetilsyn(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         singletonList(new ResultatBeregningNettoBarnetilsyn(1, 100)),
-        new ResultatGrunnlagNettoBarnetilsyn(singletonList(new FaktiskUtgift(1, LocalDate.parse("2010-01-01"), 100d)))));
+        new ResultatGrunnlagNettoBarnetilsyn(singletonList(new FaktiskUtgift(1, 10, 100d)))));
     return new BeregnBMNettoBarnetilsynResultat(bidragPeriodeResultatListe);
   }
 
@@ -940,7 +940,7 @@ public class TestUtil {
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         singletonList(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatBeregningCore(1, 100)),
         new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatGrunnlagCore(
-            singletonList(new FaktiskUtgiftCore(1, LocalDate.parse("2010-01-01"), 100d)), emptyList())));
+            singletonList(new FaktiskUtgiftCore(1, 10, 100d)), emptyList())));
     return new BeregnNettoBarnetilsynResultatCore(bidragPeriodeResultatListe, emptyList());
   }
 
