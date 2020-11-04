@@ -6,7 +6,7 @@
     "https://bidrag-beregn-barnebidrag-rest-feature.dev.adeo.no"
   ],
   "env": {
-    "BIDRAGSEVNE_URL": "https://bidrag-beregn-bidragsevne-rest-q1.dev-fss.nais.io/bidrag-beregn-bidragsevne-rest",
+    "BIDRAGSEVNE_URL": "https://bidrag-beregn-bidragsevne-rest-feature.dev-adeo.no/bidrag-beregn-bidragsevne-rest",
     "SJABLON_URL": "https://bidrag-sjablon.dev-fss.nais.io/bidrag-sjablon"
   }
 }
