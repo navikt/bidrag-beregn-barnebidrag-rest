@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 import no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragResultatCore;
@@ -92,6 +93,10 @@ public class TestUtil {
   // Total barnebidrag
   public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag() {
     return byggTotalBarnebidragGrunnlag("");
+  }
+
+  public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagMedKnytningBMInntektSoknadsbarn(String soknadsbarnPersonId) {
+    return byggTotalBarnebidragGrunnlag(soknadsbarnPersonId);
   }
 
   public static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlagUtenBeregnDatoFra() {
@@ -539,7 +544,12 @@ public class TestUtil {
 
   // Bygger opp BeregnTotalBarnebidragGrunnlag (felles grunnlag for alle delberegninger)
   private static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag(String nullVerdi) {
-    return byggTotalBarnebidragGrunnlag(nullVerdi, "", "", "", "", "", "", "");
+    // "Jukser" litt hvis nullVerdi er numerisk. Verdien brukes da til å knytte inntekt BM til nullVerdi (= søknadsbarn person-id)
+    if (StringUtils.isNumeric(nullVerdi)) {
+      return byggTotalBarnebidragGrunnlag("", "", nullVerdi, "", "", "", "", "");
+    } else {
+      return byggTotalBarnebidragGrunnlag(nullVerdi, "", "", "", "", "", "", "");
+    }
   }
 
   private static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag(String nullVerdi, String soknadsbarnVerdi, String inntektVerdi,
@@ -593,9 +603,9 @@ public class TestUtil {
 
     InntektPeriode inntektPeriode;
     if (nullVerdi.equals("inntektDatoFraTil")) {
-      inntektPeriode = new InntektPeriode(null, inntektType, inntektBelop);
+      inntektPeriode = new InntektPeriode(null, inntektType, inntektBelop, null);
     } else {
-      inntektPeriode = new InntektPeriode(new Periode(inntektDatoFra, inntektDatoTil), inntektType, inntektBelop);
+      inntektPeriode = new InntektPeriode(new Periode(inntektDatoFra, inntektDatoTil), inntektType, inntektBelop, null);
     }
 
     return inntektPeriode;
@@ -619,9 +629,9 @@ public class TestUtil {
     } else {
       InntektPeriode inntektBPPeriode;
       if (nullVerdi.equals("inntektBPDatoFraTil")) {
-        inntektBPPeriode = new InntektPeriode(null, inntektBPType, inntektBPBelop);
+        inntektBPPeriode = new InntektPeriode(null, inntektBPType, inntektBPBelop, null);
       } else {
-        inntektBPPeriode = new InntektPeriode(new Periode(inntektBPDatoFra, inntektBPDatoTil), inntektBPType, inntektBPBelop);
+        inntektBPPeriode = new InntektPeriode(new Periode(inntektBPDatoFra, inntektBPDatoTil), inntektBPType, inntektBPBelop, null);
       }
       inntektBPPeriodeListe = singletonList(inntektBPPeriode);
     }
@@ -632,9 +642,12 @@ public class TestUtil {
     } else {
       InntektPeriode inntektBMPeriode;
       if (nullVerdi.equals("inntektBMDatoFraTil")) {
-        inntektBMPeriode = new InntektPeriode(null, inntektBMType, inntektBMBelop);
+        inntektBMPeriode = new InntektPeriode(null, inntektBMType, inntektBMBelop, null);
+      } else if (StringUtils.isNumeric(nullVerdi)) {
+        inntektBMPeriode = new InntektPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop,
+            Integer.parseInt(nullVerdi));
       } else {
-        inntektBMPeriode = new InntektPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop);
+        inntektBMPeriode = new InntektPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop, null);
       }
       inntektBMPeriodeListe = singletonList(inntektBMPeriode);
     }
