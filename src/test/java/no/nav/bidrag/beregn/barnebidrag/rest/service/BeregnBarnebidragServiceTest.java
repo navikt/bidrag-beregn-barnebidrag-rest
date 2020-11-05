@@ -258,6 +258,81 @@ class BeregnBarnebidragServiceTest {
   }
 
   @Test
+  @DisplayName("Skal ikke koble BM inntekt og søknadsbarn - knytningsverdi = null")
+  void skalIkkeKobleBMInntektOgSoknadsbarn() {
+    var bpAndelUnderholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBPsAndelUnderholdskostnadGrunnlagCore.class);
+
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
+    when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
+    when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
+    when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.capture()))
+        .thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
+    when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
+    when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+    when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
+
+    beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag());
+
+    var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
+
+    assertAll(
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore).isNotNull(),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isNotNull(),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe().size()).isEqualTo(1)
+    );
+  }
+
+  @Test
+  @DisplayName("Skal koble BM inntekt og søknadsbarn - likhet - knytningsverdi = 1")
+  void skalKobleBMInntektOgSoknadsbarnLikhet() {
+    var bpAndelUnderholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBPsAndelUnderholdskostnadGrunnlagCore.class);
+
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
+    when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
+    when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
+    when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.capture()))
+        .thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
+    when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
+    when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+    when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
+
+    beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlagMedKnytningBMInntektSoknadsbarn("1"));
+
+    var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
+
+    assertAll(
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore).isNotNull(),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isNotNull(),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe().size()).isEqualTo(1)
+    );
+  }
+
+  @Test
+  @DisplayName("Skal koble BM inntekt og søknadsbarn - ikke likhet - knytningsverdi = 2")
+  void skalKobleBMInntektOgSoknadsbarnIkkeLikhet() {
+    var bpAndelUnderholdskostnadGrunnlagTilCoreCaptor = ArgumentCaptor.forClass(BeregnBPsAndelUnderholdskostnadGrunnlagCore.class);
+
+    when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
+    when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
+    when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
+    when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.capture()))
+        .thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
+    when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
+    when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+    when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
+
+    beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlagMedKnytningBMInntektSoknadsbarn("2"));
+
+    var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
+
+    assertAll(
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore).isNotNull(),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isNotNull(),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe().size()).isEqualTo(0)
+    );
+  }
+
+  @Test
   @DisplayName("Skal kaste UgyldigInputException ved feil retur fra BidragsevneCore")
   void skalKasteUgyldigInputExceptionVedFeilReturFraBidragsevneCore() {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCoreMedAvvik());

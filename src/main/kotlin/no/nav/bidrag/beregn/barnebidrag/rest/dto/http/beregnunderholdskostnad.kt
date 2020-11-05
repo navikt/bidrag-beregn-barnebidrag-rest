@@ -91,7 +91,7 @@ data class ResultatBeregningUnderholdskostnad(
 
 @ApiModel(value = "Grunnlaget for beregning av underholdskostnad")
 data class ResultatGrunnlagUnderholdskostnad(
-    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadBarnAlder: Int? = null,
+    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int? = null,
     @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String? = null,
     @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String? = null,
     @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: Double? = null,
@@ -100,7 +100,7 @@ data class ResultatGrunnlagUnderholdskostnad(
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
-      soknadBarnAlder = resultatGrunnlag.soknadBarnAlder,
+      soknadsbarnAlder = resultatGrunnlag.soknadBarnAlder,
       barnetilsynMedStonadTilsynType = resultatGrunnlag.barnetilsynMedStonadTilsynType,
       barnetilsynMedStonadStonadType = resultatGrunnlag.barnetilsynMedStonadStonadType,
       nettoBarnetilsynBelop = resultatGrunnlag.nettoBarnetilsynBelop,

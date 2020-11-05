@@ -207,8 +207,8 @@ public class BeregnBarnebidragService {
 
   // Delberegning BPs andel av underholdskostnad
   private BeregnBPsAndelUnderholdskostnadResultatCore utfoerDelberegningBPAndelUnderholdskostnad(
-      BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
-      Map<String, SjablonTallNavn> sjablontallMap, BeregnUnderholdskostnadResultatCore underholdskostnadResultatFraCore, SjablonListe sjablonListe) {
+      BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag, Map<String, SjablonTallNavn> sjablontallMap,
+      BeregnUnderholdskostnadResultatCore underholdskostnadResultatFraCore, SjablonListe sjablonListe) {
 
     // Bygger opp liste med grunnlag for hvert søknadsbarn
     var bPAndelUnderholdskostnadGrunnlagTilCoreListe = new ArrayList<BeregnBPsAndelUnderholdskostnadGrunnlagCore>();
@@ -388,10 +388,13 @@ public class BeregnBarnebidragService {
                 inntektBPPeriode.getInntektType(), inntektBPPeriode.getInntektBelop()))
             .collect(toList());
 
-    // Bygg liste over BMs inntekter til core
+    // Bygg liste over BMs inntekter til core. En inntekt kan være knyttet til et bestemt søknadsbarn eller gjelde for alle søknadsbarn (null-verdi).
+    //  Filtrerer derfor vekk inntekter som er knyttet til andre søknadsbarn.
     var inntektBMPeriodeCoreListe =
         beregnTotalBarnebidragGrunnlag.getInntektBPBMGrunnlag().getInntektBMPeriodeListe()
             .stream()
+            .filter(inntektBMPeriode ->
+                (inntektBMPeriode.getSoknadsbarnPersonId() == null || inntektBMPeriode.getSoknadsbarnPersonId().equals(soknadsbarnPersonId)))
             .map(inntektBMPeriode -> new InntektPeriodeCore(
                 new PeriodeCore(inntektBMPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
                     inntektBMPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
@@ -632,7 +635,7 @@ public class BeregnBarnebidragService {
           + "beregnDatoFra= " + underholdskostnadGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
           + "beregnDatoTil= " + underholdskostnadGrunnlagTilCore.getBeregnDatoTil() + System.lineSeparator()
           + "soknadsbarnPersonId= " + underholdskostnadGrunnlagTilCore.getSoknadsbarnPersonId() + System.lineSeparator()
-          + "soknadBarnFodselsdato= " + underholdskostnadGrunnlagTilCore.getSoknadBarnFodselsdato() + System.lineSeparator()
+          + "soknadsbarnFodselsdato= " + underholdskostnadGrunnlagTilCore.getSoknadBarnFodselsdato() + System.lineSeparator()
           + "barneTilsynMedStonadPeriodeListe= " + underholdskostnadGrunnlagTilCore.getBarnetilsynMedStonadPeriodeListe() + System.lineSeparator()
           + "forpleiningUtgiftPeriodeListe= " + underholdskostnadGrunnlagTilCore.getForpleiningUtgiftPeriodeListe() + System.lineSeparator()
           + "nettoBarnetilsynPeriodeListe= " + underholdskostnadGrunnlagTilCore.getNettoBarnetilsynPeriodeListe() + System.lineSeparator());

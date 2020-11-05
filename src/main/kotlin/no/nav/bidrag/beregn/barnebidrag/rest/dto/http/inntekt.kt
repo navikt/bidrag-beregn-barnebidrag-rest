@@ -16,7 +16,8 @@ data class InntektBPBMGrunnlag(
 data class InntektPeriode(
     @ApiModelProperty(value = "Inntekt fra-til dato") var inntektDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Inntekt type") var inntektType: String? = null,
-    @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: Double? = null
+    @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: Double? = null,
+    @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadsbarnPersonId: Int? = null
 ) {
 
   fun tilCore(dataElement: String) = InntektPeriodeCore(
