@@ -3,7 +3,7 @@
   "ingresses": [
     "https://bidrag-beregn-barnebidrag-rest.nais.preprod.local/",
     "https://bidrag-beregn-barnebidrag-rest.dev-fss.nais.io/",
-    "https://bidrag-beregn-barnebidrag-rest.dev-adeo.no/"
+    "https://bidrag-beregn-barnebidrag-rest.dev.adeo.no/"
   ],
   "env": {
     "BIDRAGSEVNE_URL": "https://bidrag-beregn-bidragsevne-rest.dev.adeo.no/bidrag-beregn-bidragsevne-rest",
