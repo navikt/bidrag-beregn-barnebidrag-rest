@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class MaksFradrag(
-    val antBarnTom: Int,
-    val datoFom: LocalDate,
-    val datoTom: LocalDate,
-    val maksBelopFradrag: BigDecimal
+    val antBarnTom: Int? = null,
+    val datoFom: LocalDate? = null,
+    val datoTom: LocalDate? = null,
+    val maksBelopFradrag: BigDecimal? = null
 )

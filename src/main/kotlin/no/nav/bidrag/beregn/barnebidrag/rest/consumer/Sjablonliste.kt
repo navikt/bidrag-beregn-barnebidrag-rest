@@ -1,11 +1,11 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.consumer
 
 data class SjablonListe (
-    var sjablonSjablontallResponse: List<Sjablontall>,
-    var sjablonForbruksutgifterResponse: List<Forbruksutgifter>,
-    var sjablonMaksTilsynResponse: List<MaksTilsyn>,
-    var sjablonMaksFradragResponse: List<MaksFradrag>,
-    var sjablonSamvaersfradragResponse: List<Samvaersfradrag>,
-    var sjablonBidragsevneResponse: List<Bidragsevne>,
-    var sjablonTrinnvisSkattesatsResponse: List<TrinnvisSkattesats>
+    var sjablonSjablontallResponse: List<Sjablontall> = emptyList(),
+    var sjablonForbruksutgifterResponse: List<Forbruksutgifter> = emptyList(),
+    var sjablonMaksTilsynResponse: List<MaksTilsyn> = emptyList(),
+    var sjablonMaksFradragResponse: List<MaksFradrag> = emptyList(),
+    var sjablonSamvaersfradragResponse: List<Samvaersfradrag> = emptyList(),
+    var sjablonBidragsevneResponse: List<Bidragsevne> = emptyList(),
+    var sjablonTrinnvisSkattesatsResponse: List<TrinnvisSkattesats> = emptyList()
 )

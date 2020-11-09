@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TrinnvisSkattesats (
-    val datoFom: LocalDate,
-    val datoTom: LocalDate,
-    val inntektgrense: BigDecimal,
-    val sats: BigDecimal
+    val datoFom: LocalDate? = null,
+    val datoTom: LocalDate? = null,
+    val inntektgrense: BigDecimal? = null,
+    val sats: BigDecimal? = null
 )

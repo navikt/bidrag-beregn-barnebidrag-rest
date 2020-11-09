@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Sjablontall (
-    val typeSjablon: String,
-    val datoFom: LocalDate,
-    val datoTom: LocalDate,
-    val verdi: BigDecimal
+    val typeSjablon: String? = null,
+    val datoFom: LocalDate? = null,
+    val datoTom: LocalDate? = null,
+    val verdi: BigDecimal? = null
 )
