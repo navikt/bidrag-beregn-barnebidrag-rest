@@ -9,7 +9,7 @@
   </parent>
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-beregn-barnebidrag-rest</artifactId>
-  <version>0.0.45-SNAPSHOT</version>
+  <version>0.0.46-SNAPSHOT</version>
   <name>bidrag-beregn-barnebidrag-rest</name>
   <description>Beregning av barnebidrag</description>
 
