@@ -7,6 +7,7 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadResulta
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore
+import java.math.BigDecimal
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en underholdskostnadsberegning for bidragsmottaker")
@@ -39,7 +40,7 @@ data class BarnetilsynMedStonadPeriode(
 data class ForpleiningUtgiftPeriode(
     @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining fra-til-dato") var forpleiningUtgiftDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var forpleiningUtgiftSoknadsbarnPersonId: Int? = null,
-    @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining beløp") var forpleiningUtgiftBelop: Double? = null
+    @ApiModelProperty(value = "Bidragsmottakers utgifter til forpleining beløp") var forpleiningUtgiftBelop: BigDecimal? = null
 ) {
 
   fun validerForpleiningUtgift() {
@@ -66,9 +67,9 @@ data class BeregnBMUnderholdskostnadResultat(
 @ApiModel(value = "Resultatet av beregning av underholdskostnad for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeUnderholdskostnad(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningUnderholdskostnad? = null,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagUnderholdskostnad? = null
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningUnderholdskostnad,
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagUnderholdskostnad
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -81,7 +82,7 @@ data class ResultatPeriodeUnderholdskostnad(
 
 @ApiModel(value = "Resultatet av beregning av underholdskostnad")
 data class ResultatBeregningUnderholdskostnad(
-    @ApiModelProperty(value = "Beløp underholdskostnad") var resultatBelop: Double = 0.0
+    @ApiModelProperty(value = "Beløp underholdskostnad") var resultatBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -91,12 +92,12 @@ data class ResultatBeregningUnderholdskostnad(
 
 @ApiModel(value = "Grunnlaget for beregning av underholdskostnad")
 data class ResultatGrunnlagUnderholdskostnad(
-    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int? = null,
-    @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String? = null,
-    @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String? = null,
-    @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: Double? = null,
-    @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: Double? = null
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
+    @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String,
+    @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String,
+    @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: BigDecimal = BigDecimal.ZERO
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(

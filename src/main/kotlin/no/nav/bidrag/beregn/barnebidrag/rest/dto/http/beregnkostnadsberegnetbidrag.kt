@@ -6,6 +6,7 @@ import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBid
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatPeriodeCore
+import java.math.BigDecimal
 
 // Resultat
 @ApiModel(value = "Resultatet av beregning av kostnadsberegnet bidrag for bidragspliktig")
@@ -22,9 +23,9 @@ data class BeregnBPKostnadsberegnetBidragResultat(
 @ApiModel(value = "Resultatet av beregning av kostnadsberegnet bidrag for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeKostnadsberegnetBidrag(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningKostnadsberegnetBidrag? = null,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagKostnadsberegnetBidrag? = null
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningKostnadsberegnetBidrag,
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagKostnadsberegnetBidrag
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -37,7 +38,7 @@ data class ResultatPeriodeKostnadsberegnetBidrag(
 
 @ApiModel(value = "Resultatet av beregning av kostnadsberegnet bidrag")
 data class ResultatBeregningKostnadsberegnetBidrag(
-    @ApiModelProperty(value = "Beløp kostnadsberegnet bidrag") var resultatBelop: Double = 0.0
+    @ApiModelProperty(value = "Beløp kostnadsberegnet bidrag") var resultatBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -47,9 +48,9 @@ data class ResultatBeregningKostnadsberegnetBidrag(
 
 @ApiModel(value = "Grunnlaget for beregning av kostnadsberegnet bidrag")
 data class ResultatGrunnlagKostnadsberegnetBidrag(
-    @ApiModelProperty(value = "Beløp underholdskostnad") var underholdskostnadBelop: Double = 0.0,
-    @ApiModelProperty(value = "BPs andel underholdskostnad prosent") var bPAndelUnderholdskostnadProsent: Double = 0.0,
-    @ApiModelProperty(value = "Beløp samværsfradrag") var samvaersfradragBelop: Double? = null
+    @ApiModelProperty(value = "Beløp underholdskostnad") var underholdskostnadBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "BPs andel underholdskostnad prosent") var bPAndelUnderholdskostnadProsent: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Beløp samværsfradrag") var samvaersfradragBelop: BigDecimal? = BigDecimal.ZERO
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(

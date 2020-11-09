@@ -14,6 +14,7 @@ import no.nav.bidrag.beregn.barnebidrag.dto.GrunnlagBeregningPeriodisertCore
 import no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.barnebidrag.dto.ResultatPeriodeCore
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
+import java.math.BigDecimal
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en beregning av barnebidrag")
@@ -32,8 +33,8 @@ data class BeregnBarnebidragGrunnlag(
 data class BarnetilleggPeriode(
     @ApiModelProperty(value = "Barnetillegg fra-til-dato") var barnetilleggDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var barnetilleggSoknadsbarnPersonId: Int? = null,
-    @ApiModelProperty(value = "Barnetillegg bruttobeløp") var barnetilleggBruttoBelop: Double? = null,
-    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: Double? = null
+    @ApiModelProperty(value = "Barnetillegg bruttobeløp") var barnetilleggBruttoBelop: BigDecimal? = null,
+    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: BigDecimal? = null
 ) {
 
   fun tilCore(dataElement: String) = BarnetilleggPeriodeCore(
@@ -93,9 +94,9 @@ data class BeregnBarnebidragResultat(
 
 @ApiModel(value = "Resultatet av beregning av barnebidrag for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeBarnebidrag(
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
     @ApiModelProperty(value = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningBarnebidrag> = emptyList(),
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagBarnebidrag? = null
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagBarnebidrag
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -108,8 +109,8 @@ data class ResultatPeriodeBarnebidrag(
 @ApiModel(value = "Resultatet av beregning av barnebidrag")
 data class ResultatBeregningBarnebidrag(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beløp barnebidrag") var resultatBelop: Double = 0.0,
-    @ApiModelProperty(value = "Resultatkode barnebidrag") var resultatKode: String? = null
+    @ApiModelProperty(value = "Beløp barnebidrag") var resultatBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Resultatkode barnebidrag") var resultatKode: String
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -121,10 +122,10 @@ data class ResultatBeregningBarnebidrag(
 
 @ApiModel(value = "Grunnlaget for beregning av barnebidrag")
 data class ResultatGrunnlagBarnebidrag(
-    @ApiModelProperty(value = "Bidragsevne") var bidragsevne: BidragsevneGrunnlag? = null,
+    @ApiModelProperty(value = "Bidragsevne") var bidragsevne: BidragsevneGrunnlag,
     @ApiModelProperty(value = "Grunnlag per barn liste") var resultatGrunnlagPerBarnListe: List<ResultatGrunnlagPerBarn> = emptyList(),
-    @ApiModelProperty(value = "Barnetillegg forsvaret") var barnetilleggForsvaret: Boolean? = null
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+    @ApiModelProperty(value = "Barnetillegg forsvaret") var barnetilleggForsvaret: Boolean = false
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: GrunnlagBeregningPeriodisertCore) : this(
@@ -137,8 +138,8 @@ data class ResultatGrunnlagBarnebidrag(
 
 @ApiModel(value = "Grunnlaget for beregning - bidragsevne")
 data class BidragsevneGrunnlag(
-    @ApiModelProperty(value = "Bidragsevne beløp") var bidragsevneBelop: Double? = null,
-    @ApiModelProperty(value = "Bidragsevne 25 prosent inntekt") var bidragsevne25ProsentInntekt: Double? = null
+    @ApiModelProperty(value = "Bidragsevne beløp") var bidragsevneBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Bidragsevne 25 prosent inntekt") var bidragsevne25ProsentInntekt: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(bidragsevne: BidragsevneCore) : this(
@@ -150,11 +151,11 @@ data class BidragsevneGrunnlag(
 @ApiModel(value = "Grunnlaget for beregning av barnebidrag per barn")
 data class ResultatGrunnlagPerBarn(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Samværsfradrag beløp") var samvaersfradragBelop: Double? = null,
-    @ApiModelProperty(value = "BPs andel underholdskostnad") var bpAndelUnderholdskostnad: BPAndelUnderholdskostnad? = null,
-    @ApiModelProperty(value = "Barnetillegg bidragspliktig") var barnetilleggBP: Barnetillegg? = null,
-    @ApiModelProperty(value = "Barnetillegg bidragsmottaker") var barnetilleggBM: Barnetillegg? = null,
-    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean? = null
+    @ApiModelProperty(value = "Samværsfradrag beløp") var samvaersfradragBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "BPs andel underholdskostnad") var bpAndelUnderholdskostnad: BPAndelUnderholdskostnad,
+    @ApiModelProperty(value = "Barnetillegg bidragspliktig") var barnetilleggBP: Barnetillegg,
+    @ApiModelProperty(value = "Barnetillegg bidragsmottaker") var barnetilleggBM: Barnetillegg,
+    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean
 ) {
 
   constructor(resultatGrunnlagPerBarn: GrunnlagBeregningPerBarnCore) : this(
@@ -170,9 +171,9 @@ data class ResultatGrunnlagPerBarn(
 
 @ApiModel(value = "Grunnlaget for beregning - BPs andel underholdskostnad")
 data class BPAndelUnderholdskostnad(
-    @ApiModelProperty(value = "Resultatandel prosent") var resultatAndelProsent: Double? = null,
-    @ApiModelProperty(value = "Resultatandel beløp") var resultatAndelBelop: Double? = null,
-    @ApiModelProperty(value = "Barnet er selvforsørget") var barnetErSelvforsorget: Boolean? = null
+    @ApiModelProperty(value = "Resultatandel prosent") var resultatAndelProsent: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Resultatandel beløp") var resultatAndelBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Barnet er selvforsørget") var barnetErSelvforsorget: Boolean = false
 ) {
 
   constructor(bpAndelUnderholdskostnad: BPsAndelUnderholdskostnadCore) : this(
@@ -184,8 +185,8 @@ data class BPAndelUnderholdskostnad(
 
 @ApiModel(value = "Grunnlaget for beregning - barnetillegg")
 data class Barnetillegg(
-    @ApiModelProperty(value = "Barnetillegg beløp") var barnetilleggBelop: Double? = null,
-    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: Double? = null
+    @ApiModelProperty(value = "Barnetillegg beløp") var barnetilleggBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Barnetillegg skatt prosent") var barnetilleggSkattProsent: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(barnetillegg: BarnetilleggCore) : this(

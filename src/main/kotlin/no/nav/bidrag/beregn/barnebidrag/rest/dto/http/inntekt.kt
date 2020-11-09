@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
 import no.nav.bidrag.beregn.bidragsevne.dto.InntektPeriodeCore
+import java.math.BigDecimal
 
 // Grunnlag
 @ApiModel(value = "Grunnlagsdata for bidragspliktiges og bidragsmottakers inntekt")
@@ -16,7 +17,7 @@ data class InntektBPBMGrunnlag(
 data class InntektPeriode(
     @ApiModelProperty(value = "Inntekt fra-til dato") var inntektDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Inntekt type") var inntektType: String? = null,
-    @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: Double? = null,
+    @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: BigDecimal? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadsbarnPersonId: Int? = null
 ) {
 
@@ -40,7 +41,7 @@ data class InntektPeriode(
 @ApiModel(value = "Inntekttype og -beløp")
 data class Inntekt(
     @ApiModelProperty(value = "Inntekt type") var inntektType: String,
-    @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: Double
+    @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(inntekt: no.nav.bidrag.beregn.bidragsevne.dto.InntektCore) : this(

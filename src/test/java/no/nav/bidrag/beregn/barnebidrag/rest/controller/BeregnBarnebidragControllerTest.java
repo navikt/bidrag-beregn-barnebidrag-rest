@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
@@ -74,10 +75,10 @@ class BeregnBarnebidragControllerTest {
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(
             totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultat25ProsentInntekt())
-            .isEqualTo(100d),
+            .isEqualTo(BigDecimal.valueOf(100)),
         () -> assertThat(
             totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvneBelop())
-            .isEqualTo(100d),
+            .isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
@@ -93,7 +94,7 @@ class BeregnBarnebidragControllerTest {
         () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
             .getResultatSoknadsbarnPersonId()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
-            .getResultatBelop()).isEqualTo(100d),
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
@@ -108,7 +109,7 @@ class BeregnBarnebidragControllerTest {
             totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatBelop()).isEqualTo(100d),
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
@@ -123,9 +124,9 @@ class BeregnBarnebidragControllerTest {
             totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
                 .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatAndelProsent()).isEqualTo(10d),
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(10)),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatAndelBelop()).isEqualTo(100d),
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
@@ -140,7 +141,7 @@ class BeregnBarnebidragControllerTest {
             totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatBelop()).isEqualTo(100d),
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe()).isNotNull(),
@@ -152,7 +153,7 @@ class BeregnBarnebidragControllerTest {
         () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
             .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatBelop()).isEqualTo(100d),
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
@@ -164,7 +165,7 @@ class BeregnBarnebidragControllerTest {
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
             .get(0).getResultatSoknadsbarnPersonId()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
-            .get(0).getResultatBelop()).isEqualTo(100d),
+            .get(0).getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
             .get(0).getResultatKode()).isEqualTo("RESULTATKODE")
     );

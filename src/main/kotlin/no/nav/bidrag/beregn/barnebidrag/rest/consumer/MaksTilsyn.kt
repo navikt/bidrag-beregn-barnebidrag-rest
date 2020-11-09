@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class MaksTilsyn(
-    var antBarnTom: Int? = null,
-    var datoFom: LocalDate? = null,
-    var datoTom: LocalDate? = null,
-    var maksBelopTilsyn: BigDecimal? = null
+    val antBarnTom: Int,
+    val datoFom: LocalDate? = null,
+    val datoTom: LocalDate? = null,
+    val maksBelopTilsyn: BigDecimal? = null
 )

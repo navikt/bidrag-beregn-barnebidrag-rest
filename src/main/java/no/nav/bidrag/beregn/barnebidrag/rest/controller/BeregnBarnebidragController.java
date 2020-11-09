@@ -20,7 +20,8 @@ public class BeregnBarnebidragController {
   }
 
   @PostMapping(path = "/barnebidrag")
-  public ResponseEntity<BeregnTotalBarnebidragResultat> beregnTotalBarnebidrag(@RequestBody BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+  public ResponseEntity<BeregnTotalBarnebidragResultat> beregnTotalBarnebidrag(
+      @RequestBody BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
     var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(beregnTotalBarnebidragGrunnlag);
     return new ResponseEntity<>(beregnTotalBarnebidragResultat.getResponseEntity().getBody(),
         beregnTotalBarnebidragResultat.getResponseEntity().getStatusCode());
