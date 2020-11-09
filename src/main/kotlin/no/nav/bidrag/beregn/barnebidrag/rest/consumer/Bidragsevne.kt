@@ -5,10 +5,10 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Bidragsevne (
-  var bostatus: String? = null,
-  var datoFom: LocalDate? = null,
-  var datoTom: LocalDate? = null,
-  var belopBoutgift: BigDecimal? = null,
-  var belopUnderhold: BigDecimal? = null
+data class Bidragsevne(
+    val bostatus: String? = null,
+    val datoFom: LocalDate? = null,
+    val datoTom: LocalDate? = null,
+    val belopBoutgift: BigDecimal? = null,
+    val belopUnderhold: BigDecimal? = null
 )

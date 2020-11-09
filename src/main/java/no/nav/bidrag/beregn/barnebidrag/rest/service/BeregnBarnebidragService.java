@@ -5,12 +5,14 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
@@ -354,7 +356,8 @@ public class BeregnBarnebidragService {
         soknadsbarnPersonId,
         beregnTotalBarnebidragGrunnlag.getBeregnDatoFra(),
         beregnTotalBarnebidragGrunnlag.getBeregnDatoTil(),
-        SoknadsbarnUtil.hentFodselsdatoForId(soknadsbarnPersonId, soknadsbarnMap),
+        Optional.ofNullable(SoknadsbarnUtil.hentFodselsdatoForId(soknadsbarnPersonId, soknadsbarnMap)).orElseThrow(() -> new UgyldigInputException(
+            "Søknadsbarn med id " + soknadsbarnPersonId + "har ingen korresponderende fødselsdato i soknadsbarnListe")),
         barnetilsynMedStonadPeriodeCoreListe,
         nettoBarnetilsynPeriodeCoreListe,
         forpleiningUtgiftPeriodeCoreListe,
@@ -463,7 +466,8 @@ public class BeregnBarnebidragService {
         beregnTotalBarnebidragGrunnlag.getBeregnDatoFra(),
         beregnTotalBarnebidragGrunnlag.getBeregnDatoTil(),
         soknadsbarnPersonId,
-        SoknadsbarnUtil.hentFodselsdatoForId(soknadsbarnPersonId, soknadsbarnMap),
+        Optional.ofNullable(SoknadsbarnUtil.hentFodselsdatoForId(soknadsbarnPersonId, soknadsbarnMap)).orElseThrow(() -> new UgyldigInputException(
+            "Søknadsbarn med id " + soknadsbarnPersonId + "har ingen korresponderende fødselsdato i soknadsbarnListe")),
         samvaersklassePeriodeCoreListe,
         sjablonPeriodeCoreListe
     );
@@ -764,37 +768,39 @@ public class BeregnBarnebidragService {
   // Henter sjabloner
   private SjablonListe hentSjabloner() {
 
-    var sjablonListe = new SjablonListe();
-
     // Henter sjabloner for sjablontall
-    sjablonListe.setSjablonSjablontallResponse(sjablonConsumer.hentSjablonSjablontall().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonListe.getSjablonSjablontallResponse().size());
+    var sjablonSjablontallListe = Optional.ofNullable(sjablonConsumer.hentSjablonSjablontall().getResponseEntity().getBody()).orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallListe.size());
 
     // Henter sjabloner for forbruksutgifter
-    sjablonListe.setSjablonForbruksutgifterResponse(sjablonConsumer.hentSjablonForbruksutgifter().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonListe.getSjablonForbruksutgifterResponse().size());
+    var sjablonForbruksutgifterListe = Optional.ofNullable(sjablonConsumer.hentSjablonForbruksutgifter().getResponseEntity().getBody())
+        .orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterListe.size());
 
     // Henter sjabloner for maks tilsyn
-    sjablonListe.setSjablonMaksTilsynResponse(sjablonConsumer.hentSjablonMaksTilsyn().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonListe.getSjablonMaksTilsynResponse().size());
+    var sjablonMaksTilsynListe = Optional.ofNullable(sjablonConsumer.hentSjablonMaksTilsyn().getResponseEntity().getBody()).orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynListe.size());
 
     // Henter sjabloner for maks bidrag
-    sjablonListe.setSjablonMaksFradragResponse(sjablonConsumer.hentSjablonMaksFradrag().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonListe.getSjablonMaksFradragResponse().size());
+    var sjablonMaksFradragListe = Optional.ofNullable(sjablonConsumer.hentSjablonMaksFradrag().getResponseEntity().getBody()).orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragListe.size());
 
     // Henter sjabloner for samværsfradrag
-    sjablonListe.setSjablonSamvaersfradragResponse(sjablonConsumer.hentSjablonSamvaersfradrag().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Samværsfradrag: {}", sjablonListe.getSjablonSamvaersfradragResponse().size());
+    var sjablonSamvaersfradragListe = Optional.ofNullable(sjablonConsumer.hentSjablonSamvaersfradrag().getResponseEntity().getBody())
+        .orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Samværsfradrag: {}", sjablonSamvaersfradragListe.size());
 
     // Henter sjabloner for bidragsevne
-    sjablonListe.setSjablonBidragsevneResponse(sjablonConsumer.hentSjablonBidragsevne().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonListe.getSjablonBidragsevneResponse().size());
+    var sjablonBidragsevneListe = Optional.ofNullable(sjablonConsumer.hentSjablonBidragsevne().getResponseEntity().getBody()).orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonBidragsevneListe.size());
 
     // Henter sjabloner for trinnvis skattesats
-    sjablonListe.setSjablonTrinnvisSkattesatsResponse(sjablonConsumer.hentSjablonTrinnvisSkattesats().getResponseEntity().getBody());
-    LOGGER.debug("Antall sjabloner hentet av type Trinnvis skattesats: {}", sjablonListe.getSjablonTrinnvisSkattesatsResponse().size());
+    var sjablonTrinnvisSkattesatsListe = Optional.ofNullable(sjablonConsumer.hentSjablonTrinnvisSkattesats().getResponseEntity().getBody())
+        .orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Trinnvis skattesats: {}", sjablonTrinnvisSkattesatsListe.size());
 
-    return sjablonListe;
+    return new SjablonListe(sjablonSjablontallListe, sjablonForbruksutgifterListe, sjablonMaksTilsynListe, sjablonMaksFradragListe,
+        sjablonSamvaersfradragListe, sjablonBidragsevneListe, sjablonTrinnvisSkattesatsListe);
   }
 
   // Mapper sjabloner av typen sjablontall
@@ -813,7 +819,7 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             sjablontallMap.getOrDefault(sjablon.getTypeSjablon(), SjablonTallNavn.DUMMY).getNavn(),
             emptyList(),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sjablon.getVerdi().doubleValue()))))
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.SJABLON_VERDI.getNavn(), sjablon.getVerdi()))))
         .collect(toList());
   }
 
@@ -831,8 +837,8 @@ public class BeregnBarnebidragService {
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.FORBRUKSUTGIFTER.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sjablon.getAlderTom().toString())),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.FORBRUK_TOTAL_BELOP.getNavn(), sjablon.getBelopForbrukTot().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), String.valueOf(sjablon.getAlderTom()))),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.FORBRUK_TOTAL_BELOP.getNavn(), sjablon.getBelopForbrukTot()))))
         .collect(toList());
   }
 
@@ -850,8 +856,8 @@ public class BeregnBarnebidragService {
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.MAKS_TILSYN.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sjablon.getAntBarnTom().toString())),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_TILSYN_BELOP.getNavn(), sjablon.getMaksBelopTilsyn().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), String.valueOf(sjablon.getAntBarnTom()))),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_TILSYN_BELOP.getNavn(), sjablon.getMaksBelopTilsyn()))))
         .collect(toList());
   }
 
@@ -869,8 +875,8 @@ public class BeregnBarnebidragService {
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.MAKS_FRADRAG.getNavn(),
-            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), sjablon.getAntBarnTom().toString())),
-            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sjablon.getMaksBelopFradrag().doubleValue()))))
+            singletonList(new SjablonNokkelCore(SjablonNokkelNavn.ANTALL_BARN_TOM.getNavn(), String.valueOf(sjablon.getAntBarnTom()))),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.MAKS_FRADRAG_BELOP.getNavn(), sjablon.getMaksBelopFradrag()))))
         .collect(toList());
   }
 
@@ -889,10 +895,10 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.SAMVAERSFRADRAG.getNavn(),
             asList(new SjablonNokkelCore(SjablonNokkelNavn.SAMVAERSKLASSE.getNavn(), sjablon.getSamvaersklasse()),
-                new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), sjablon.getAlderTom().toString())),
-            asList(new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_DAGER_TOM.getNavn(), sjablon.getAntDagerTom().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_NETTER_TOM.getNavn(), sjablon.getAntNetterTom().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.FRADRAG_BELOP.getNavn(), sjablon.getBelopFradrag().doubleValue()))))
+                new SjablonNokkelCore(SjablonNokkelNavn.ALDER_TOM.getNavn(), String.valueOf(sjablon.getAlderTom()))),
+            asList(new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_DAGER_TOM.getNavn(), BigDecimal.valueOf(sjablon.getAntDagerTom())),
+                new SjablonInnholdCore(SjablonInnholdNavn.ANTALL_NETTER_TOM.getNavn(), BigDecimal.valueOf(sjablon.getAntNetterTom())),
+                new SjablonInnholdCore(SjablonInnholdNavn.FRADRAG_BELOP.getNavn(), sjablon.getBelopFradrag()))))
         .collect(toList());
   }
 
@@ -911,8 +917,8 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.BIDRAGSEVNE.getNavn(),
             singletonList(new SjablonNokkelCore(SjablonNokkelNavn.BOSTATUS.getNavn(), sjablon.getBostatus())),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.BOUTGIFT_BELOP.getNavn(), sjablon.getBelopBoutgift().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.UNDERHOLD_BELOP.getNavn(), sjablon.getBelopUnderhold().doubleValue()))))
+            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.BOUTGIFT_BELOP.getNavn(), sjablon.getBelopBoutgift()),
+                new SjablonInnholdCore(SjablonInnholdNavn.UNDERHOLD_BELOP.getNavn(), sjablon.getBelopUnderhold()))))
         .collect(toList());
   }
 
@@ -931,8 +937,8 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.TRINNVIS_SKATTESATS.getNavn(),
             emptyList(),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.INNTEKTSGRENSE_BELOP.getNavn(), sjablon.getInntektgrense().doubleValue()),
-                new SjablonInnholdCore(SjablonInnholdNavn.SKATTESATS_PROSENT.getNavn(), sjablon.getSats().doubleValue()))))
+            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.INNTEKTSGRENSE_BELOP.getNavn(), sjablon.getInntektgrense()),
+                new SjablonInnholdCore(SjablonInnholdNavn.SKATTESATS_PROSENT.getNavn(), sjablon.getSats()))))
         .collect(toList());
   }
 

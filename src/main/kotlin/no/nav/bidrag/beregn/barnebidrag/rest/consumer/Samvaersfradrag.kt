@@ -6,11 +6,11 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Samvaersfradrag(
-    var samvaersklasse: String? = null,
-    var alderTom: Int? = null,
-    var datoFom: LocalDate? = null,
-    var datoTom: LocalDate? = null,
-    var antDagerTom: Int? = null,
-    var antNetterTom: Int? = null,
-    var belopFradrag: BigDecimal? = null
+    val samvaersklasse: String? = null,
+    val alderTom: Int? = null,
+    val datoFom: LocalDate? = null,
+    val datoTom: LocalDate? = null,
+    val antDagerTom: Int? = null,
+    val antNetterTom: Int? = null,
+    val belopFradrag: BigDecimal? = null
 )

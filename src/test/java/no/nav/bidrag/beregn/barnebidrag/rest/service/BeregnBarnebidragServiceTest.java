@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
@@ -242,8 +243,8 @@ class BeregnBarnebidragServiceTest {
             .flatMap(Collection::stream)
             .findFirst()
             .map(SjablonInnholdCore::getSjablonInnholdVerdi)
-            .orElse(0d))
-            .isEqualTo(1054d),
+            .orElse(BigDecimal.ZERO))
+            .isEqualTo(BigDecimal.valueOf(1054)),
 
         // Sjekk at det mappes ut riktig verdi for en gitt sjablon av type MaksFradrag
         () -> assertThat(nettoBarnetilsynGrunnlagTilCore.getSjablonPeriodeListe().stream()
@@ -253,8 +254,8 @@ class BeregnBarnebidragServiceTest {
             .flatMap(Collection::stream)
             .findFirst()
             .map(SjablonInnholdCore::getSjablonInnholdVerdi)
-            .orElse(0d))
-            .isEqualTo(3333d));
+            .orElse(BigDecimal.ZERO))
+            .isEqualTo(BigDecimal.valueOf(3333)));
   }
 
   @Test

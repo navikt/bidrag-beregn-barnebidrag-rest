@@ -10,6 +10,7 @@ import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftPeriodeCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore
+import java.math.BigDecimal
 import java.time.LocalDate
 
 // Grunnlag
@@ -23,7 +24,7 @@ data class BeregnBMNettoBarnetilsynGrunnlag(
 data class FaktiskUtgiftPeriode(
     @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn fra-til-dato") var faktiskUtgiftDatoFraTil: Periode? = null,
     @ApiModelProperty(value = "Søknadsbarnets person-id") var faktiskUtgiftSoknadsbarnPersonId: Int? = null,
-    @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: Double? = null
+    @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: BigDecimal? = null
 ) {
 
   fun tilCore(soknadsbarnMap: Map<Int, LocalDate>) = FaktiskUtgiftPeriodeCore(
@@ -52,9 +53,9 @@ data class BeregnBMNettoBarnetilsynResultat(
 
 @ApiModel(value = "Resultatet av beregning av netto barnetilsyn for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeNettoBarnetilsyn(
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
     @ApiModelProperty(value = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningNettoBarnetilsyn> = emptyList(),
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagNettoBarnetilsyn? = null
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagNettoBarnetilsyn
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -67,7 +68,7 @@ data class ResultatPeriodeNettoBarnetilsyn(
 @ApiModel(value = "Resultatet av beregning av netto barnetilsyn")
 data class ResultatBeregningNettoBarnetilsyn(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beløp netto barnetilsyn") var resultatBelop: Double = 0.0
+    @ApiModelProperty(value = "Beløp netto barnetilsyn") var resultatBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -78,9 +79,8 @@ data class ResultatBeregningNettoBarnetilsyn(
 
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn")
 data class ResultatGrunnlagNettoBarnetilsyn(
-    @ApiModelProperty(
-        value = "Liste over faktiske utgifter") var faktiskUtgiftListe: List<FaktiskUtgift> = emptyList()
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+    @ApiModelProperty(value = "Liste over faktiske utgifter") var faktiskUtgiftListe: List<FaktiskUtgift> = emptyList()
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
@@ -93,7 +93,7 @@ data class ResultatGrunnlagNettoBarnetilsyn(
 data class FaktiskUtgift(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var soknadsbarnPersonId: Int = 0,
     @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
-    @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: Double? = null
+    @ApiModelProperty(value = "Bidragsmottakers faktiske bruttoutgifter til tilsyn beløp") var faktiskUtgiftBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(faktiskUtgift: FaktiskUtgiftCore) : this(

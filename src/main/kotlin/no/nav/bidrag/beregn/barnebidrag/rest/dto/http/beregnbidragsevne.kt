@@ -11,6 +11,7 @@ import no.nav.bidrag.beregn.bidragsevne.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.bidragsevne.dto.ResultatPeriodeCore
 import no.nav.bidrag.beregn.bidragsevne.dto.SaerfradragPeriodeCore
 import no.nav.bidrag.beregn.bidragsevne.dto.SkatteklassePeriodeCore
+import java.math.BigDecimal
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en bidragsevnesberegning for bidragspliktig")
@@ -102,8 +103,8 @@ data class ResultatPeriodeBidragsevne(
 
 @ApiModel(value = "Resultatet av en beregning")
 data class ResultatBeregningBidragsevne(
-    @ApiModelProperty(value = "Resultat 25 prosent inntekt") var resultat25ProsentInntekt: Double = 0.0,
-    @ApiModelProperty(value = "Resultatevne beløp") var resultatEvneBelop: Double = 0.0
+    @ApiModelProperty(value = "Resultat 25 prosent inntekt") var resultat25ProsentInntekt: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Resultatevne beløp") var resultatEvneBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -115,9 +116,9 @@ data class ResultatBeregningBidragsevne(
 @ApiModel(value = "Grunnlaget for en beregning")
 data class ResultatGrunnlagBidragsevne(
     @ApiModelProperty(value = "Liste over bidragspliktiges inntekter") var inntektListe: List<Inntekt> = emptyList(),
-    @ApiModelProperty(value = "Bidragspliktiges skatteklasse") var skatteklasse: Int,
+    @ApiModelProperty(value = "Bidragspliktiges skatteklasse") var skatteklasse: Int = 0,
     @ApiModelProperty(value = "Bidragspliktiges bostatuskode") var bostatusKode: String,
-    @ApiModelProperty(value = "Antall egne barn i bidragspliktiges husstand") var antallEgneBarnIHusstand: Int,
+    @ApiModelProperty(value = "Antall egne barn i bidragspliktiges husstand") var antallEgneBarnIHusstand: Int = 0,
     @ApiModelProperty(value = "Bidragspliktiges særfradragkode") var saerfradragKode: String
 //    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {

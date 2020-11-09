@@ -7,6 +7,7 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragResultatCor
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatGrunnlagCore
 import no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore
+import java.math.BigDecimal
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en samværsfradragberegning for bidragspliktig")
@@ -23,8 +24,8 @@ data class SamvaersklassePeriode(
 ) {
 
   fun validerSamvaersklasse() {
-    if (samvaersklasseDatoFraTil != null) samvaersklasseDatoFraTil!!.valider("samvaersklasse")
-    else throw UgyldigInputException("samvaersklasseDatoFraTil kan ikke være null")
+    if (samvaersklasseDatoFraTil != null) samvaersklasseDatoFraTil!!.valider("samvaersklasse") else throw UgyldigInputException(
+        "samvaersklasseDatoFraTil kan ikke være null")
 
     if (samvaersklasseSoknadsbarnPersonId == null) throw UgyldigInputException("samvaersklasseSoknadsbarnPersonId kan ikke være null")
     if (samvaersklasseId == null) throw UgyldigInputException("samvaersklasseId kan ikke være null")
@@ -47,9 +48,9 @@ data class BeregnBPSamvaersfradragResultat(
 @ApiModel(value = "Resultatet av beregning av samværsfradrag for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeSamvaersfradrag(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningSamvaersfradrag? = null,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagSamvaersfradrag? = null
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningSamvaersfradrag,
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagSamvaersfradrag
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -62,7 +63,7 @@ data class ResultatPeriodeSamvaersfradrag(
 
 @ApiModel(value = "Resultatet av beregning av samværsfradrag")
 data class ResultatBeregningSamvaersfradrag(
-    @ApiModelProperty(value = "Beløp samværsfradrag") var resultatBelop: Double = 0.0
+    @ApiModelProperty(value = "Beløp samværsfradrag") var resultatBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -72,9 +73,9 @@ data class ResultatBeregningSamvaersfradrag(
 
 @ApiModel(value = "Grunnlaget for beregning av samværsfradrag")
 data class ResultatGrunnlagSamvaersfradrag(
-    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int? = null,
-    @ApiModelProperty(value = "Samværsklasse Id") var samvaersklasseId: String? = null
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
+    @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
+    @ApiModelProperty(value = "Samværsklasse Id") var samvaersklasseId: String
+//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
