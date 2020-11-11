@@ -12,6 +12,7 @@ import no.nav.bidrag.beregn.bidragsevne.dto.ResultatPeriodeCore
 import no.nav.bidrag.beregn.bidragsevne.dto.SaerfradragPeriodeCore
 import no.nav.bidrag.beregn.bidragsevne.dto.SkatteklassePeriodeCore
 import java.math.BigDecimal
+import java.util.stream.Collectors.toList
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en bidragsevnesberegning for bidragspliktig")
@@ -129,6 +130,6 @@ data class ResultatGrunnlagBidragsevne(
       bostatusKode = resultatGrunnlag.bostatusKode,
       antallEgneBarnIHusstand = resultatGrunnlag.antallEgneBarnIHusstand,
       saerfradragKode = resultatGrunnlag.saerfradragkode,
-      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+      sjablonListe = resultatGrunnlag.sjablonListe.stream().sorted().collect(toList()).map { Sjablon(it) }
   )
 }
