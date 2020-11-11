@@ -79,13 +79,13 @@ data class ResultatBeregningNettoBarnetilsyn(
 
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn")
 data class ResultatGrunnlagNettoBarnetilsyn(
-    @ApiModelProperty(value = "Liste over faktiske utgifter") var faktiskUtgiftListe: List<FaktiskUtgift> = emptyList()
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Liste over faktiske utgifter") var faktiskUtgiftListe: List<FaktiskUtgift> = emptyList(),
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
-      faktiskUtgiftListe = resultatGrunnlag.faktiskUtgiftListe.map { FaktiskUtgift(it) }
-//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+      faktiskUtgiftListe = resultatGrunnlag.faktiskUtgiftListe.map { FaktiskUtgift(it) },
+      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 

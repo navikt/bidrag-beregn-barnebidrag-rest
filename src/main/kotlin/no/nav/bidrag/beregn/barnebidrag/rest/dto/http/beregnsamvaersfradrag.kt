@@ -74,13 +74,13 @@ data class ResultatBeregningSamvaersfradrag(
 @ApiModel(value = "Grunnlaget for beregning av samværsfradrag")
 data class ResultatGrunnlagSamvaersfradrag(
     @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
-    @ApiModelProperty(value = "Samværsklasse Id") var samvaersklasseId: String
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Samværsklasse Id") var samvaersklasseId: String,
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       soknadsbarnAlder = resultatGrunnlag.soknadBarnAlder,
-      samvaersklasseId = resultatGrunnlag.samvaersklasse
-//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+      samvaersklasseId = resultatGrunnlag.samvaersklasse,
+      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
