@@ -15,7 +15,6 @@ import no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.barnebidrag.dto.ResultatPeriodeCore
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
 import java.math.BigDecimal
-import java.util.stream.Collectors.toList
 
 // Grunnlag
 @ApiModel(value = "Grunnlaget for en beregning av barnebidrag")
@@ -133,7 +132,7 @@ data class ResultatGrunnlagBarnebidrag(
       bidragsevne = BidragsevneGrunnlag(resultatGrunnlag.bidragsevne),
       resultatGrunnlagPerBarnListe = resultatGrunnlag.grunnlagPerBarnListe.map { ResultatGrunnlagPerBarn(it) },
       barnetilleggForsvaret = resultatGrunnlag.barnetilleggForsvaret,
-      sjablonListe = resultatGrunnlag.sjablonListe.stream().sorted().collect(toList()).map { Sjablon(it) }
+      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 
