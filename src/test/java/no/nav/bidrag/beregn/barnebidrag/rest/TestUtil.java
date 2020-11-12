@@ -14,6 +14,7 @@ import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragResultatCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevneCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.GrunnlagBeregningPerBarnCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.GrunnlagBeregningPeriodisertCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Barnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Bidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Forbruksutgifter;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksFradrag;
@@ -912,7 +913,7 @@ public class TestUtil {
     bidragPeriodeResultatListe.add(new ResultatPeriodeBidragsevne(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new ResultatBeregningBidragsevne(BigDecimal.valueOf(100), BigDecimal.valueOf(100)),
         new ResultatGrunnlagBidragsevne(singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(500000))), 1, "MED_ANDRE", 1,
-            "HELT")));
+            "HELT", emptyList())));
     return new BeregnBPBidragsevneResultat(bidragPeriodeResultatListe);
   }
 
@@ -943,7 +944,7 @@ public class TestUtil {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeNettoBarnetilsyn>();
     bidragPeriodeResultatListe.add(new ResultatPeriodeNettoBarnetilsyn(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         singletonList(new ResultatBeregningNettoBarnetilsyn(1, BigDecimal.valueOf(100))),
-        new ResultatGrunnlagNettoBarnetilsyn(singletonList(new FaktiskUtgift(1, 10, BigDecimal.valueOf(100))))));
+        new ResultatGrunnlagNettoBarnetilsyn(singletonList(new FaktiskUtgift(1, 10, BigDecimal.valueOf(100))), emptyList())));
     return new BeregnBMNettoBarnetilsynResultat(bidragPeriodeResultatListe);
   }
 
@@ -975,7 +976,7 @@ public class TestUtil {
     bidragPeriodeResultatListe.add(new ResultatPeriodeUnderholdskostnad(1,
         new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new ResultatBeregningUnderholdskostnad(BigDecimal.valueOf(100)),
-        new ResultatGrunnlagUnderholdskostnad(9, "DO", "64", BigDecimal.valueOf(1000), BigDecimal.valueOf(1000))));
+        new ResultatGrunnlagUnderholdskostnad(9, "DO", "64", BigDecimal.valueOf(1000), BigDecimal.valueOf(1000), emptyList())));
     return new BeregnBMUnderholdskostnadResultat(bidragPeriodeResultatListe);
   }
 
@@ -1011,7 +1012,8 @@ public class TestUtil {
             new ResultatGrunnlagBPAndelUnderholdskostnad(BigDecimal.valueOf(100),
                 singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
                 singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
-                singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))))));
+                singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
+                emptyList())));
     return new BeregnBPAndelUnderholdskostnadResultat(bidragPeriodeResultatListe);
   }
 
@@ -1022,9 +1024,12 @@ public class TestUtil {
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore(BigDecimal.valueOf(10), BigDecimal.valueOf(100), false),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatGrunnlagCore(BigDecimal.valueOf(100),
-            singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
-            singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
-            singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
+            singletonList(
+                new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
+            singletonList(
+                new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
+            singletonList(
+                new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
             emptyList())));
     return new BeregnBPsAndelUnderholdskostnadResultatCore(bidragPeriodeResultatListe, emptyList());
   }
@@ -1046,7 +1051,7 @@ public class TestUtil {
     bidragPeriodeResultatListe.add(new ResultatPeriodeSamvaersfradrag(1,
         new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new ResultatBeregningSamvaersfradrag(BigDecimal.valueOf(100)),
-        new ResultatGrunnlagSamvaersfradrag(9, "00")));
+        new ResultatGrunnlagSamvaersfradrag(9, "00", emptyList())));
     return new BeregnBPSamvaersfradragResultat(bidragPeriodeResultatListe);
   }
 
@@ -1088,7 +1093,8 @@ public class TestUtil {
     bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatPeriodeCore(1,
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatBeregningCore(BigDecimal.valueOf(100)),
-        new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatGrunnlagCore(BigDecimal.valueOf(100), BigDecimal.valueOf(10), BigDecimal.valueOf(100))));
+        new no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.ResultatGrunnlagCore(BigDecimal.valueOf(100), BigDecimal.valueOf(10),
+            BigDecimal.valueOf(100))));
     return new BeregnKostnadsberegnetBidragResultatCore(bidragPeriodeResultatListe, emptyList());
   }
 
@@ -1115,7 +1121,7 @@ public class TestUtil {
                 new Barnetillegg(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
                 new Barnetillegg(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
                 true)),
-            true)));
+            true, emptyList())));
     return new BeregnBarnebidragResultat(bidragPeriodeResultatListe);
   }
 
@@ -1403,5 +1409,48 @@ public class TestUtil {
         new TrinnvisSkattesats(LocalDate.parse("2020-01-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(999550), BigDecimal.valueOf(16.2)));
 
     return sjablonTrinnvisSkattesatsListe;
+  }
+
+  // Bygger opp liste av sjabloner av typen Barnetilsyn
+  public static List<Barnetilsyn> dummySjablonBarnetilsynListe() {
+    var sjablonBarnetilsynListe = new ArrayList<Barnetilsyn>();
+
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DO", LocalDate.parse("2017-07-01"), LocalDate.parse("2018-06-30"), BigDecimal.valueOf(330)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DU", LocalDate.parse("2017-07-01"), LocalDate.parse("2018-06-30"), BigDecimal.valueOf(210)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HO", LocalDate.parse("2017-07-01"), LocalDate.parse("2018-06-30"), BigDecimal.valueOf(542)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HU", LocalDate.parse("2017-07-01"), LocalDate.parse("2018-06-30"), BigDecimal.valueOf(526)));
+
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DO", LocalDate.parse("2018-07-01"), LocalDate.parse("2019-06-30"), BigDecimal.valueOf(335)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DU", LocalDate.parse("2018-07-01"), LocalDate.parse("2019-06-30"), BigDecimal.valueOf(249)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HO", LocalDate.parse("2018-07-01"), LocalDate.parse("2019-06-30"), BigDecimal.valueOf(546)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HU", LocalDate.parse("2018-07-01"), LocalDate.parse("2019-06-30"), BigDecimal.valueOf(624)));
+
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DO", LocalDate.parse("2019-07-01"), LocalDate.parse("2020-06-30"), BigDecimal.valueOf(355)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DU", LocalDate.parse("2019-07-01"), LocalDate.parse("2020-06-30"), BigDecimal.valueOf(258)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HO", LocalDate.parse("2019-07-01"), LocalDate.parse("2020-06-30"), BigDecimal.valueOf(579)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HU", LocalDate.parse("2019-07-01"), LocalDate.parse("2020-06-30"), BigDecimal.valueOf(644)));
+
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DO", LocalDate.parse("2020-07-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(358)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "DU", LocalDate.parse("2020-07-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(257)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HO", LocalDate.parse("2020-07-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(589)));
+    sjablonBarnetilsynListe.add(
+        new Barnetilsyn("64", "HU", LocalDate.parse("2020-07-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(643)));
+
+    return sjablonBarnetilsynListe;
   }
 }

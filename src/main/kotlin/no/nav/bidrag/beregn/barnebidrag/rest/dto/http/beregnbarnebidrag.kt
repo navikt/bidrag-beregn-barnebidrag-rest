@@ -124,15 +124,15 @@ data class ResultatBeregningBarnebidrag(
 data class ResultatGrunnlagBarnebidrag(
     @ApiModelProperty(value = "Bidragsevne") var bidragsevne: BidragsevneGrunnlag,
     @ApiModelProperty(value = "Grunnlag per barn liste") var resultatGrunnlagPerBarnListe: List<ResultatGrunnlagPerBarn> = emptyList(),
-    @ApiModelProperty(value = "Barnetillegg forsvaret") var barnetilleggForsvaret: Boolean = false
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Barnetillegg forsvaret") var barnetilleggForsvaret: Boolean = false,
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: GrunnlagBeregningPeriodisertCore) : this(
       bidragsevne = BidragsevneGrunnlag(resultatGrunnlag.bidragsevne),
       resultatGrunnlagPerBarnListe = resultatGrunnlag.grunnlagPerBarnListe.map { ResultatGrunnlagPerBarn(it) },
-      barnetilleggForsvaret = resultatGrunnlag.barnetilleggForsvaret
-//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+      barnetilleggForsvaret = resultatGrunnlag.barnetilleggForsvaret,
+      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 
@@ -165,7 +165,6 @@ data class ResultatGrunnlagPerBarn(
       barnetilleggBP = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBP),
       barnetilleggBM = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBM),
       deltBosted = resultatGrunnlagPerBarn.deltBosted
-//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
 

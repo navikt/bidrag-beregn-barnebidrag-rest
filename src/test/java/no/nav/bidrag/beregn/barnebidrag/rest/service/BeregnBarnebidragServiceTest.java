@@ -75,6 +75,8 @@ class BeregnBarnebidragServiceTest {
     when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
     when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
         .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(sjablonConsumerMock.hentSjablonBarnetilsyn())
+        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBarnetilsynListe()));
   }
 
   @Test
@@ -157,8 +159,8 @@ class BeregnBarnebidragServiceTest {
     var forventetAntallSjablonElementerBidragsevne = 25 + 8 + 12;
     // NettoBarnetilsyn: Sjablontall (0015) + MaksFradrag + MaksTilsyn
     var forventetAntallSjablonElementerNettoBarnetilsyn = 3 + 2 + 4;
-    // Underholdskostnad: Sjablontall (0001, 0003, 0041) + Forbruksutgifter
-    var forventetAntallSjablonElementerUnderholdskostnad = 6 + 8;
+    // Underholdskostnad: Sjablontall (0001, 0003, 0041) + Forbruksutgifter + Barnetilsyn
+    var forventetAntallSjablonElementerUnderholdskostnad = 6 + 8 + 12;
     // BPsAndelUnderholdskostnad: Sjablontall (0005)
     var forventetAntallSjablonElementerBPsAndelUnderholdskostnad = 4;
     // Samvaersfradrag: Samvaersfradrag

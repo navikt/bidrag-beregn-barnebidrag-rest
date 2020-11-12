@@ -96,8 +96,8 @@ data class ResultatGrunnlagUnderholdskostnad(
     @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String,
     @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String,
     @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: BigDecimal = BigDecimal.ZERO,
-    @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: BigDecimal = BigDecimal.ZERO
-//    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
@@ -105,7 +105,7 @@ data class ResultatGrunnlagUnderholdskostnad(
       barnetilsynMedStonadTilsynType = resultatGrunnlag.barnetilsynMedStonadTilsynType,
       barnetilsynMedStonadStonadType = resultatGrunnlag.barnetilsynMedStonadStonadType,
       nettoBarnetilsynBelop = resultatGrunnlag.nettoBarnetilsynBelop,
-      forpleiningUtgiftBelop = resultatGrunnlag.forpleiningUtgiftBelop
-//      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
+      forpleiningUtgiftBelop = resultatGrunnlag.forpleiningUtgiftBelop,
+      sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
