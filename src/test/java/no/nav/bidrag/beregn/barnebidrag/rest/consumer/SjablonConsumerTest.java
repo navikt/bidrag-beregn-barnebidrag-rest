@@ -196,4 +196,31 @@ class SjablonConsumerTest {
 
     assertThatExceptionOfType(SjablonConsumerException.class).isThrownBy(() -> sjablonConsumer.hentSjablonTrinnvisSkattesats());
   }
+
+  @Test
+  @DisplayName("Skal hente liste av Barnetilsyn-sjabloner når respons fra tjenesten er OK")
+  void skalHenteListeAvBarnetilsynSjablonerNaarResponsFraTjenestenErOk() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Barnetilsyn>>) any()))
+        .thenReturn(new ResponseEntity<>(TestUtil.dummySjablonBarnetilsynListe(), HttpStatus.OK));
+    var sjablonResponse = sjablonConsumer.hentSjablonBarnetilsyn();
+
+    assertAll(
+        () -> assertThat(sjablonResponse).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().size()).isEqualTo(TestUtil.dummySjablonBarnetilsynListe().size()),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().get(0).getBelopBarneTilsyn())
+            .isEqualTo(TestUtil.dummySjablonBarnetilsynListe().get(0).getBelopBarneTilsyn())
+    );
+  }
+
+  @Test
+  @DisplayName("Skal kaste SjablonConsumerException når respons fra tjenesten ikke er OK for Barnetilsyn")
+  void skalKasteRestClientExceptionNaarResponsFraTjenestenIkkeErOkForBarnetilsyn() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Barnetilsyn>>) any()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+    assertThatExceptionOfType(SjablonConsumerException.class).isThrownBy(() -> sjablonConsumer.hentSjablonBarnetilsyn());
+  }
 }

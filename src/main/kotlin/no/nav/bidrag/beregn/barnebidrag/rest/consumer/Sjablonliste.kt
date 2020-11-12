@@ -7,5 +7,6 @@ data class SjablonListe (
     var sjablonMaksFradragResponse: List<MaksFradrag> = emptyList(),
     var sjablonSamvaersfradragResponse: List<Samvaersfradrag> = emptyList(),
     var sjablonBidragsevneResponse: List<Bidragsevne> = emptyList(),
-    var sjablonTrinnvisSkattesatsResponse: List<TrinnvisSkattesats> = emptyList()
+    var sjablonTrinnvisSkattesatsResponse: List<TrinnvisSkattesats> = emptyList(),
+    var sjablonBarnetilsynResponse: List<Barnetilsyn> = emptyList()
 )

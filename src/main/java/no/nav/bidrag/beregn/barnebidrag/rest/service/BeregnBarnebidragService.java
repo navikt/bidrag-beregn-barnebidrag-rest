@@ -18,6 +18,7 @@ import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragResultatCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevnePeriodeCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Barnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Bidragsevne;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Forbruksutgifter;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksFradrag;
@@ -86,8 +87,8 @@ public class BeregnBarnebidragService {
 
   private static final String BIDRAGSEVNE = "Bidragsevne";
   private static final String NETTO_BARNETILSYN = "NettoBarnetilsyn";
-  private static final String UNDERHOLDSKOSTAND = "Underholdskostnad";
-  private static final String BP_ANDEL_UNDERHOLDSKOSTAND = "BPsAndelUnderholdskostnad";
+  private static final String UNDERHOLDSKOSTNAD = "Underholdskostnad";
+  private static final String BP_ANDEL_UNDERHOLDSKOSTNAD = "BPsAndelUnderholdskostnad";
   private static final String BARNEBIDRAG = "Barnebidrag";
 
   private final SjablonConsumer sjablonConsumer;
@@ -346,10 +347,13 @@ public class BeregnBarnebidragService {
 
     // Hent aktuelle sjabloner
     var sjablonPeriodeCoreListe = new ArrayList<SjablonPeriodeCore>();
-    sjablonPeriodeCoreListe.addAll(mapSjablonSjablontall(sjablonListe.getSjablonSjablontallResponse(), UNDERHOLDSKOSTAND,
+    sjablonPeriodeCoreListe.addAll(mapSjablonSjablontall(sjablonListe.getSjablonSjablontallResponse(), UNDERHOLDSKOSTNAD,
         beregnTotalBarnebidragGrunnlag, sjablontallMap));
     sjablonPeriodeCoreListe
         .addAll(mapSjablonForbruksutgifter(sjablonListe.getSjablonForbruksutgifterResponse(), beregnTotalBarnebidragGrunnlag));
+    sjablonPeriodeCoreListe
+        .addAll(mapSjablonBarnetilsyn(sjablonListe.getSjablonBarnetilsynResponse(), beregnTotalBarnebidragGrunnlag));
+
 
     // Bygg core-objekt
     return new BeregnUnderholdskostnadGrunnlagCore(
@@ -426,7 +430,7 @@ public class BeregnBarnebidragService {
 
     // Hent aktuelle sjabloner
     var sjablonPeriodeCoreListe = new ArrayList<>(
-        mapSjablonSjablontall(sjablonListe.getSjablonSjablontallResponse(), BP_ANDEL_UNDERHOLDSKOSTAND, beregnTotalBarnebidragGrunnlag,
+        mapSjablonSjablontall(sjablonListe.getSjablonSjablontallResponse(), BP_ANDEL_UNDERHOLDSKOSTNAD, beregnTotalBarnebidragGrunnlag,
             sjablontallMap));
 
     // Bygg core-objekt
@@ -799,8 +803,13 @@ public class BeregnBarnebidragService {
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Trinnvis skattesats: {}", sjablonTrinnvisSkattesatsListe.size());
 
+    // Henter sjabloner for barnetilsyn
+    var sjablonBarnetilsynListe = Optional.ofNullable(sjablonConsumer.hentSjablonBarnetilsyn().getResponseEntity().getBody())
+        .orElse(emptyList());
+    LOGGER.debug("Antall sjabloner hentet av type Barnetilsyn: {}", sjablonBarnetilsynListe.size());
+
     return new SjablonListe(sjablonSjablontallListe, sjablonForbruksutgifterListe, sjablonMaksTilsynListe, sjablonMaksFradragListe,
-        sjablonSamvaersfradragListe, sjablonBidragsevneListe, sjablonTrinnvisSkattesatsListe);
+        sjablonSamvaersfradragListe, sjablonBidragsevneListe, sjablonTrinnvisSkattesatsListe, sjablonBarnetilsynListe);
   }
 
   // Mapper sjabloner av typen sjablontall
@@ -942,14 +951,33 @@ public class BeregnBarnebidragService {
         .collect(toList());
   }
 
+  // Mapper sjabloner av typen barnetilsyn
+  // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
+  private List<SjablonPeriodeCore> mapSjablonBarnetilsyn(List<Barnetilsyn> sjablonBarnetilsynListe,
+      BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
+
+    var beregnDatoFra = beregnTotalBarnebidragGrunnlag.getBeregnDatoFra();
+    var beregnDatoTil = beregnTotalBarnebidragGrunnlag.getBeregnDatoTil();
+
+    return sjablonBarnetilsynListe
+        .stream()
+        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .map(sjablon -> new SjablonPeriodeCore(
+            new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
+            SjablonNavn.BARNETILSYN.getNavn(),
+            emptyList(),
+            singletonList(new SjablonInnholdCore(SjablonInnholdNavn.BARNETILSYN_BELOP.getNavn(), sjablon.getBelopBarneTilsyn()))))
+        .collect(toList());
+  }
+
   // Sjekker om en type SjablonTall er i bruk for en delberegning
   private boolean filtrerSjablonTall(SjablonTallNavn sjablonTallNavn, String delberegning) {
 
     return switch (delberegning) {
       case BIDRAGSEVNE -> sjablonTallNavn.getBidragsevne();
       case NETTO_BARNETILSYN -> sjablonTallNavn.getNettoBarnetilsyn();
-      case UNDERHOLDSKOSTAND -> sjablonTallNavn.getUnderholdskostnad();
-      case BP_ANDEL_UNDERHOLDSKOSTAND -> sjablonTallNavn.getBpAndelUnderholdskostnad();
+      case UNDERHOLDSKOSTNAD -> sjablonTallNavn.getUnderholdskostnad();
+      case BP_ANDEL_UNDERHOLDSKOSTNAD -> sjablonTallNavn.getBpAndelUnderholdskostnad();
       case BARNEBIDRAG -> sjablonTallNavn.getBarnebidrag();
       default -> false;
     };
