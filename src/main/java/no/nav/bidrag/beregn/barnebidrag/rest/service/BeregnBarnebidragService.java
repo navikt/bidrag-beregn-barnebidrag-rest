@@ -8,7 +8,6 @@ import static java.util.stream.Collectors.toList;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -353,7 +352,6 @@ public class BeregnBarnebidragService {
         .addAll(mapSjablonForbruksutgifter(sjablonListe.getSjablonForbruksutgifterResponse(), beregnTotalBarnebidragGrunnlag));
     sjablonPeriodeCoreListe
         .addAll(mapSjablonBarnetilsyn(sjablonListe.getSjablonBarnetilsynResponse(), beregnTotalBarnebidragGrunnlag));
-
 
     // Bygg core-objekt
     return new BeregnUnderholdskostnadGrunnlagCore(
@@ -926,7 +924,7 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.BIDRAGSEVNE.getNavn(),
             singletonList(new SjablonNokkelCore(SjablonNokkelNavn.BOSTATUS.getNavn(), sjablon.getBostatus())),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.BOUTGIFT_BELOP.getNavn(), sjablon.getBelopBoutgift()),
+            asList(new SjablonInnholdCore(SjablonInnholdNavn.BOUTGIFT_BELOP.getNavn(), sjablon.getBelopBoutgift()),
                 new SjablonInnholdCore(SjablonInnholdNavn.UNDERHOLD_BELOP.getNavn(), sjablon.getBelopUnderhold()))))
         .collect(toList());
   }
@@ -946,7 +944,7 @@ public class BeregnBarnebidragService {
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.TRINNVIS_SKATTESATS.getNavn(),
             emptyList(),
-            Arrays.asList(new SjablonInnholdCore(SjablonInnholdNavn.INNTEKTSGRENSE_BELOP.getNavn(), sjablon.getInntektgrense()),
+            asList(new SjablonInnholdCore(SjablonInnholdNavn.INNTEKTSGRENSE_BELOP.getNavn(), sjablon.getInntektgrense()),
                 new SjablonInnholdCore(SjablonInnholdNavn.SKATTESATS_PROSENT.getNavn(), sjablon.getSats()))))
         .collect(toList());
   }
@@ -965,7 +963,8 @@ public class BeregnBarnebidragService {
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.BARNETILSYN.getNavn(),
-            emptyList(),
+            asList(new SjablonNokkelCore(SjablonNokkelNavn.STONAD_TYPE.getNavn(), sjablon.getTypeStonad()),
+                new SjablonNokkelCore(SjablonNokkelNavn.TILSYN_TYPE.getNavn(), sjablon.getTypeTilsyn())),
             singletonList(new SjablonInnholdCore(SjablonInnholdNavn.BARNETILSYN_BELOP.getNavn(), sjablon.getBelopBarneTilsyn()))))
         .collect(toList());
   }
