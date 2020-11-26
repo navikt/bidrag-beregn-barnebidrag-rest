@@ -614,9 +614,9 @@ public class TestUtil {
 
     InntektPeriode inntektPeriode;
     if (nullVerdi.equals("inntektDatoFraTil")) {
-      inntektPeriode = new InntektPeriode(null, inntektType, inntektBelop, null);
+      inntektPeriode = new InntektPeriode(null, inntektType, inntektBelop);
     } else {
-      inntektPeriode = new InntektPeriode(new Periode(inntektDatoFra, inntektDatoTil), inntektType, inntektBelop, null);
+      inntektPeriode = new InntektPeriode(new Periode(inntektDatoFra, inntektDatoTil), inntektType, inntektBelop);
     }
 
     return inntektPeriode;
@@ -642,9 +642,9 @@ public class TestUtil {
     } else {
       InntektPeriode inntektBPPeriode;
       if (nullVerdi.equals("inntektBPDatoFraTil")) {
-        inntektBPPeriode = new InntektPeriode(null, inntektBPType, inntektBPBelop, null);
+        inntektBPPeriode = new InntektPeriode(null, inntektBPType, inntektBPBelop);
       } else {
-        inntektBPPeriode = new InntektPeriode(new Periode(inntektBPDatoFra, inntektBPDatoTil), inntektBPType, inntektBPBelop, null);
+        inntektBPPeriode = new InntektPeriode(new Periode(inntektBPDatoFra, inntektBPDatoTil), inntektBPType, inntektBPBelop);
       }
       inntektBPPeriodeListe = singletonList(inntektBPPeriode);
     }
