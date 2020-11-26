@@ -358,6 +358,22 @@ class DtoTest {
         .withMessage("BM inntektBelop kan ikke være null");
   }
 
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektBMDeltFordel er null")
+  void skalKasteIllegalArgumentExceptionNaarInntektBMDeltFordelErNull() {
+    var grunnlag = TestUtil.byggInntektGrunnlagUtenInntektBMDeltFordel().getInntektBMPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(() -> grunnlag.get(0).validerInntekt("BM"))
+        .withMessage("BM deltFordel kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når inntektBMSkatteklasse2 er null")
+  void skalKasteIllegalArgumentExceptionNaarInntektBMSkatteklasse2ErNull() {
+    var grunnlag = TestUtil.byggInntektGrunnlagUtenInntektBMSkatteklasse2().getInntektBMPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(() -> grunnlag.get(0).validerInntekt("BM"))
+        .withMessage("BM skatteklasse2 kan ikke være null");
+  }
+
 
   // Bidragsevne
   @Test

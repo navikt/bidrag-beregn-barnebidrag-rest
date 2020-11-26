@@ -390,7 +390,7 @@ public class BeregnBarnebidragService {
             .map(inntektBPPeriode -> new InntektPeriodeCore(
                 new PeriodeCore(inntektBPPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
                     inntektBPPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
-                inntektBPPeriode.getInntektType(), inntektBPPeriode.getInntektBelop()))
+                inntektBPPeriode.getInntektType(), inntektBPPeriode.getInntektBelop(), false, false))
             .collect(toList());
 
     // Bygg liste over BMs inntekter til core. En inntekt kan være knyttet til et bestemt søknadsbarn eller gjelde for alle søknadsbarn (null-verdi).
@@ -403,7 +403,8 @@ public class BeregnBarnebidragService {
             .map(inntektBMPeriode -> new InntektPeriodeCore(
                 new PeriodeCore(inntektBMPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
                     inntektBMPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
-                inntektBMPeriode.getInntektType(), inntektBMPeriode.getInntektBelop()))
+                inntektBMPeriode.getInntektType(), inntektBMPeriode.getInntektBelop(), inntektBMPeriode.getDeltFordel(),
+                inntektBMPeriode.getSkatteklasse2()))
             .collect(toList());
 
     // Bygg liste over SBs inntekter til core
@@ -420,7 +421,7 @@ public class BeregnBarnebidragService {
           .map(inntektSBPeriode -> new InntektPeriodeCore(
               new PeriodeCore(inntektSBPeriode.getInntektDatoFraTil().getPeriodeDatoFra(),
                   inntektSBPeriode.getInntektDatoFraTil().getPeriodeDatoTil()),
-              inntektSBPeriode.getInntektType(), inntektSBPeriode.getInntektBelop()))
+              inntektSBPeriode.getInntektType(), inntektSBPeriode.getInntektBelop(), false, false))
           .collect(toList());
     } else {
       throw new UgyldigInputException("Fant ikke søknadsbarn med id " + soknadsbarnPersonId + " i soknadsbarnListe");
@@ -820,7 +821,7 @@ public class BeregnBarnebidragService {
 
     return sjablonSjablontallListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .filter(sjablon -> filtrerSjablonTall(sjablontallMap.getOrDefault(sjablon.getTypeSjablon(), SjablonTallNavn.DUMMY), delberegning))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
@@ -840,7 +841,7 @@ public class BeregnBarnebidragService {
 
     return sjablonForbruksutgifterListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.FORBRUKSUTGIFTER.getNavn(),
@@ -859,7 +860,7 @@ public class BeregnBarnebidragService {
 
     return sjablonMaksTilsynListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.MAKS_TILSYN.getNavn(),
@@ -878,7 +879,7 @@ public class BeregnBarnebidragService {
 
     return sjablonMaksFradragListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.MAKS_FRADRAG.getNavn(),
@@ -897,7 +898,7 @@ public class BeregnBarnebidragService {
 
     return sjablonSamvaersfradragListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.SAMVAERSFRADRAG.getNavn(),
@@ -919,7 +920,7 @@ public class BeregnBarnebidragService {
 
     return sjablonBidragsevneListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.BIDRAGSEVNE.getNavn(),
@@ -939,7 +940,7 @@ public class BeregnBarnebidragService {
 
     return sjablonTrinnvisSkattesatsListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.TRINNVIS_SKATTESATS.getNavn(),
@@ -959,7 +960,7 @@ public class BeregnBarnebidragService {
 
     return sjablonBarnetilsynListe
         .stream()
-        .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(beregnDatoTil)) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
+        .filter(sjablon -> (sjablon.getDatoFom().isBefore(beregnDatoTil) && (!(sjablon.getDatoTom().isBefore(beregnDatoFra)))))
         .map(sjablon -> new SjablonPeriodeCore(
             new PeriodeCore(sjablon.getDatoFom(), sjablon.getDatoTom()),
             SjablonNavn.BARNETILSYN.getNavn(),

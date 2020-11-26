@@ -48,6 +48,8 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.FaktiskUtgift;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.FaktiskUtgiftPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ForpleiningUtgiftPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Inntekt;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntektBM;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntektBMPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntektBPBMGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.InntektPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Periode;
@@ -278,6 +280,14 @@ public class TestUtil {
 
   public static InntektBPBMGrunnlag byggInntektGrunnlagUtenInntektBMBelop() {
     return byggInntektGrunnlag("inntektBMBelop");
+  }
+
+  public static InntektBPBMGrunnlag byggInntektGrunnlagUtenInntektBMDeltFordel() {
+    return byggInntektGrunnlag("inntektBMDeltFordel");
+  }
+
+  public static InntektBPBMGrunnlag byggInntektGrunnlagUtenInntektBMSkatteklasse2() {
+    return byggInntektGrunnlag("inntektBMSkatteklasse2");
   }
 
 
@@ -623,6 +633,8 @@ public class TestUtil {
     var inntektBMDatoTil = (nullVerdi.equals("inntektBMDatoTil") ? null : LocalDate.parse("2020-01-01"));
     var inntektBMType = (nullVerdi.equals("inntektBMType") ? null : "INNTEKTSOPPL_ARBEIDSGIVER");
     var inntektBMBelop = (nullVerdi.equals("inntektBMBelop") ? null : BigDecimal.valueOf(100));
+    var inntektBMDeltFordel = (nullVerdi.equals("inntektBMDeltFordel") ? null : false);
+    var inntektBMSkatteklasse2 = (nullVerdi.equals("inntektBMSkatteklasse2") ? null : false);
 
     List<InntektPeriode> inntektBPPeriodeListe;
     if (nullVerdi.equals("inntektBPPeriodeListe")) {
@@ -637,18 +649,19 @@ public class TestUtil {
       inntektBPPeriodeListe = singletonList(inntektBPPeriode);
     }
 
-    List<InntektPeriode> inntektBMPeriodeListe;
+    List<InntektBMPeriode> inntektBMPeriodeListe;
     if (nullVerdi.equals("inntektBMPeriodeListe")) {
       inntektBMPeriodeListe = null;
     } else {
-      InntektPeriode inntektBMPeriode;
+      InntektBMPeriode inntektBMPeriode;
       if (nullVerdi.equals("inntektBMDatoFraTil")) {
-        inntektBMPeriode = new InntektPeriode(null, inntektBMType, inntektBMBelop, null);
+        inntektBMPeriode = new InntektBMPeriode(null, inntektBMType, inntektBMBelop, null, inntektBMDeltFordel, inntektBMSkatteklasse2);
       } else if (StringUtils.isNumeric(nullVerdi)) {
-        inntektBMPeriode = new InntektPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop,
-            Integer.parseInt(nullVerdi));
+        inntektBMPeriode = new InntektBMPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop,
+            Integer.parseInt(nullVerdi), inntektBMDeltFordel, inntektBMSkatteklasse2);
       } else {
-        inntektBMPeriode = new InntektPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop, null);
+        inntektBMPeriode = new InntektBMPeriode(new Periode(inntektBMDatoFra, inntektBMDatoTil), inntektBMType, inntektBMBelop, null,
+            inntektBMDeltFordel, inntektBMSkatteklasse2);
       }
       inntektBMPeriodeListe = singletonList(inntektBMPeriode);
     }
@@ -1011,7 +1024,7 @@ public class TestUtil {
             new ResultatBeregningBPAndelUnderholdskostnad(BigDecimal.valueOf(10), BigDecimal.valueOf(100), false),
             new ResultatGrunnlagBPAndelUnderholdskostnad(BigDecimal.valueOf(100),
                 singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
-                singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
+                singletonList(new InntektBM("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000), false, false)),
                 singletonList(new Inntekt("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
                 emptyList())));
     return new BeregnBPAndelUnderholdskostnadResultat(bidragPeriodeResultatListe);
@@ -1024,12 +1037,12 @@ public class TestUtil {
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatBeregningCore(BigDecimal.valueOf(10), BigDecimal.valueOf(100), false),
         new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatGrunnlagCore(BigDecimal.valueOf(100),
-            singletonList(
-                new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
-            singletonList(
-                new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
-            singletonList(
-                new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER", BigDecimal.valueOf(100000))),
+            singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER",
+                BigDecimal.valueOf(100000), false, false)),
+            singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER",
+                BigDecimal.valueOf(100000), false, false)),
+            singletonList(new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektCore("INNTEKTSOPPL_ARBEIDSGIVER",
+                BigDecimal.valueOf(100000), false, false)),
             emptyList())));
     return new BeregnBPsAndelUnderholdskostnadResultatCore(bidragPeriodeResultatListe, emptyList());
   }
@@ -1225,6 +1238,18 @@ public class TestUtil {
     sjablonSjablontallListe.add(new Sjablontall("0028", LocalDate.parse("2018-07-01"), LocalDate.parse("2019-06-30"), BigDecimal.valueOf(54750)));
     sjablonSjablontallListe.add(new Sjablontall("0028", LocalDate.parse("2019-07-01"), LocalDate.parse("2020-06-30"), BigDecimal.valueOf(56550)));
     sjablonSjablontallListe.add(new Sjablontall("0028", LocalDate.parse("2020-07-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(51300)));
+
+    sjablonSjablontallListe.add(new Sjablontall("0030", LocalDate.parse("2016-01-01"), LocalDate.parse("2016-12-31"), BigDecimal.valueOf(90850)));
+    sjablonSjablontallListe.add(new Sjablontall("0030", LocalDate.parse("2017-01-01"), LocalDate.parse("2017-12-31"), BigDecimal.valueOf(94850)));
+    sjablonSjablontallListe.add(new Sjablontall("0030", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-12-31"), BigDecimal.valueOf(99540)));
+    sjablonSjablontallListe.add(new Sjablontall("0030", LocalDate.parse("2019-01-01"), LocalDate.parse("2019-12-31"), BigDecimal.valueOf(102820)));
+    sjablonSjablontallListe.add(new Sjablontall("0030", LocalDate.parse("2020-01-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(93273)));
+
+    sjablonSjablontallListe.add(new Sjablontall("0031", LocalDate.parse("2016-01-01"), LocalDate.parse("2016-12-31"), BigDecimal.valueOf(112350)));
+    sjablonSjablontallListe.add(new Sjablontall("0031", LocalDate.parse("2017-01-01"), LocalDate.parse("2017-12-31"), BigDecimal.valueOf(117350)));
+    sjablonSjablontallListe.add(new Sjablontall("0031", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-12-31"), BigDecimal.valueOf(99540)));
+    sjablonSjablontallListe.add(new Sjablontall("0031", LocalDate.parse("2019-01-01"), LocalDate.parse("2019-12-31"), BigDecimal.valueOf(102820)));
+    sjablonSjablontallListe.add(new Sjablontall("0031", LocalDate.parse("2020-01-01"), LocalDate.parse("9999-12-31"), BigDecimal.valueOf(93273)));
 
     sjablonSjablontallListe.add(new Sjablontall("0039", LocalDate.parse("2016-01-01"), LocalDate.parse("2016-12-31"), BigDecimal.valueOf(13505)));
     sjablonSjablontallListe.add(new Sjablontall("0039", LocalDate.parse("2017-01-01"), LocalDate.parse("2017-12-31"), BigDecimal.valueOf(13298)));
