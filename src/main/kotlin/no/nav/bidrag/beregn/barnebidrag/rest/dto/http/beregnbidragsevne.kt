@@ -52,7 +52,7 @@ data class BostatusPeriode(
 @ApiModel(value = "Antall barn i bidragspliktiges hushold")
 data class AntallBarnIEgetHusholdPeriode(
     @ApiModelProperty(value = "Antall barn i bidragspliktiges hushold fra-til-dato") var antallBarnIEgetHusholdDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Antall barn i bidragspliktiges husholde") var antallBarn: Int? = null
+    @ApiModelProperty(value = "Antall barn i bidragspliktiges husholde") var antallBarn: BigDecimal? = null
 ) {
 
   fun tilCore() = AntallBarnIEgetHusholdPeriodeCore(
@@ -118,7 +118,7 @@ data class ResultatGrunnlagBidragsevne(
     @ApiModelProperty(value = "Liste over bidragspliktiges inntekter") var inntektListe: List<Inntekt> = emptyList(),
     @ApiModelProperty(value = "Bidragspliktiges skatteklasse") var skatteklasse: Int = 0,
     @ApiModelProperty(value = "Bidragspliktiges bostatuskode") var bostatusKode: String,
-    @ApiModelProperty(value = "Antall egne barn i bidragspliktiges husstand") var antallEgneBarnIHusstand: Int = 0,
+    @ApiModelProperty(value = "Antall egne barn i bidragspliktiges husstand") var antallEgneBarnIHusstand: BigDecimal = BigDecimal.ZERO,
     @ApiModelProperty(value = "Bidragspliktiges særfradragkode") var saerfradragKode: String,
     @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
