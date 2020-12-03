@@ -63,6 +63,33 @@ class SjablonConsumerTest {
   }
 
   @Test
+  @DisplayName("Skal hente liste av Samvaersfradrag-sjabloner når respons fra tjenesten er OK")
+  void skalHenteListeAvSamvaersfradragSjablonerNaarResponsFraTjenestenErOk() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Samvaersfradrag>>) any()))
+        .thenReturn(new ResponseEntity<>(TestUtil.dummySjablonSamvaersfradragListe(), HttpStatus.OK));
+    var sjablonResponse = sjablonConsumer.hentSjablonSamvaersfradrag();
+
+    assertAll(
+        () -> assertThat(sjablonResponse).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody()).isNotNull(),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().size()).isEqualTo(TestUtil.dummySjablonSamvaersfradragListe().size()),
+        () -> assertThat(sjablonResponse.getResponseEntity().getBody().get(0).getBelopFradrag())
+            .isEqualTo(TestUtil.dummySjablonSamvaersfradragListe().get(0).getBelopFradrag())
+    );
+  }
+
+  @Test
+  @DisplayName("Skal kaste SjablonConsumerException når respons fra tjenesten ikke er OK for Samvaersfradrag")
+  void skalKasteRestClientExceptionNaarResponsFraTjenestenIkkeErOkForSamvaersfradrag() {
+    when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Samvaersfradrag>>) any()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+    assertThatExceptionOfType(SjablonConsumerException.class).isThrownBy(() -> sjablonConsumer.hentSjablonSamvaersfradrag());
+  }
+
+  @Test
   @DisplayName("Skal hente liste av Forbruksutgifter-sjabloner når respons fra tjenesten er OK")
   void skalHenteListeAvForbruksutgifterSjablonerNaarResponsFraTjenestenErOk() {
     when(restTemplateMock.exchange(anyString(), eq(HttpMethod.GET), eq(null), (ParameterizedTypeReference<List<Forbruksutgifter>>) any()))
