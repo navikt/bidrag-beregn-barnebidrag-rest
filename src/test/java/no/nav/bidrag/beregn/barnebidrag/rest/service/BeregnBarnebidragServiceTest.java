@@ -227,14 +227,14 @@ class BeregnBarnebidragServiceTest {
             .filter(sjablonPeriodeCore -> sjablonPeriodeCore.getSjablonNavn().equals(SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn())).count())
             .isEqualTo(TestUtil.dummySjablonSjablontallListe().stream()
                 .filter(sjablontall -> sjablontall.getTypeSjablon().equals("0001"))
-                .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(LocalDate.parse("2020-01-01")) && (!(sjablon.getDatoTom()
-                    .isBefore(LocalDate.parse("2017-01-01"))))))).count()),
+                .filter(sjablon -> ((!(sjablon.getDatoFom().isAfter(LocalDate.parse("2020-01-01")))) && (!(sjablon.getDatoTom()
+                    .isBefore(LocalDate.parse("2017-01-01")))))).count()),
 
         // Sjekk at det mappes ut riktig antall sjabloner av type Forbruksutgifter
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().stream()
             .filter(sjablonPeriodeCore -> sjablonPeriodeCore.getSjablonNavn().equals(SjablonNavn.FORBRUKSUTGIFTER.getNavn())).count())
             .isEqualTo(TestUtil.dummySjablonForbruksutgifterListe().stream()
-                .filter(sjablon -> (!(sjablon.getDatoFom().isAfter(LocalDate.parse("2020-01-01"))) && (!(sjablon.getDatoTom()
+                .filter(sjablon -> ((!(sjablon.getDatoFom().isAfter(LocalDate.parse("2020-01-01")))) && (!(sjablon.getDatoTom()
                     .isBefore(LocalDate.parse("2017-01-01")))))).count()),
 
         // Sjekk at det mappes ut riktig verdi for en gitt sjablon av type Sjablontall

@@ -9,7 +9,7 @@ import java.time.LocalDate
 @ApiModel(value = "Grunnlagsdata for søknadsbarn")
 data class SoknadsbarnGrunnlag(
     @ApiModelProperty(
-        value = "Periodeisert liste over søknadsbarn") val soknadsbarnListe: List<Soknadsbarn>? = null
+        value = "Periodisert liste over søknadsbarn") val soknadsbarnListe: List<Soknadsbarn>? = null
 )
 
 @ApiModel(value = "Søknadsbarn")

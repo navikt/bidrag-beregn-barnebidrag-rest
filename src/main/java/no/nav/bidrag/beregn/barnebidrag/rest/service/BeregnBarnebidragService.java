@@ -213,17 +213,17 @@ public class BeregnBarnebidragService {
       BeregnUnderholdskostnadResultatCore underholdskostnadResultatFraCore, SjablonListe sjablonListe) {
 
     // Bygger opp liste med grunnlag for hvert søknadsbarn
-    var bPAndelUnderholdskostnadGrunnlagTilCoreListe = new ArrayList<BeregnBPsAndelUnderholdskostnadGrunnlagCore>();
+    var bpAndelUnderholdskostnadGrunnlagTilCoreListe = new ArrayList<BeregnBPsAndelUnderholdskostnadGrunnlagCore>();
     beregnTotalBarnebidragGrunnlag.getSoknadsbarnGrunnlag().getSoknadsbarnListe()
-        .forEach(soknadsbarn -> bPAndelUnderholdskostnadGrunnlagTilCoreListe
+        .forEach(soknadsbarn -> bpAndelUnderholdskostnadGrunnlagTilCoreListe
             .add(byggBPAndelUnderholdskostnadGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, soknadsbarn.getSoknadsbarnPersonId(), sjablontallMap,
                 underholdskostnadResultatFraCore, sjablonListe)));
 
     // Kaller beregning for hvert søknadsbarn
     var resultatBPAndelUnderholdskostnadListe = new ArrayList<no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore>();
-    bPAndelUnderholdskostnadGrunnlagTilCoreListe
-        .forEach(bPAndelUnderholdskostnadGrunnlagTilCore -> resultatBPAndelUnderholdskostnadListe
-            .addAll(beregnBPsAndelUnderholdskostnad(bPAndelUnderholdskostnadGrunnlagTilCore)));
+    bpAndelUnderholdskostnadGrunnlagTilCoreListe
+        .forEach(bpAndelUnderholdskostnadGrunnlagTilCore -> resultatBPAndelUnderholdskostnadListe
+            .addAll(beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore)));
 
     return new BeregnBPsAndelUnderholdskostnadResultatCore(resultatBPAndelUnderholdskostnadListe, emptyList());
   }
@@ -495,7 +495,7 @@ public class BeregnBarnebidragService {
             .collect(toList());
 
     // Løp gjennom output fra beregning av BPs andel av underholdskostnad og bygg opp ny input-liste til core
-    var bPAndelUnderholdskostnadPeriodeCoreListe =
+    var bpAndelUnderholdskostnadPeriodeCoreListe =
         bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe()
             .stream()
             .filter(resultat -> resultat.getSoknadsbarnPersonId() == soknadsbarnPersonId)
@@ -522,7 +522,7 @@ public class BeregnBarnebidragService {
         beregnTotalBarnebidragGrunnlag.getBeregnDatoTil(),
         soknadsbarnPersonId,
         underholdskostnadPeriodeCoreListe,
-        bPAndelUnderholdskostnadPeriodeCoreListe,
+        bpAndelUnderholdskostnadPeriodeCoreListe,
         samvaersfradragPeriodeCoreListe
     );
   }
@@ -544,7 +544,7 @@ public class BeregnBarnebidragService {
             .collect(toList());
 
     // Løp gjennom output fra beregning av BPs andel underholdskostnad og bygg opp ny input-liste til core
-    var bPAndelUnderholdskostnadPeriodeCoreListe =
+    var bpAndelUnderholdskostnadPeriodeCoreListe =
         bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe()
             .stream()
             .map(resultat -> new no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadPeriodeCore(
@@ -571,7 +571,7 @@ public class BeregnBarnebidragService {
         beregnTotalBarnebidragGrunnlag, sjablontallMap);
 
     // Bygg grunnlag for beregning av barnebidrag. Her gjøres også kontroll av inputdata
-    return beregnTotalBarnebidragGrunnlag.barnebidragTilCore(bidragsevnePeriodeCoreListe, bPAndelUnderholdskostnadPeriodeCoreListe,
+    return beregnTotalBarnebidragGrunnlag.barnebidragTilCore(bidragsevnePeriodeCoreListe, bpAndelUnderholdskostnadPeriodeCoreListe,
         samvaersfradragPeriodeCoreListe, sjablonPeriodeCoreListe);
   }
 

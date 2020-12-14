@@ -393,8 +393,8 @@ class DtoTest {
   }
 
   @Test
-  @DisplayName("Skal ikke kaste exception når skatteklasseDatoTil er null")
-  void skalIkkeKasteExceptionNaarBESkatteklasseDatoTilErNull() {
+  @DisplayName("Skal kaste IllegalArgumentException når skatteklasseDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBESkatteklasseDatoTilErNull() {
     var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSkatteklasseDatoTil().getSkatteklassePeriodeListe();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
         .withMessage("skatteklasseDatoTil kan ikke være null");
@@ -425,8 +425,8 @@ class DtoTest {
   }
 
   @Test
-  @DisplayName("Skal ikke kaste exception når bostatusDatoTil er null")
-  void skalIkkeKasteExceptionNaarBEBostatusDatoTilErNull() {
+  @DisplayName("Skal kaste IllegalArgumentException når bostatusDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBEBostatusDatoTilErNull() {
     var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenBostatusDatoTil().getBostatusPeriodeListe();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
         .withMessage("bostatusDatoTil kan ikke være null");
@@ -457,8 +457,8 @@ class DtoTest {
   }
 
   @Test
-  @DisplayName("Skal ikke kaste exception når antallBarnIEgetHusholdDatoTil er null")
-  void skalIkkeKasteExceptionNaarBEAntallBarnIEgetHusholdDatoTilErNull() {
+  @DisplayName("Skal kaste IllegalArgumentException når antallBarnIEgetHusholdDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBEAntallBarnIEgetHusholdDatoTilErNull() {
     var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenAntallBarnIEgetHusholdDatoTil().getAntallBarnIEgetHusholdPeriodeListe();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
         .withMessage("antallBarnIEgetHusholdDatoTil kan ikke være null");
@@ -489,8 +489,8 @@ class DtoTest {
   }
 
   @Test
-  @DisplayName("Skal ikke kaste exception når saerfradragDatoTil er null")
-  void skalIkkeKasteExceptionNaarBESaerfradragDatoTilErNull() {
+  @DisplayName("Skal kaste IllegalArgumentException når saerfradragDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBESaerfradragDatoTilErNull() {
     var grunnlag = TestUtil.byggBidragsevneGrunnlagUtenSaerfradragDatoTil().getSaerfradragPeriodeListe();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
         .withMessage("saerfradragDatoTil kan ikke være null");
