@@ -122,14 +122,14 @@ data class BeregnTotalBarnebidragGrunnlag(
 
 
   fun barnebidragTilCore(
-      bidragsevnePeriodeListe: List<BidragsevnePeriodeCore>, bPAndelUnderholdskostnadPeriodeListe: List<BPsAndelUnderholdskostnadPeriodeCore>,
+      bidragsevnePeriodeListe: List<BidragsevnePeriodeCore>, bpAndelUnderholdskostnadPeriodeListe: List<BPsAndelUnderholdskostnadPeriodeCore>,
       samvaersfradragPeriodeListe: List<SamvaersfradragPeriodeCore>, sjablonPeriodeListe: List<SjablonPeriodeCore>) = BeregnBarnebidragGrunnlagCore(
 
       beregnDatoFra = beregnDatoFra!!,
       beregnDatoTil = beregnDatoTil!!,
 
       bidragsevnePeriodeListe = bidragsevnePeriodeListe,
-      bPsAndelUnderholdskostnadPeriodeListe = bPAndelUnderholdskostnadPeriodeListe,
+      bPsAndelUnderholdskostnadPeriodeListe = bpAndelUnderholdskostnadPeriodeListe,
       samvaersfradragPeriodeListe = samvaersfradragPeriodeListe,
 
       deltBostedPeriodeListe =

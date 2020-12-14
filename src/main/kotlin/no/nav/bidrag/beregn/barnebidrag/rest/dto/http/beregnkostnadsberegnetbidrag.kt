@@ -49,13 +49,13 @@ data class ResultatBeregningKostnadsberegnetBidrag(
 @ApiModel(value = "Grunnlaget for beregning av kostnadsberegnet bidrag")
 data class ResultatGrunnlagKostnadsberegnetBidrag(
     @ApiModelProperty(value = "Beløp underholdskostnad") var underholdskostnadBelop: BigDecimal = BigDecimal.ZERO,
-    @ApiModelProperty(value = "BPs andel underholdskostnad prosent") var bPAndelUnderholdskostnadProsent: BigDecimal = BigDecimal.ZERO,
+    @ApiModelProperty(value = "BPs andel underholdskostnad prosent") var bpAndelUnderholdskostnadProsent: BigDecimal = BigDecimal.ZERO,
     @ApiModelProperty(value = "Beløp samværsfradrag") var samvaersfradragBelop: BigDecimal? = BigDecimal.ZERO
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
       underholdskostnadBelop = resultatGrunnlag.underholdskostnadBelop,
-      bPAndelUnderholdskostnadProsent = resultatGrunnlag.bPsAndelUnderholdskostnadProsent,
+      bpAndelUnderholdskostnadProsent = resultatGrunnlag.bPsAndelUnderholdskostnadProsent,
       samvaersfradragBelop = resultatGrunnlag.samvaersfradragBelop
   )
 }

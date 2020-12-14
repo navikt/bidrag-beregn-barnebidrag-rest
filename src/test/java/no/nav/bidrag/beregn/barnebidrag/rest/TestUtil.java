@@ -387,7 +387,7 @@ public class TestUtil {
   }
 
 
-  //Underholdskostnad
+  // Underholdskostnad
   public static BeregnBMUnderholdskostnadGrunnlag byggUnderholdskostnadGrunnlag() {
     return byggUnderholdskostnadGrunnlag("");
   }
@@ -463,7 +463,7 @@ public class TestUtil {
   }
 
 
-  //Barnebidrag
+  // Barnebidrag
   public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlag() {
     return byggBarnebidragGrunnlag("");
   }
