@@ -59,7 +59,7 @@ data class InntektBMPeriode(
 // Resultat
 @ApiModel(value = "Inntekttype og -beløp")
 data class Inntekt(
-    @ApiModelProperty(value = "Inntekt type") var inntektType: String,
+    @ApiModelProperty(value = "Inntekt type") var inntektType: String = "",
     @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
@@ -76,7 +76,7 @@ data class Inntekt(
 
 @ApiModel(value = "Inntekt bidragsmottaker")
 data class InntektBM(
-    @ApiModelProperty(value = "Inntekt type") var inntektType: String,
+    @ApiModelProperty(value = "Inntekt type") var inntektType: String = "",
     @ApiModelProperty(value = "Inntekt beløp") var inntektBelop: BigDecimal = BigDecimal.ZERO,
     @ApiModelProperty(value = "Delt fordel (utvidet barnetrygd)") var deltFordel: Boolean = false,
     @ApiModelProperty(value = "Skatteklasse 2") var skatteklasse2: Boolean = false

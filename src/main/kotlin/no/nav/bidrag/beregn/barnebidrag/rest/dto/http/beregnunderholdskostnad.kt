@@ -67,9 +67,9 @@ data class BeregnBMUnderholdskostnadResultat(
 @ApiModel(value = "Resultatet av beregning av underholdskostnad for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeUnderholdskostnad(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningUnderholdskostnad,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagUnderholdskostnad
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningUnderholdskostnad = ResultatBeregningUnderholdskostnad(),
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagUnderholdskostnad = ResultatGrunnlagUnderholdskostnad()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -93,11 +93,11 @@ data class ResultatBeregningUnderholdskostnad(
 @ApiModel(value = "Grunnlaget for beregning av underholdskostnad")
 data class ResultatGrunnlagUnderholdskostnad(
     @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
-    @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String,
-    @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String,
+    @ApiModelProperty(value = "Barnetilsyn med stønad - tilsyn-type") var barnetilsynMedStonadTilsynType: String = "",
+    @ApiModelProperty(value = "Barnetilsyn med stønad - stønad-type") var barnetilsynMedStonadStonadType: String = "",
     @ApiModelProperty(value = "Faktisk utgift barnetilsyn - netto-beløp") var nettoBarnetilsynBelop: BigDecimal = BigDecimal.ZERO,
     @ApiModelProperty(value = "Utgift forpleining - beløp") var forpleiningUtgiftBelop: BigDecimal = BigDecimal.ZERO,
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(

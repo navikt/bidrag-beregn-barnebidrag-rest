@@ -159,13 +159,18 @@ data class BeregnTotalBarnebidragGrunnlag(
 // Resultat
 @ApiModel(value = "Resultatet av en total barnebidragsberegning")
 data class BeregnTotalBarnebidragResultat(
-    @ApiModelProperty(value = "Beregn BP bidragsevne resultat") var beregnBPBidragsevneResultat: BeregnBPBidragsevneResultat,
-    @ApiModelProperty(value = "Beregn BM netto barnetilsyn resultat") var beregnBMNettoBarnetilsynResultat: BeregnBMNettoBarnetilsynResultat,
-    @ApiModelProperty(value = "Beregn BM underholdskostnad resultat") var beregnBMUnderholdskostnadResultat: BeregnBMUnderholdskostnadResultat,
-    @ApiModelProperty(
-        value = "Beregn BP andel av underholdskostnad resultat") var beregnBPAndelUnderholdskostnadResultat: BeregnBPAndelUnderholdskostnadResultat,
-    @ApiModelProperty(value = "Beregn BP samværsfradrag resultat") var beregnBPSamvaersfradragResultat: BeregnBPSamvaersfradragResultat,
-    @ApiModelProperty(
-        value = "Beregn BP kostnadsberegnet bidrag resultat") var beregnBPKostnadsberegnetBidragResultat: BeregnBPKostnadsberegnetBidragResultat,
-    @ApiModelProperty(value = "Beregn barnebidrag resultat") var beregnBarnebidragResultat: BeregnBarnebidragResultat
+    @ApiModelProperty(value = "Beregn BP bidragsevne resultat") var beregnBPBidragsevneResultat: BeregnBPBidragsevneResultat =
+        BeregnBPBidragsevneResultat(),
+    @ApiModelProperty(value = "Beregn BM netto barnetilsyn resultat") var beregnBMNettoBarnetilsynResultat: BeregnBMNettoBarnetilsynResultat =
+        BeregnBMNettoBarnetilsynResultat(),
+    @ApiModelProperty(value = "Beregn BM underholdskostnad resultat") var beregnBMUnderholdskostnadResultat: BeregnBMUnderholdskostnadResultat =
+        BeregnBMUnderholdskostnadResultat(),
+    @ApiModelProperty(value = "Beregn BP andel av underholdskostnad resultat") var beregnBPAndelUnderholdskostnadResultat: BeregnBPAndelUnderholdskostnadResultat =
+        BeregnBPAndelUnderholdskostnadResultat(),
+    @ApiModelProperty(value = "Beregn BP samværsfradrag resultat") var beregnBPSamvaersfradragResultat: BeregnBPSamvaersfradragResultat =
+        BeregnBPSamvaersfradragResultat(),
+    @ApiModelProperty(value = "Beregn BP kostnadsberegnet bidrag resultat") var beregnBPKostnadsberegnetBidragResultat: BeregnBPKostnadsberegnetBidragResultat =
+        BeregnBPKostnadsberegnetBidragResultat(),
+    @ApiModelProperty(value = "Beregn barnebidrag resultat") var beregnBarnebidragResultat: BeregnBarnebidragResultat =
+        BeregnBarnebidragResultat()
 )

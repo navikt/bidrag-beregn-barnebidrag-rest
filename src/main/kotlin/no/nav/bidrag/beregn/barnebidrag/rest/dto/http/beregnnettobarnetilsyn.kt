@@ -53,9 +53,9 @@ data class BeregnBMNettoBarnetilsynResultat(
 
 @ApiModel(value = "Resultatet av beregning av netto barnetilsyn for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeNettoBarnetilsyn(
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
     @ApiModelProperty(value = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningNettoBarnetilsyn> = emptyList(),
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagNettoBarnetilsyn
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagNettoBarnetilsyn = ResultatGrunnlagNettoBarnetilsyn()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -80,7 +80,7 @@ data class ResultatBeregningNettoBarnetilsyn(
 @ApiModel(value = "Grunnlaget for beregning av netto barnetilsyn")
 data class ResultatGrunnlagNettoBarnetilsyn(
     @ApiModelProperty(value = "Liste over faktiske utgifter") var faktiskUtgiftListe: List<FaktiskUtgift> = emptyList(),
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
