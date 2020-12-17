@@ -23,9 +23,9 @@ data class BeregnBPAndelUnderholdskostnadResultat(
 @ApiModel(value = "Resultatet av beregning av BPs andel av underholdskostnad for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeBPAndelUnderholdskostnad(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningBPAndelUnderholdskostnad,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagBPAndelUnderholdskostnad
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningBPAndelUnderholdskostnad = ResultatBeregningBPAndelUnderholdskostnad(),
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagBPAndelUnderholdskostnad = ResultatGrunnlagBPAndelUnderholdskostnad()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -56,7 +56,7 @@ data class ResultatGrunnlagBPAndelUnderholdskostnad(
     @ApiModelProperty(value = "Liste over bidragspliktiges inntekter") var inntektBPListe: List<Inntekt> = emptyList(),
     @ApiModelProperty(value = "Liste over bidragsmottakers inntekter") var inntektBMListe: List<InntektBM> = emptyList(),
     @ApiModelProperty(value = "Liste over søknadsbarnets inntekter") var inntektSBListe: List<Inntekt> = emptyList(),
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(

@@ -23,9 +23,9 @@ data class BeregnBPKostnadsberegnetBidragResultat(
 @ApiModel(value = "Resultatet av beregning av kostnadsberegnet bidrag for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeKostnadsberegnetBidrag(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningKostnadsberegnetBidrag,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagKostnadsberegnetBidrag
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningKostnadsberegnetBidrag = ResultatBeregningKostnadsberegnetBidrag(),
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagKostnadsberegnetBidrag = ResultatGrunnlagKostnadsberegnetBidrag()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(

@@ -48,9 +48,9 @@ data class BeregnBPSamvaersfradragResultat(
 @ApiModel(value = "Resultatet av beregning av samværsfradrag for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeSamvaersfradrag(
     @ApiModelProperty(value = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
-    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode,
-    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningSamvaersfradrag,
-    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagSamvaersfradrag
+    @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
+    @ApiModelProperty(value = "Beregning resultat innhold") var resultatBeregning: ResultatBeregningSamvaersfradrag = ResultatBeregningSamvaersfradrag(),
+    @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagSamvaersfradrag = ResultatGrunnlagSamvaersfradrag()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -74,8 +74,8 @@ data class ResultatBeregningSamvaersfradrag(
 @ApiModel(value = "Grunnlaget for beregning av samværsfradrag")
 data class ResultatGrunnlagSamvaersfradrag(
     @ApiModelProperty(value = "Søknadsbarnets alder") var soknadsbarnAlder: Int = 0,
-    @ApiModelProperty(value = "Samværsklasse Id") var samvaersklasseId: String,
-    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon>
+    @ApiModelProperty(value = "Samværsklasse Id") var samvaersklasseId: String = "",
+    @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: ResultatGrunnlagCore) : this(
