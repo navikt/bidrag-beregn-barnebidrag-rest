@@ -40,7 +40,14 @@ public class BeregnBarnebidragControllerIntegrationTest {
   @DisplayName("skal kalle core og returnere en respons")
   void skalKalleCore() {
 
-    // Wiremock mot sjablon barnetilsyn
+    // Wiremock mot sjablon-tjenestene
+    sjablonApiStub.hentSjablonSjablontallStub();
+    sjablonApiStub.hentSjablonForbruksutgifterStub();
+    sjablonApiStub.hentSjablonMaksTilsynStub();
+    sjablonApiStub.hentSjablonMaksFradragStub();
+    sjablonApiStub.hentSjablonSamvaersfradragStub();
+    sjablonApiStub.hentSjablonBidragsevneStub();
+    sjablonApiStub.hentSjablonTrinnvisSkattesatsStub();
     sjablonApiStub.hentSjablonBarnetilsynStub();
 
     // Les inn fil med request-data (json)
@@ -56,10 +63,19 @@ public class BeregnBarnebidragControllerIntegrationTest {
 
     // Kall rest-API for barnebidrag
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
+    var totalBarnebidragResultat = responseEntity.getBody();
 
     assertAll(
-        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK)
-    );
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
+
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop().doubleValue()).isEqualTo(3490d),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("KOSTNADSBEREGNET_BIDRAG")
+        );
   }
 
   private <T> HttpEntity<T> initHttpEntity(T body) {

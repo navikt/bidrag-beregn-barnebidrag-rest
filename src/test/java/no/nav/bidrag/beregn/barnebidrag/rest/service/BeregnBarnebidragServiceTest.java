@@ -158,13 +158,13 @@ class BeregnBarnebidragServiceTest {
     // Bidragsevne: Sjablontall (0004, 0017, 0019, 0023, 0025, 0027, 0028, 0039, 0040) + Bidragsevne + TrinnvisSkattesats
     var forventetAntallSjablonElementerBidragsevne = 25 + 8 + 8;
     // NettoBarnetilsyn: Sjablontall (0015) + MaksFradrag + MaksTilsyn
-    var forventetAntallSjablonElementerNettoBarnetilsyn = 3 + 2 + 4;
+    var forventetAntallSjablonElementerNettoBarnetilsyn = 3 + 9 + 6;
     // Underholdskostnad: Sjablontall (0001, 0003, 0041) + Forbruksutgifter + Barnetilsyn
-    var forventetAntallSjablonElementerUnderholdskostnad = 6 + 8 + 12;
+    var forventetAntallSjablonElementerUnderholdskostnad = 6 + 20 + 12;
     // BPsAndelUnderholdskostnad: Sjablontall (0004, 0005, 0030, 0031, 0039)
     var forventetAntallSjablonElementerBPsAndelUnderholdskostnad = 14;
     // Samvaersfradrag: Samvaersfradrag
-    var forventetAntallSjablonElementerSamvaersfradrag = 8;
+    var forventetAntallSjablonElementerSamvaersfradrag = 81;
     // Barnebidrag: Sjablontall (0021, 0022)
     var forventetAntallSjablonElementerBarnebidrag = 6;
 
