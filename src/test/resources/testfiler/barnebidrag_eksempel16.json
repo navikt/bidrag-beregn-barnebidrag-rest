@@ -1,0 +1,175 @@
+{
+  "beregnDatoFra": "2020-08-01",
+  "beregnDatoTil": "2021-01-01",
+  "soknadsbarnGrunnlag": {
+    "soknadsbarnListe": [
+      {
+        "inntektPeriodeListe": [
+          {
+            "inntektBelop": 0,
+            "inntektDatoFraTil": {
+              "periodeDatoFra": "2020-08-01",
+              "periodeDatoTil": "2021-01-01"
+            },
+            "inntektType": "INNTEKTSOPPLYSNINGER_ARBEIDSGIVER"
+          }
+        ],
+        "soknadsbarnFodselsdato": "2006-01-01",
+        "soknadsbarnPersonId": 1
+      }
+    ]
+  },
+  "inntektBPBMGrunnlag": {
+    "inntektBMPeriodeListe": [
+      {
+        "inntektBelop": 400000,
+        "inntektDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "inntektType": "INNTEKTSOPPLYSNINGER_ARBEIDSGIVER",
+        "soknadsbarnPersonId": null,
+        "deltFordel": false,
+        "skatteklasse2": false
+      }
+    ],
+    "inntektBPPeriodeListe": [
+      {
+        "inntektBelop": 600000,
+        "inntektDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "inntektType": "INNTEKTSOPPLYSNINGER_ARBEIDSGIVER"
+      }
+    ]
+  },
+  "beregnBPBidragsevneGrunnlag": {
+    "antallBarnIEgetHusholdPeriodeListe": [
+      {
+        "antallBarn": 0,
+        "antallBarnIEgetHusholdDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        }
+      }
+    ],
+    "bostatusPeriodeListe": [
+      {
+        "bostatusDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "bostatusKode": "ALENE"
+      }
+    ],
+    "saerfradragPeriodeListe": [
+      {
+        "saerfradragDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "saerfradragKode": "INGEN"
+      }
+    ],
+    "skatteklassePeriodeListe": [
+      {
+        "skatteklasseDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "skatteklasseId": 1
+      }
+    ]
+  },
+  "beregnBMNettoBarnetilsynGrunnlag": {
+    "faktiskUtgiftPeriodeListe": [
+      {
+        "faktiskUtgiftBelop": 0,
+        "faktiskUtgiftDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "faktiskUtgiftSoknadsbarnPersonId": 1
+      }
+    ]
+  },
+  "beregnBMUnderholdskostnadGrunnlag": {
+    "barnetilsynMedStonadPeriodeListe": [
+      {
+        "barnetilsynMedStonadDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "barnetilsynMedStonadSoknadsbarnPersonId": 1,
+        "barnetilsynMedStonadStonadType": "XX",
+        "barnetilsynMedStonadTilsynType": "XX"
+      }
+    ],
+    "forpleiningUtgiftPeriodeListe": [
+      {
+        "forpleiningUtgiftBelop": 0,
+        "forpleiningUtgiftDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "forpleiningUtgiftSoknadsbarnPersonId": 1
+      }
+    ]
+  },
+  "beregnBPSamvaersfradragGrunnlag": {
+    "samvaersklassePeriodeListe": [
+      {
+        "samvaersklasseDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "samvaersklasseId": "01",
+        "samvaersklasseSoknadsbarnPersonId": 1
+      }
+    ]
+  },
+  "beregnBarnebidragGrunnlag": {
+    "barnetilleggBMPeriodeListe": [
+      {
+        "barnetilleggBruttoBelop": 4000,
+        "barnetilleggDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "barnetilleggSkattProsent": 10,
+        "barnetilleggSoknadsbarnPersonId": 1
+      }
+    ],
+    "barnetilleggBPPeriodeListe": [
+      {
+        "barnetilleggBruttoBelop": 6000,
+        "barnetilleggDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "barnetilleggSkattProsent": 10,
+        "barnetilleggSoknadsbarnPersonId": 1
+      }
+    ],
+    "barnetilleggForsvaretBPPeriodeListe": [
+      {
+        "barnetilleggForsvaretDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "barnetilleggForsvaretIPeriode": false
+      }
+    ],
+    "deltBostedBPPeriodeListe": [
+      {
+        "deltBostedDatoFraTil": {
+          "periodeDatoFra": "2020-08-01",
+          "periodeDatoTil": "2021-01-01"
+        },
+        "deltBostedIPeriode": false,
+        "deltBostedSoknadsbarnPersonId": 1
+      }
+    ]
+  }
+}

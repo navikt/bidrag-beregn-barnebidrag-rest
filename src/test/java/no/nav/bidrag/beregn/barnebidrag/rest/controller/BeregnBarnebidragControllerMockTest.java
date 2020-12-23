@@ -32,7 +32,7 @@ import org.springframework.http.HttpMethod;
 
 @DisplayName("BeregnBarnebidragControllerTest")
 @SpringBootTest(classes = BidragBeregnBarnebidragLocal.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-class BeregnBarnebidragControllerTest {
+class BeregnBarnebidragControllerMockTest {
 
   @Autowired
   private HttpHeaderTestRestTemplate httpHeaderTestRestTemplate;

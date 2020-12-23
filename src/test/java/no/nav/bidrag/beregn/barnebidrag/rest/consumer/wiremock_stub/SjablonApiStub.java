@@ -1,4 +1,4 @@
-package no.nav.bidrag.beregn.barnebidrag.rest.controller;
+package no.nav.bidrag.beregn.barnebidrag.rest.consumer.wiremock_stub;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -12,7 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class SjablonApiStub {
 
-  public void hentSjablonSjablontallStub() {
+  public void settOppSjablonStub() {
+    settOppSjablonSjablontallStub();
+    settOppSjablonForbruksutgifterStub();
+    settOppSjablonMaksTilsynStub();
+    settOppSjablonMaksFradragStub();
+    settOppSjablonSamvaersfradragStub();
+    settOppSjablonBidragsevneStub();
+    settOppSjablonTrinnvisSkattesatsStub();
+    settOppSjablonBarnetilsynStub();
+  }
+
+  private void settOppSjablonSjablontallStub() {
     var url = "/bidrag-sjablon/sjablontall/all";
 
     stubFor(
@@ -152,7 +163,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonForbruksutgifterStub() {
+  private void settOppSjablonForbruksutgifterStub() {
     var url = "/bidrag-sjablon/forbruksutgifter/all";
 
     stubFor(
@@ -216,7 +227,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonMaksTilsynStub() {
+  private void settOppSjablonMaksTilsynStub() {
     var url = "/bidrag-sjablon/makstilsyn/all";
 
     stubFor(
@@ -251,7 +262,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonMaksFradragStub() {
+  private void settOppSjablonMaksFradragStub() {
     var url = "/bidrag-sjablon/maksfradrag/all";
 
     stubFor(
@@ -328,7 +339,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonSamvaersfradragStub() {
+  private void settOppSjablonSamvaersfradragStub() {
     var url = "/bidrag-sjablon/samvaersfradrag/all";
 
     stubFor(
@@ -552,7 +563,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonBidragsevneStub() {
+  private void settOppSjablonBidragsevneStub() {
     var url = "/bidrag-sjablon/bidragsevner/all";
 
     stubFor(
@@ -582,7 +593,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonTrinnvisSkattesatsStub() {
+  private void settOppSjablonTrinnvisSkattesatsStub() {
     var url = "/bidrag-sjablon/trinnvisskattesats/all";
 
     stubFor(
@@ -624,7 +635,7 @@ public class SjablonApiStub {
                                 + "\"tidspktEndret\": \"2020-05-17T14:15:49.233\"}]"))));
   }
 
-  public void hentSjablonBarnetilsynStub() {
+  private void settOppSjablonBarnetilsynStub() {
     var url = "/bidrag-sjablon/barnetilsyn/all";
 
     stubFor(

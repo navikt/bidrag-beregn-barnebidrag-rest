@@ -22,7 +22,3 @@ wiremock.server:
 # Profil for integrasjonstest
 spring.profiles: integrationtest
 SJABLON_URL: http://localhost:8096/bidrag-sjablon
-
-wiremock.server:
-  files: classpath:/__files
-  stubs: classpath:/wiremock_stubs
