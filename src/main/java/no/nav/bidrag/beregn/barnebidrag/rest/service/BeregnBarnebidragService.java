@@ -394,7 +394,7 @@ public class BeregnBarnebidragService {
             .collect(toList());
 
     // Bygg liste over BMs inntekter til core. En inntekt kan være knyttet til et bestemt søknadsbarn eller gjelde for alle søknadsbarn (null-verdi).
-    //  Filtrerer derfor vekk inntekter som er knyttet til andre søknadsbarn.
+    // Filtrerer derfor vekk inntekter som er knyttet til andre søknadsbarn.
     var inntektBMPeriodeCoreListe =
         beregnTotalBarnebidragGrunnlag.getInntektBPBMGrunnlag().getInntektBMPeriodeListe()
             .stream()
