@@ -34,7 +34,5 @@ spec:
   vault:
     enabled: false
   env:
-    - name: BIDRAGSEVNE_URL
-      value: https://bidrag-beregn-bidragsevne-rest.nais.adeo.no/bidrag-beregn-bidragsevne-rest
     - name: SJABLON_URL
       value: https://bidrag-sjablon.nais.adeo.no/bidrag-sjablon
