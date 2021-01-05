@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.wiremock_stub.SjablonApiStub;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragResultat;
@@ -516,6 +517,372 @@ public class BeregnBarnebidragControllerIntegrationTest {
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
 
     utfoerBeregningerOgEvaluerResultat_EttSoknadsbarn();
+  }
+
+  @Test
+  @DisplayName("skal kalle core og returnere et resultat - eksempel 1 og 4 slått sammen")
+  void skalKalleCoreOgReturnereEtResultat_Eksempel_1_4_SplittPeriode() {
+    // Eksempel 1 og 4 slått sammen (gir 2 perioder i resultatet for enkelte delberegninger)
+    filnavn = "src/test/resources/testfiler/barnebidrag_eksempel_1_4_splittperiode.json";
+
+    var request = lesFilOgByggRequest(filnavn);
+
+    // Kall rest-API for barnebidrag
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
+    var totalBarnebidragResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
+        () -> assertThat(totalBarnebidragResultat).isNotNull(),
+
+        // Sjekk BeregnBPBidragsevneResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatEvneBelop()).isEqualTo(BigDecimal.valueOf(16357)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatEvneBelop()).isEqualTo(BigDecimal.valueOf(1583)),
+
+        // Sjekk BeregnBMNettoBarnetilsynResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop()).isEqualTo(BigDecimal.ZERO),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatBelop()).isEqualTo(BigDecimal.valueOf(2478)),
+
+        // Sjekk BeregnBMUnderholdskostnadResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(5999)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(8477)),
+
+        // Sjekk BeregnBPAndelUnderholdskostnadResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(3749)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(62.5)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(4239)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(50.0)),
+
+        // Sjekk BeregnBPSamvaersfradragResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(256)),
+
+        // Sjekk BeregnBarnebidragResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop().compareTo(BigDecimal.valueOf(3490))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("KOSTNADSBEREGNET_BIDRAG"),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatBelop().compareTo(BigDecimal.valueOf(1330))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("BIDRAG_REDUSERT_AV_EVNE")
+    );
+  }
+
+  @Test
+  @DisplayName("skal kalle core og returnere et resultat - eksempel 12 og 13 slått sammen")
+  void skalKalleCoreOgReturnereEtResultat_Eksempel_12_13_SplittPeriode() {
+    // Eksempel 12 og 13 slått sammen (gir 2 perioder i resultatet for enkelte delberegninger)
+    filnavn = "src/test/resources/testfiler/barnebidrag_eksempel_12_13_splittperiode.json";
+
+    var request = lesFilOgByggRequest(filnavn);
+
+    // Kall rest-API for barnebidrag
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
+    var totalBarnebidragResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
+        () -> assertThat(totalBarnebidragResultat).isNotNull(),
+
+        // Sjekk BeregnBPBidragsevneResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatEvneBelop()).isEqualTo(BigDecimal.valueOf(136)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatEvneBelop()).isEqualTo(BigDecimal.valueOf(16536)),
+
+        // Sjekk BeregnBMNettoBarnetilsynResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop()).isEqualTo(BigDecimal.ZERO),
+
+        // Sjekk BeregnBMUnderholdskostnadResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(8684)),
+
+        // Sjekk BeregnBPAndelUnderholdskostnadResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(3725)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(42.9)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(5210)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(60.0)),
+
+        // Sjekk BeregnBPSamvaersfradragResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(457)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.ZERO),
+
+        // Sjekk BeregnBarnebidragResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-08-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop().compareTo(BigDecimal.valueOf(1140))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("BIDRAG_SATT_TIL_BARNETILLEGG_BP"),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-10-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatBelop().compareTo(BigDecimal.valueOf(5080))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("BIDRAG_SATT_TIL_UNDERHOLDSKOSTNAD_MINUS_BARNETILLEGG_BM")
+    );
+  }
+
+  @Test
+  @DisplayName("skal kalle core og returnere et resultat - eksempel 1 med splitt sjablon")
+  void skalKalleCoreOgReturnereEtResultat_Eksempel_1_SplittSjablon() {
+    // Eksempel 1 med splittperiode for sjablon (gir 2 perioder i resultatet for enkelte delberegninger)
+    filnavn = "src/test/resources/testfiler/barnebidrag_eksempel_1_splitt_sjablon.json";
+
+    var request = lesFilOgByggRequest(filnavn);
+
+    // Kall rest-API for barnebidrag
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
+    var totalBarnebidragResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
+        () -> assertThat(totalBarnebidragResultat).isNotNull(),
+
+        // Sjekk BeregnBPBidragsevneResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-06-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatEvneBelop()).isEqualTo(BigDecimal.valueOf(17271)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatEvneBelop()).isEqualTo(BigDecimal.valueOf(16357)),
+
+        // Sjekk BeregnBMNettoBarnetilsynResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-06-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop()).isEqualTo(BigDecimal.ZERO),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatBelop()).isEqualTo(BigDecimal.ZERO),
+
+        // Sjekk BeregnBMUnderholdskostnadResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-06-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(5382)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(5999)),
+
+        // Sjekk BeregnBPAndelUnderholdskostnadResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-06-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(3364)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(62.5)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatAndelBelop()).isEqualTo(BigDecimal.valueOf(3749)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPAndelUnderholdskostnadResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatAndelProsent()).isEqualTo(BigDecimal.valueOf(62.5)),
+
+        // Sjekk BeregnBPSamvaersfradragResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-06-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(219)),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(1).getResultatBeregning()
+            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(256)),
+
+        // Sjekk BeregnBarnebidragResultat
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-06-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatBelop().compareTo(BigDecimal.valueOf(3150))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("KOSTNADSBEREGNET_BIDRAG"),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2020-07-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatDatoFraTil()
+            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2021-01-01")),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatBelop().compareTo(BigDecimal.valueOf(3490))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().get(1).getResultatBeregningListe()
+            .get(0).getResultatKode()).isEqualTo("KOSTNADSBEREGNET_BIDRAG")
+    );
   }
 
   private void utfoerBeregningerOgEvaluerResultat_EttSoknadsbarn() {
