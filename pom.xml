@@ -11,7 +11,7 @@
 
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-beregn-barnebidrag-rest</artifactId>
-  <version>0.0.60-SNAPSHOT</version>
+  <version>0.0.61-SNAPSHOT</version>
 
   <name>bidrag-beregn-barnebidrag-rest</name>
   <description>Beregning av barnebidrag</description>
