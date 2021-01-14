@@ -43,5 +43,5 @@ For hver delberegning returneres resultatet av beregningen og grunnlaget for ber
 
 ### Integrasjonstester
 Det er lagt inn integrasjonstester (BeregnBarnebidragControllerIntegrationTest.java) vha. Junit- og WireMock-rammeverkene. Disse testene er ment å
-dekke et bredt spekter av scenarier med tanke på bidragsberegning. De inneholder derimot bare data for beregning av en enkelt periode og vil dermed 
-ikke  dekke scenarier for testing av periodisering og splitt-perioder.
+dekke et bredt spekter av scenarier med tanke på bidragsberegning. De fleste inneholder bare data for beregning av en enkelt periode og vil dermed 
+ikke dekke scenarier for testing av periodisering og splitt-perioder. Det er i tillegg lagt inn noen få tester som danner splitt-perioder.
