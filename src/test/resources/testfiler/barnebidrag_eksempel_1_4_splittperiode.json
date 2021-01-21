@@ -29,8 +29,8 @@
         },
         "inntektType": "INNTEKTSOPPLYSNINGER_ARBEIDSGIVER",
         "soknadsbarnPersonId": null,
-		"deltFordel": false,
-		"skatteklasse2": false
+        "deltFordel": false,
+        "skatteklasse2": false
       }
     ],
     "inntektBPPeriodeListe": [
@@ -193,6 +193,7 @@
         "deltBostedIPeriode": false,
         "deltBostedSoknadsbarnPersonId": 1
       }
-    ]
+    ],
+    "andreLopendeBidragBPPeriodeListe": []
   }
 }

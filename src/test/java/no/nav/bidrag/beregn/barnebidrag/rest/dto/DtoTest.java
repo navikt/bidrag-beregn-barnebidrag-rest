@@ -210,6 +210,15 @@ class DtoTest {
         .withMessage("deltBostedBPPeriodeListe kan ikke være null");
   }
 
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragBPPeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragBPPeriodeListeErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(() -> grunnlag.barnebidragTilCore(emptyList(), emptyList(), emptyList(), emptyList()))
+        .withMessage("andreLopendeBidragBPPeriodeListe kan ikke være null");
+  }
+
 
   // Søknadsbarn
   @Test
@@ -854,5 +863,53 @@ class DtoTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenDeltBostedIPeriode().getDeltBostedBPPeriodeListe();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
         .withMessage("deltBostedIPeriode kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoFraTil().getAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("andreLopendeBidragDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragDatoFraErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoFra().getAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("andreLopendeBidragDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragDatoTilErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoTil().getAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("andreLopendeBidragDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragBarnPersonId er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragBarnPersonIdErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragBarnPersonId().getAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("andreLopendeBidragBarnPersonId kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragBidragBelop er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragBidragBelopErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragBidragBelop().getAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("andreLopendeBidragBidragBelop kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når andreLopendeBidragSamvaersfradragBelop er null")
+  void skalKasteIllegalArgumentExceptionNaarBBAndreLopendeBidragSamvaersfradragBelopErNull() {
+    var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenAndreLopendeBidragSamvaersfradragBelop().getAndreLopendeBidragBPPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
+        .withMessage("andreLopendeBidragSamvaersfradragBelop kan ikke være null");
   }
 }
