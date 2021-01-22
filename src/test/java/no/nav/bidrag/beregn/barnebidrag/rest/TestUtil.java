@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
+import no.nav.bidrag.beregn.barnebidrag.dto.AndreLopendeBidragCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragResultatCore;
@@ -1184,9 +1185,10 @@ public class TestUtil {
                 new BPAndelUnderholdskostnad(BigDecimal.valueOf(10), BigDecimal.valueOf(100), false),
                 new Barnetillegg(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
                 new Barnetillegg(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
-                true,
-                new AndreLopendeBidrag(1, BigDecimal.valueOf(100), BigDecimal.valueOf(100)))),
-            true, emptyList())));
+                true)),
+            true,
+            singletonList(new AndreLopendeBidrag(1, BigDecimal.valueOf(100), BigDecimal.valueOf(100))),
+            emptyList())));
     return new BeregnBarnebidragResultat(bidragPeriodeResultatListe);
   }
 
@@ -1203,6 +1205,7 @@ public class TestUtil {
                 new BarnetilleggCore(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
                 new BarnetilleggCore(BigDecimal.valueOf(100), BigDecimal.valueOf(25)))),
             true,
+            singletonList(new AndreLopendeBidragCore(1, BigDecimal.valueOf(100), BigDecimal.valueOf(100))),
             emptyList())));
     return new BeregnBarnebidragResultatCore(bidragPeriodeResultatListe, emptyList());
   }

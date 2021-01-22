@@ -149,6 +149,7 @@ data class ResultatGrunnlagBarnebidrag(
     @ApiModelProperty(value = "Bidragsevne") var bidragsevne: BidragsevneGrunnlag = BidragsevneGrunnlag(),
     @ApiModelProperty(value = "Grunnlag per barn liste") var resultatGrunnlagPerBarnListe: List<ResultatGrunnlagPerBarn> = emptyList(),
     @ApiModelProperty(value = "Barnetillegg forsvaret") var barnetilleggForsvaret: Boolean = false,
+    @ApiModelProperty(value = "Andre løpende bidrag liste") var andreLopendeBidragListe: List<AndreLopendeBidrag> = emptyList(),
     @ApiModelProperty(value = "Liste over sjablonperioder") var sjablonListe: List<Sjablon> = emptyList()
 ) {
 
@@ -156,6 +157,7 @@ data class ResultatGrunnlagBarnebidrag(
       bidragsevne = BidragsevneGrunnlag(resultatGrunnlag.bidragsevne),
       resultatGrunnlagPerBarnListe = resultatGrunnlag.grunnlagPerBarnListe.map { ResultatGrunnlagPerBarn(it) },
       barnetilleggForsvaret = resultatGrunnlag.barnetilleggForsvaret,
+      andreLopendeBidragListe = resultatGrunnlag.andreLopendeBidragListe.map { AndreLopendeBidrag(it) },
       sjablonListe = resultatGrunnlag.sjablonListe.map { Sjablon(it) }
   )
 }
@@ -179,8 +181,7 @@ data class ResultatGrunnlagPerBarn(
     @ApiModelProperty(value = "BPs andel underholdskostnad") var bpAndelUnderholdskostnad: BPAndelUnderholdskostnad = BPAndelUnderholdskostnad(),
     @ApiModelProperty(value = "Barnetillegg bidragspliktig") var barnetilleggBP: Barnetillegg = Barnetillegg(),
     @ApiModelProperty(value = "Barnetillegg bidragsmottaker") var barnetilleggBM: Barnetillegg = Barnetillegg(),
-    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean = false,
-    @ApiModelProperty(value = "Andre løpende bidrag") var andreLopendeBidrag: AndreLopendeBidrag = AndreLopendeBidrag()
+    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean = false
 ) {
 
   constructor(resultatGrunnlagPerBarn: GrunnlagBeregningPerBarnCore) : this(
@@ -190,7 +191,6 @@ data class ResultatGrunnlagPerBarn(
       barnetilleggBP = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBP),
       barnetilleggBM = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBM),
       deltBosted = resultatGrunnlagPerBarn.deltBosted
-//      andreLopendeBidrag = AndreLopendeBidrag(resultatGrunnlagPerBarn.andreLopendeBidrag)
   )
 }
 
