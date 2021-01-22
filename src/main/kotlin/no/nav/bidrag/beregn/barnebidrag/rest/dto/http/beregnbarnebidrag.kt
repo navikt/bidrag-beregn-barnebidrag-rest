@@ -2,6 +2,8 @@ package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import no.nav.bidrag.beregn.barnebidrag.dto.AndreLopendeBidragCore
+import no.nav.bidrag.beregn.barnebidrag.dto.AndreLopendeBidragPeriodeCore
 import no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadCore
 import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggCore
 import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggForsvaretPeriodeCore
@@ -26,7 +28,9 @@ data class BeregnBarnebidragGrunnlag(
     @ApiModelProperty(value = "Periodisert liste over bidragspliktiges barnetillegg fra forsvaret")
     val barnetilleggForsvaretBPPeriodeListe: List<BarnetilleggForsvaretBPPeriode>? = null,
     @ApiModelProperty(value = "Periodisert liste over delt bosted for bidragspliktig")
-    val deltBostedBPPeriodeListe: List<DeltBostedBPPeriode>? = null
+    val deltBostedBPPeriodeListe: List<DeltBostedBPPeriode>? = null,
+    @ApiModelProperty(value = "Periodisert liste over andre løpende bidrag for bidragspliktig")
+    val andreLopendeBidragBPPeriodeListe: List<AndreLopendeBidragBPPeriode>? = null
 )
 
 @ApiModel(value = "Barnetillegg BM og BP")
@@ -77,6 +81,26 @@ data class DeltBostedBPPeriode(
           "deltBosted") else throw UgyldigInputException("deltBostedDatoFraTil kan ikke være null"),
       deltBostedIPeriode = if (deltBostedIPeriode != null) deltBostedIPeriode!! else throw UgyldigInputException(
           "deltBostedIPeriode kan ikke være null")
+  )
+}
+
+@ApiModel(value = "Andre løpende bidrag for bidragspliktig")
+data class AndreLopendeBidragBPPeriode(
+    @ApiModelProperty(value = "Andre løpende bidrag - fra-til-dato") var andreLopendeBidragDatoFraTil: Periode? = null,
+    @ApiModelProperty(value = "Andre løpende bidrag - barn person-id") var andreLopendeBidragBarnPersonId: Int? = null,
+    @ApiModelProperty(value = "Andre løpende bidrag - bidrag beløp") var andreLopendeBidragBidragBelop: BigDecimal? = null,
+    @ApiModelProperty(value = "Andre løpende bidrag - samværsfradrag beløp") var andreLopendeBidragSamvaersfradragBelop: BigDecimal? = null
+) {
+
+  fun tilCore() = AndreLopendeBidragPeriodeCore(
+      periodeDatoFraTil = if (andreLopendeBidragDatoFraTil != null) andreLopendeBidragDatoFraTil!!.tilCore("andreLopendeBidrag")
+      else throw UgyldigInputException("andreLopendeBidragDatoFraTil kan ikke være null"),
+      barnPersonId = if (andreLopendeBidragBarnPersonId != null) andreLopendeBidragBarnPersonId!! else throw UgyldigInputException(
+          "andreLopendeBidragBarnPersonId kan ikke være null"),
+      bidragBelop = if (andreLopendeBidragBidragBelop != null) andreLopendeBidragBidragBelop!! else throw UgyldigInputException(
+          "andreLopendeBidragBidragBelop kan ikke være null"),
+      samvaersfradragBelop = if (andreLopendeBidragSamvaersfradragBelop != null) andreLopendeBidragSamvaersfradragBelop!!
+      else throw UgyldigInputException("andreLopendeBidragSamvaersfradragBelop kan ikke være null")
   )
 }
 
@@ -155,7 +179,8 @@ data class ResultatGrunnlagPerBarn(
     @ApiModelProperty(value = "BPs andel underholdskostnad") var bpAndelUnderholdskostnad: BPAndelUnderholdskostnad = BPAndelUnderholdskostnad(),
     @ApiModelProperty(value = "Barnetillegg bidragspliktig") var barnetilleggBP: Barnetillegg = Barnetillegg(),
     @ApiModelProperty(value = "Barnetillegg bidragsmottaker") var barnetilleggBM: Barnetillegg = Barnetillegg(),
-    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean = false
+    @ApiModelProperty(value = "Delt bosted") var deltBosted: Boolean = false,
+    @ApiModelProperty(value = "Andre løpende bidrag") var andreLopendeBidrag: AndreLopendeBidrag = AndreLopendeBidrag()
 ) {
 
   constructor(resultatGrunnlagPerBarn: GrunnlagBeregningPerBarnCore) : this(
@@ -165,6 +190,7 @@ data class ResultatGrunnlagPerBarn(
       barnetilleggBP = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBP),
       barnetilleggBM = Barnetillegg(resultatGrunnlagPerBarn.barnetilleggBM),
       deltBosted = resultatGrunnlagPerBarn.deltBosted
+//      andreLopendeBidrag = AndreLopendeBidrag(resultatGrunnlagPerBarn.andreLopendeBidrag)
   )
 }
 
@@ -191,5 +217,19 @@ data class Barnetillegg(
   constructor(barnetillegg: BarnetilleggCore) : this(
       barnetilleggBelop = barnetillegg.barnetilleggBelop,
       barnetilleggSkattProsent = barnetillegg.barnetilleggSkattProsent
+  )
+}
+
+@ApiModel(value = "Grunnlaget for beregning - andre løpende bidrag")
+data class AndreLopendeBidrag(
+  @ApiModelProperty(value = "Andre løpende bidrag - barn person-id") var andreLopendeBidragBarnPersonId: Int = 0,
+  @ApiModelProperty(value = "Andre løpende bidrag - bidrag beløp") var andreLopendeBidragBidragBelop: BigDecimal = BigDecimal.ZERO,
+  @ApiModelProperty(value = "Andre løpende bidrag - samværsfradrag beløp") var andreLopendeBidragSamvaersfradragBelop: BigDecimal = BigDecimal.ZERO
+) {
+
+  constructor(andreLopendBidrag: AndreLopendeBidragCore) : this(
+      andreLopendeBidragBarnPersonId = andreLopendBidrag.barnPersonId,
+      andreLopendeBidragBidragBelop = andreLopendBidrag.bidragBelop,
+      andreLopendeBidragSamvaersfradragBelop = andreLopendBidrag.samvaersfradragBelop
   )
 }

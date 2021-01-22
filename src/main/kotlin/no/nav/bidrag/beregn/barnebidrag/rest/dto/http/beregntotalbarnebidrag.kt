@@ -152,6 +152,11 @@ data class BeregnTotalBarnebidragGrunnlag(
         beregnBarnebidragGrunnlag!!.barnetilleggForsvaretBPPeriodeListe!!.map { it.tilCore() }
       else throw UgyldigInputException("barnetilleggForsvaretBPPeriodeListe kan ikke være null"),
 
+      andreLopendeBidragPeriodeListe =
+      if (beregnBarnebidragGrunnlag!!.andreLopendeBidragBPPeriodeListe != null)
+        beregnBarnebidragGrunnlag!!.andreLopendeBidragBPPeriodeListe!!.map { it.tilCore() }
+      else throw UgyldigInputException("andreLopendeBidragBPPeriodeListe kan ikke være null"),
+
       sjablonPeriodeListe = sjablonPeriodeListe
   )
 }

@@ -31,15 +31,16 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCor
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.commons.web.HttpResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("BeregnBarnebidragServiceTest")
 class BeregnBarnebidragServiceTest {
 
@@ -63,9 +64,7 @@ class BeregnBarnebidragServiceTest {
   @Mock
   private BarnebidragCore barnebidragCoreMock;
 
-  @BeforeEach
-  void initMocksOgSettOppSjablonMocks() {
-    MockitoAnnotations.initMocks(this);
+  void settOppSjablonMocks() {
     when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
     when(sjablonConsumerMock.hentSjablonForbruksutgifter())
         .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
@@ -89,6 +88,8 @@ class BeregnBarnebidragServiceTest {
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
     when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
+
+    settOppSjablonMocks();
 
     var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag());
 
@@ -142,6 +143,8 @@ class BeregnBarnebidragServiceTest {
         .thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
     when(barnebidragCoreMock.beregnBarnebidrag(barnebidragGrunnlagTilCoreCaptor.capture())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
+
+    settOppSjablonMocks();
 
     var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag());
 
@@ -274,6 +277,8 @@ class BeregnBarnebidragServiceTest {
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
     when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
 
+    settOppSjablonMocks();
+
     beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag());
 
     var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
@@ -298,6 +303,8 @@ class BeregnBarnebidragServiceTest {
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
     when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
+
+    settOppSjablonMocks();
 
     beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlagMedKnytningBMInntektSoknadsbarn("1"));
 
@@ -324,6 +331,8 @@ class BeregnBarnebidragServiceTest {
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
     when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCore());
 
+    settOppSjablonMocks();
+
     beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlagMedKnytningBMInntektSoknadsbarn("2"));
 
     var bpAndelUnderholdskostnadGrunnlagTilCore = bpAndelUnderholdskostnadGrunnlagTilCoreCaptor.getValue();
@@ -340,6 +349,8 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedFeilReturFraBidragsevneCore() {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCoreMedAvvik());
 
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet:")
@@ -352,6 +363,8 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedFeilReturFraNettoBarnetilsynCore() {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCoreMedAvvik());
+
+    settOppSjablonMocks();
 
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
@@ -366,6 +379,8 @@ class BeregnBarnebidragServiceTest {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCoreMedAvvik());
+
+    settOppSjablonMocks();
 
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
@@ -383,6 +398,8 @@ class BeregnBarnebidragServiceTest {
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any()))
         .thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCoreMedAvvik());
 
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet:")
@@ -398,6 +415,8 @@ class BeregnBarnebidragServiceTest {
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCoreMedAvvik());
+
+    settOppSjablonMocks();
 
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
@@ -416,6 +435,8 @@ class BeregnBarnebidragServiceTest {
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCoreMedAvvik());
 
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
         .withMessageContaining("Ugyldig input ved beregning av kostnadsberegnet bidrag. Følgende avvik ble funnet:")
@@ -433,6 +454,8 @@ class BeregnBarnebidragServiceTest {
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
     when(barnebidragCoreMock.beregnBarnebidrag(any())).thenReturn(TestUtil.dummyBarnebidragResultatCoreMedAvvik());
+
+    settOppSjablonMocks();
 
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(TestUtil.byggTotalBarnebidragGrunnlag()))
@@ -467,6 +490,8 @@ class BeregnBarnebidragServiceTest {
   @Test
   @DisplayName("Skal kaste UgyldigInputException ved validering av inputdata - bidragsevne")
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataBidragsevne() {
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
             new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), TestUtil.byggSoknadsbarnGrunnlag(),
@@ -479,6 +504,9 @@ class BeregnBarnebidragServiceTest {
   @DisplayName("Skal kaste UgyldigInputException ved validering av inputdata - netto barnetilsyn")
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataNettoBarnetilsyn() {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
+
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
             new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), TestUtil.byggSoknadsbarnGrunnlag(),
@@ -492,6 +520,9 @@ class BeregnBarnebidragServiceTest {
   void skalKasteUgyldigInputExceptionVedValideringAvInputdataUnderholdskostnad() {
     when(bidragsevneCoreMock.beregnBidragsevne(any())).thenReturn(TestUtil.dummyBidragsevneResultatCore());
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
+
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
             new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), TestUtil.byggSoknadsbarnGrunnlag(),
@@ -508,6 +539,9 @@ class BeregnBarnebidragServiceTest {
     when(nettoBarnetilsynCoreMock.beregnNettoBarnetilsyn(any())).thenReturn(TestUtil.dummyNettoBarnetilsynResultatCore());
     when(underholdskostnadCoreMock.beregnUnderholdskostnad(any())).thenReturn(TestUtil.dummyUnderholdskostnadResultatCore());
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
+
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
             new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), TestUtil.byggSoknadsbarnGrunnlag(),
@@ -526,6 +560,9 @@ class BeregnBarnebidragServiceTest {
     when(bpAndelUnderholdskostnadCoreMock.beregnBPsAndelUnderholdskostnad(any())).thenReturn(TestUtil.dummyBPsAndelUnderholdskostnadResultatCore());
     when(samvaersfradragCoreMock.beregnSamvaersfradrag(any())).thenReturn(TestUtil.dummySamvaersfradragResultatCore());
     when(kostnadsberegnetBidragCoreMock.beregnKostnadsberegnetBidrag(any())).thenReturn(TestUtil.dummyKostnadsberegnetBidragResultatCore());
+
+    settOppSjablonMocks();
+
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> beregnBarnebidragService.beregn(
             new BeregnTotalBarnebidragGrunnlag(LocalDate.parse("2017-01-01"), LocalDate.parse("2020-01-01"), TestUtil.byggSoknadsbarnGrunnlag(),

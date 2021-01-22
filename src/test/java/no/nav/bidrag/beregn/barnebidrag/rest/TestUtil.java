@@ -22,6 +22,8 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksTilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Samvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Sjablontall;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.TrinnvisSkattesats;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.AndreLopendeBidrag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.AndreLopendeBidragBPPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.AntallBarnIEgetHusholdPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BPAndelUnderholdskostnad;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Barnetillegg;
@@ -196,6 +198,10 @@ public class TestUtil {
 
   public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenDeltBostedBPPeriodeListe() {
     return byggTotalBarnebidragGrunnlag("", "", "", "", "", "", "", "deltBostedBPPeriodeListe");
+  }
+
+  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragBPPeriodeListe() {
+    return byggTotalBarnebidragGrunnlag("", "", "", "", "", "", "", "andreLopendeBidragBPPeriodeListe");
   }
 
 
@@ -552,6 +558,30 @@ public class TestUtil {
     return byggBarnebidragGrunnlag("deltBostedIPeriode");
   }
 
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoFraTil() {
+    return byggBarnebidragGrunnlag("andreLopendeBidragDatoFraTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoFra() {
+    return byggBarnebidragGrunnlag("andreLopendeBidragDatoFra");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoTil() {
+    return byggBarnebidragGrunnlag("andreLopendeBidragDatoTil");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragBarnPersonId() {
+    return byggBarnebidragGrunnlag("andreLopendeBidragBarnPersonId");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragBidragBelop() {
+    return byggBarnebidragGrunnlag("andreLopendeBidragBidragBelop");
+  }
+
+  public static BeregnBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragSamvaersfradragBelop() {
+    return byggBarnebidragGrunnlag("andreLopendeBidragSamvaersfradragBelop");
+  }
+
 
   // Bygger opp BeregnTotalBarnebidragGrunnlag (felles grunnlag for alle delberegninger)
   private static BeregnTotalBarnebidragGrunnlag byggTotalBarnebidragGrunnlag(String nullVerdi) {
@@ -857,6 +887,11 @@ public class TestUtil {
     var deltBostedDatoTil = (nullVerdi.equals("deltBostedDatoTil") ? null : LocalDate.parse("2020-01-01"));
     var deltBostedSoknadsbarnPersonId = (nullVerdi.equals("deltBostedSoknadsbarnPersonId") ? null : 1);
     var deltBostedIPeriode = (nullVerdi.equals("deltBostedIPeriode") ? null : true);
+    var andreLopendeBidragDatoFra = (nullVerdi.equals("andreLopendeBidragDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var andreLopendeBidragDatoTil = (nullVerdi.equals("andreLopendeBidragDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var andreLopendeBidragBarnPersonId = (nullVerdi.equals("andreLopendeBidragBarnPersonId") ? null : 1);
+    var andreLopendeBidragBidragBelop = (nullVerdi.equals("andreLopendeBidragBidragBelop") ? null : BigDecimal.valueOf(100));
+    var andreLopendeBidragSamvaersfradragBelop = (nullVerdi.equals("andreLopendeBidragSamvaersfradragBelop") ? null : BigDecimal.valueOf(100));
 
     List<BarnetilleggPeriode> barnetilleggBPPeriodeListe;
     if (nullVerdi.equals("barnetilleggBPPeriodeListe")) {
@@ -915,8 +950,23 @@ public class TestUtil {
       deltBostedBPPeriodeListe = singletonList(deltBostedBPPeriode);
     }
 
+    List<AndreLopendeBidragBPPeriode> andreLopendeBidragBPPeriodeListe;
+    if (nullVerdi.equals("andreLopendeBidragBPPeriodeListe")) {
+      andreLopendeBidragBPPeriodeListe = null;
+    } else {
+      AndreLopendeBidragBPPeriode andreLopendeBidragBPPeriode;
+      if (nullVerdi.equals("andreLopendeBidragDatoFraTil")) {
+        andreLopendeBidragBPPeriode = new AndreLopendeBidragBPPeriode(null, andreLopendeBidragBarnPersonId, andreLopendeBidragBidragBelop,
+            andreLopendeBidragSamvaersfradragBelop);
+      } else {
+        andreLopendeBidragBPPeriode = new AndreLopendeBidragBPPeriode(new Periode(andreLopendeBidragDatoFra, andreLopendeBidragDatoTil),
+            andreLopendeBidragBarnPersonId, andreLopendeBidragBidragBelop, andreLopendeBidragSamvaersfradragBelop);
+      }
+      andreLopendeBidragBPPeriodeListe = singletonList(andreLopendeBidragBPPeriode);
+    }
+
     return new BeregnBarnebidragGrunnlag(barnetilleggBPPeriodeListe, barnetilleggBMPeriodeListe, barnetilleggForsvaretBPPeriodeListe,
-        deltBostedBPPeriodeListe);
+        deltBostedBPPeriodeListe, andreLopendeBidragBPPeriodeListe);
   }
 
 
@@ -1134,7 +1184,8 @@ public class TestUtil {
                 new BPAndelUnderholdskostnad(BigDecimal.valueOf(10), BigDecimal.valueOf(100), false),
                 new Barnetillegg(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
                 new Barnetillegg(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
-                true)),
+                true,
+                new AndreLopendeBidrag(1, BigDecimal.valueOf(100), BigDecimal.valueOf(100)))),
             true, emptyList())));
     return new BeregnBarnebidragResultat(bidragPeriodeResultatListe);
   }
