@@ -82,7 +82,7 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
             .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(2060))).isZero(),
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
-            .getResultatPerBarnListe().get(0).getResultatkode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1).getSaksnr())
             .isEqualTo(2),
@@ -91,7 +91,7 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
             .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(3600))).isZero(),
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
-            .getResultatPerBarnListe().get(0).getResultatkode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
     );
   }
 
@@ -128,7 +128,7 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
             .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1460))).isZero(),
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
-            .getResultatPerBarnListe().get(0).getResultatkode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1).getSaksnr())
             .isEqualTo(2),
@@ -137,7 +137,7 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
             .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(2550))).isZero(),
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
-            .getResultatPerBarnListe().get(0).getResultatkode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2).getSaksnr())
             .isEqualTo(3),
@@ -146,7 +146,7 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2)
             .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1640))).isZero(),
         () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2)
-            .getResultatPerBarnListe().get(0).getResultatkode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
     );
   }
 
