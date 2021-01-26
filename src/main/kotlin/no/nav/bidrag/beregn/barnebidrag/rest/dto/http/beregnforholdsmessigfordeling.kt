@@ -125,13 +125,13 @@ data class ResultatBeregningForholdsmessigFordeling(
 data class ResultatPerBarn(
   @ApiModelProperty(value = "Barnets person-id") var barnPersonId: Int = 0,
   @ApiModelProperty(value = "Barnebidrag beløp") var resultatBarnebidragBelop: BigDecimal = BigDecimal.ZERO,
-  @ApiModelProperty(value = "Resultatkode") var resultatkode: String = "",
+  @ApiModelProperty(value = "Resultatkode") var resultatKode: String = "",
 ) {
 
   constructor(resultatPerBarn: ResultatPerBarnCore) : this(
     barnPersonId = resultatPerBarn.barnPersonId,
     resultatBarnebidragBelop = resultatPerBarn.resultatBarnebidragBelop,
-    resultatkode = resultatPerBarn.resultatkode
+    resultatKode = resultatPerBarn.resultatkode
   )
 }
 
