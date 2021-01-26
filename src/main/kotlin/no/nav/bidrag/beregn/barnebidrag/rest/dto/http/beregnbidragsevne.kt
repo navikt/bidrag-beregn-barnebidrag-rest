@@ -52,7 +52,7 @@ data class BostatusPeriode(
 @ApiModel(value = "Antall barn i bidragspliktiges hushold")
 data class AntallBarnIEgetHusholdPeriode(
     @ApiModelProperty(value = "Antall barn i bidragspliktiges hushold fra-til-dato") var antallBarnIEgetHusholdDatoFraTil: Periode? = null,
-    @ApiModelProperty(value = "Antall barn i bidragspliktiges husholde") var antallBarn: BigDecimal? = null
+    @ApiModelProperty(value = "Antall barn i bidragspliktiges hushold") var antallBarn: BigDecimal? = null
 ) {
 
   fun tilCore() = AntallBarnIEgetHusholdPeriodeCore(

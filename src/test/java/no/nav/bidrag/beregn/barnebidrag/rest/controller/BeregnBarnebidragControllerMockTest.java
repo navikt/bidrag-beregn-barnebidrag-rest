@@ -12,15 +12,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragService;
+import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnForholdsmessigFordelingService;
+import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BeregnForholdsmessigFordelingGrunnlagCore;
 import no.nav.bidrag.commons.web.HttpResponse;
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -31,6 +34,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 @DisplayName("BeregnBarnebidragControllerTest")
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = BidragBeregnBarnebidragLocal.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 class BeregnBarnebidragControllerMockTest {
 
@@ -40,11 +44,8 @@ class BeregnBarnebidragControllerMockTest {
   private int port;
   @MockBean
   private BeregnBarnebidragService beregnBarnebidragServiceMock;
-
-  @BeforeEach
-  void initMocks() {
-    MockitoAnnotations.initMocks(this);
-  }
+  @MockBean
+  private BeregnForholdsmessigFordelingService beregnForholdsmessigFordelingServiceMock;
 
   @Test
   @DisplayName("Skal returnere total barnebidrag resultat ved gyldig input")
@@ -74,7 +75,8 @@ class BeregnBarnebidragControllerMockTest {
             totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultat25ProsentInntekt())
+            totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
+                .getResultat25ProsentInntekt())
             .isEqualTo(BigDecimal.valueOf(100)),
         () -> assertThat(
             totalBarnebidragResultat.getBeregnBPBidragsevneResultat().getResultatPeriodeListe().get(0).getResultatBeregning().getResultatEvneBelop())
@@ -84,17 +86,22 @@ class BeregnBarnebidragControllerMockTest {
         () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().size()).isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().size())
+        () -> assertThat(
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().size())
             .isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
-            .getResultatSoknadsbarnPersonId()).isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
-            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
+        () -> assertThat(
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+                .getResultatSoknadsbarnPersonId()).isEqualTo(1),
+        () -> assertThat(
+            totalBarnebidragResultat.getBeregnBMNettoBarnetilsynResultat().getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+                .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
         () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe()).isNotNull(),
@@ -103,10 +110,12 @@ class BeregnBarnebidragControllerMockTest {
             totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatSoknadsbarnPersonId())
             .isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBMUnderholdskostnadResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
             .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
@@ -135,10 +144,12 @@ class BeregnBarnebidragControllerMockTest {
             totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatSoknadsbarnPersonId())
             .isEqualTo(1),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2017-01-01")),
         () -> assertThat(
-            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
+                .getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2019-01-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
             .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
@@ -172,8 +183,8 @@ class BeregnBarnebidragControllerMockTest {
   }
 
   @Test
-  @DisplayName("Skal returnere 400 Bad Request når input data mangler")
-  void skalReturnere400BadRequestNaarInputDataMangler() {
+  @DisplayName("Skal returnere 400 Bad Request når input data mangler - barnebidrag")
+  void skalReturnere400BadRequestNaarInputDataManglerBarnebidrag() {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnTotalBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
 
@@ -189,8 +200,8 @@ class BeregnBarnebidragControllerMockTest {
   }
 
   @Test
-  @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler")
-  void skalReturnere500InternalServerErrorNaarKallTilServicenFeiler() {
+  @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler - barnebidrag")
+  void skalReturnere500InternalServerErrorNaarKallTilServicenFeilerBarnebidrag() {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnTotalBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
 
@@ -202,6 +213,75 @@ class BeregnBarnebidragControllerMockTest {
     assertAll(
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR),
         () -> assertThat(totalBarnebidragResultat).isNull()
+    );
+  }
+
+  @Test
+  @DisplayName("Skal returnere forholdsmessig fordeling resultat ved gyldig input")
+  void skalReturnereForholdsmessigFordelingResultatVedGyldigInput() {
+
+    when(beregnForholdsmessigFordelingServiceMock.beregn(any())).thenReturn(HttpResponse.from(OK,
+        new BeregnForholdsmessigFordelingResultat(TestUtil.dummyForholdsmessigFordelingResultatCore())));
+
+    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/forholdsmessigfordeling";
+    var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlag());
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnForholdsmessigFordelingResultat.class);
+    var forholdsmessigFordelingResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
+        () -> assertThat(forholdsmessigFordelingResultat).isNotNull(),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe()).isNotNull(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().size()).isEqualTo(1),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe()).isNotNull(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe().size()).isEqualTo(1),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoFra())
+            .isEqualTo(LocalDate.parse("2017-01-01")),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatDatoFraTil().getPeriodeDatoTil())
+            .isEqualTo(LocalDate.parse("2019-01-01")),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0).getSaksnr())
+            .isEqualTo(1),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop()).isEqualTo(BigDecimal.valueOf(100))
+    );
+  }
+
+  @Test
+  @DisplayName("Skal returnere 400 Bad Request når input data mangler - forholdsmessig fordeling")
+  void skalReturnere400BadRequestNaarInputDataManglerForholdsmessigFordeling() {
+
+    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/forholdsmessigfordeling";
+    var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnDatoFra());
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnForholdsmessigFordelingResultat.class);
+    var forholdsmessigFordelingResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST),
+        () -> assertThat(forholdsmessigFordelingResultat).isNull()
+    );
+  }
+
+  @Test
+  @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler - forholdsmessig fordeling")
+  void skalReturnere500InternalServerErrorNaarKallTilServicenFeilerForholdsmessigFordeling() {
+
+    when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnForholdsmessigFordelingGrunnlagCore.class)))
+        .thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
+
+    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/forholdsmessigfordeling";
+    var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlag());
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnForholdsmessigFordelingResultat.class);
+    var forholdsmessigFordelingResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR),
+        () -> assertThat(forholdsmessigFordelingResultat).isNull()
     );
   }
 

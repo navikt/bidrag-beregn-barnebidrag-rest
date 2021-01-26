@@ -43,8 +43,12 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPSamvaersfradragGru
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPSamvaersfradragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetBidragPerBarn;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetBidragSakPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BidragsevneGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BidragsevnePeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BostatusPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.DeltBostedBPPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.FaktiskUtgift;
@@ -88,6 +92,10 @@ import no.nav.bidrag.beregn.bidragsevne.dto.InntektCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadResultatCore;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
 import no.nav.bidrag.beregn.felles.dto.PeriodeCore;
+import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BeregnForholdsmessigFordelingResultatCore;
+import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BeregnetBidragSakCore;
+import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.GrunnlagPerBarnCore;
+import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.ResultatPerBarnCore;
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.dto.BeregnKostnadsberegnetBidragResultatCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynResultatCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftCore;
@@ -1218,6 +1226,156 @@ public class TestUtil {
         "periodeDatoTil må være etter periodeDatoFra i samvaersfradragPeriodeListe: datoFra=2018-04-01, datoTil=2018-03-01",
         "DATO_FRA_ETTER_DATO_TIL"));
     return new BeregnBarnebidragResultatCore(emptyList(), avvikListe);
+  }
+
+
+  // Forholdsmessig fordeling
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlag() {
+    return byggForholdsmessigFordelingGrunnlag("");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnDatoFra() {
+    return byggForholdsmessigFordelingGrunnlag("beregnDatoFra");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("beregnDatoTil");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevnePeriodeListe() {
+    return byggForholdsmessigFordelingGrunnlag("bidragsevnePeriodeListe");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFraTil() {
+    return byggForholdsmessigFordelingGrunnlag("bidragsevneDatoFraTil");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFra() {
+    return byggForholdsmessigFordelingGrunnlag("bidragsevneDatoFra");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("bidragsevneDatoTil");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneBelop() {
+    return byggForholdsmessigFordelingGrunnlag("bidragsevneBelop");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevne25ProsentInntekt() {
+    return byggForholdsmessigFordelingGrunnlag("bidragsevne25ProsentInntekt");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragSakPeriodeListe() {
+    return byggForholdsmessigFordelingGrunnlag("beregnetBidragSakPeriodeListe");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragSaksnr() {
+    return byggForholdsmessigFordelingGrunnlag("beregnetBidragSaksnr");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoFraTil() {
+    return byggForholdsmessigFordelingGrunnlag("beregnetBidragDatoFraTil");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoFra() {
+    return byggForholdsmessigFordelingGrunnlag("beregnetBidragDatoFra");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("beregnetBidragDatoTil");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragPerBarnListe() {
+    return byggForholdsmessigFordelingGrunnlag("beregnetBidragPerBarnListe");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBarnPersonId() {
+    return byggForholdsmessigFordelingGrunnlag("barnPersonId");
+  }
+
+  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragBelop() {
+    return byggForholdsmessigFordelingGrunnlag("bidragBelop");
+  }
+
+  // Bygger opp BeregnForholdsmessigFordelingGrunnlag
+  private static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlag(String nullVerdi) {
+    var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var beregnDatoTil = (nullVerdi.equals("beregnDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var bidragsevneDatoFra = (nullVerdi.equals("bidragsevneDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var bidragsevneDatoTil = (nullVerdi.equals("bidragsevneDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var bidragsevneBelop = (nullVerdi.equals("bidragsevneBelop") ? null : BigDecimal.valueOf(100));
+    var bidragsevne25ProsentInntekt = (nullVerdi.equals("bidragsevne25ProsentInntekt") ? null : BigDecimal.valueOf(100));
+    var beregnetBidragSaksnr = (nullVerdi.equals("beregnetBidragSaksnr") ? null : 1);
+    var beregnetBidragDatoFra = (nullVerdi.equals("beregnetBidragDatoFra") ? null : LocalDate.parse("2017-01-01"));
+    var beregnetBidragDatoTil = (nullVerdi.equals("beregnetBidragDatoTil") ? null : LocalDate.parse("2020-01-01"));
+    var barnPersonId = (nullVerdi.equals("barnPersonId") ? null : 1);
+    var bidragBelop = (nullVerdi.equals("bidragBelop") ? null : BigDecimal.valueOf(100));
+
+    List<BidragsevnePeriode> bidragsevnePeriodeListe;
+    if (nullVerdi.equals("bidragsevnePeriodeListe")) {
+      bidragsevnePeriodeListe = null;
+    } else {
+      BidragsevnePeriode bidragsevnePeriode;
+      if (nullVerdi.equals("bidragsevneDatoFraTil")) {
+        bidragsevnePeriode = new BidragsevnePeriode(null, bidragsevneBelop, bidragsevne25ProsentInntekt);
+      } else {
+        bidragsevnePeriode = new BidragsevnePeriode(new Periode(bidragsevneDatoFra, bidragsevneDatoTil), bidragsevneBelop,
+            bidragsevne25ProsentInntekt);
+      }
+      bidragsevnePeriodeListe = new ArrayList<>();
+      bidragsevnePeriodeListe.add(bidragsevnePeriode);
+    }
+
+    List<BeregnetBidragSakPeriode> beregnetBidragSakPeriodeListe;
+    if (nullVerdi.equals("beregnetBidragSakPeriodeListe")) {
+      beregnetBidragSakPeriodeListe = null;
+    } else {
+      List<BeregnetBidragPerBarn> beregnetBidragPerBarnListe;
+      if (nullVerdi.equals("beregnetBidragPerBarnListe")) {
+        beregnetBidragPerBarnListe = null;
+      } else {
+        var beregnetBidragPerBarn = new BeregnetBidragPerBarn(barnPersonId, bidragBelop);
+        beregnetBidragPerBarnListe = new ArrayList<>();
+        beregnetBidragPerBarnListe.add(beregnetBidragPerBarn);
+      }
+
+      BeregnetBidragSakPeriode beregnetBidragSakPeriode;
+      if (nullVerdi.equals("beregnetBidragDatoFraTil")) {
+        beregnetBidragSakPeriode = new BeregnetBidragSakPeriode(beregnetBidragSaksnr, null, beregnetBidragPerBarnListe);
+      } else {
+        beregnetBidragSakPeriode = new BeregnetBidragSakPeriode(beregnetBidragSaksnr, new Periode(beregnetBidragDatoFra, beregnetBidragDatoTil),
+            beregnetBidragPerBarnListe);
+      }
+      beregnetBidragSakPeriodeListe = new ArrayList<>();
+      beregnetBidragSakPeriodeListe.add(beregnetBidragSakPeriode);
+    }
+
+    return new BeregnForholdsmessigFordelingGrunnlag(beregnDatoFra, beregnDatoTil, bidragsevnePeriodeListe, beregnetBidragSakPeriodeListe);
+  }
+
+  // Bygger opp BeregnForholdsmessigFordelingResultatCore
+  public static BeregnForholdsmessigFordelingResultatCore dummyForholdsmessigFordelingResultatCore() {
+    var forholdsmessigFordelingPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.forholdsmessigfordeling.dto.ResultatPeriodeCore>();
+    forholdsmessigFordelingPeriodeResultatListe.add(new no.nav.bidrag.beregn.forholdsmessigfordeling.dto.ResultatPeriodeCore(
+        new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        singletonList(new no.nav.bidrag.beregn.forholdsmessigfordeling.dto.ResultatBeregningCore(1,
+            singletonList(new ResultatPerBarnCore(1, BigDecimal.valueOf(100), "RESULTATKODE")))),
+            new no.nav.bidrag.beregn.forholdsmessigfordeling.dto.GrunnlagBeregningPeriodisertCore(
+                new no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BidragsevneCore(BigDecimal.valueOf(100), BigDecimal.valueOf(25)),
+                singletonList(new BeregnetBidragSakCore(1,
+                    singletonList(new GrunnlagPerBarnCore(1, BigDecimal.valueOf(100))))))));
+    return new BeregnForholdsmessigFordelingResultatCore(forholdsmessigFordelingPeriodeResultatListe, emptyList());
+  }
+
+  // Bygger opp BeregnForholdsmessigFordelingResultatCore med avvik
+  public static BeregnForholdsmessigFordelingResultatCore dummyForholdsmessigFordelingResultatCoreMedAvvik() {
+    var avvikListe = new ArrayList<AvvikCore>();
+    avvikListe.add(new AvvikCore("beregnDatoFra kan ikke være null", "NULL_VERDI_I_DATO"));
+    avvikListe.add(new AvvikCore(
+        "periodeDatoTil må være etter periodeDatoFra i bidragsevnePeriodeListe: datoFra=2018-04-01, datoTil=2018-03-01",
+        "DATO_FRA_ETTER_DATO_TIL"));
+    return new BeregnForholdsmessigFordelingResultatCore(emptyList(), avvikListe);
   }
 
 

@@ -4,6 +4,7 @@ import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.BPsAndelUnderholdskostnadCore;
+import no.nav.bidrag.beregn.forholdsmessigfordeling.ForholdsmessigFordelingCore;
 import no.nav.bidrag.beregn.kostnadsberegnetbidrag.KostnadsberegnetBidragCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
 import no.nav.bidrag.beregn.samvaersfradrag.SamvaersfradragCore;
@@ -51,6 +52,11 @@ public class BeregnBarnebidragConfig {
   @Bean
   public BarnebidragCore barnebidragCore() {
     return BarnebidragCore.getInstance();
+  }
+
+  @Bean
+  public ForholdsmessigFordelingCore forholdsmessigFordelingCore() {
+    return ForholdsmessigFordelingCore.getInstance();
   }
 
   @Bean

@@ -912,4 +912,134 @@ class DtoTest {
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag.get(0)::tilCore)
         .withMessage("andreLopendeBidragSamvaersfradragBelop kan ikke være null");
   }
+
+
+  // Forholdsmessig fordeling
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnDatoFraErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnDatoFra();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnDatoTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragsevnePeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragsevnePeriodeListeErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevnePeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragsevnePeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragsevneDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragsevneDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFraTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragsevneDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragsevneDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragsevneDatoFraErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFra();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragsevneDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragsevneDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragsevneDatoTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragsevneDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragsevneBelop er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragsevneBelopErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneBelop();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragsevneBelop kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragsevne25ProsentInntekt er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragsevne25ProsentInntektErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevne25ProsentInntekt();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragsevne25ProsentInntekt kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragSakPeriodeListe er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragSakPeriodeListeErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragSakPeriodeListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnetBidragSakPeriodeListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnetBidragSaksnr er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnetBidragSaksnrErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragSaksnr();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnetBidragSaksnr kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnetBidragDatoFraTil er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnetBidragDatoFraTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoFraTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnetBidragDatoFraTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnetBidragDatoFra er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnetBidragDatoFraErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoFra();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnetBidragDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnetBidragDatoTil er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnetBidragDatoTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnetBidragDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når beregnetBidragPerBarnListe er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBeregnetBidragPerBarnListeErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragPerBarnListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("beregnetBidragPerBarnListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når barnPersonId er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBarnPersonIdErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBarnPersonId();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("barnPersonId kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste IllegalArgumentException når bidragBelop er null")
+  void skalKasteIllegalArgumentExceptionNaarFFBidragBelopErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragBelop();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::tilCore)
+        .withMessage("bidragBelop kan ikke være null");
+  }
 }
