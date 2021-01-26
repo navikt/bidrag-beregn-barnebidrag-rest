@@ -1,0 +1,94 @@
+{
+  "beregnDatoFra": "2020-08-01",
+  "beregnDatoTil": "2021-01-01",
+  "bidragsevnePeriodeListe": [
+    {
+      "bidragsevneDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "bidragsevne25ProsentInntekt": 10416.67,
+      "bidragsevneBelop": 10417
+    }
+  ],
+  "beregnetBidragSakPeriodeListe": [
+    {
+      "beregnetBidragSaksnr": 1,
+      "beregnetBidragDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "beregnetBidragPerBarnListe": [
+        {
+          "barnPersonId": 1,
+          "bidragBelop": 3749
+        }
+      ]
+    },
+    {
+      "beregnetBidragSaksnr": 2,
+      "beregnetBidragDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "beregnetBidragPerBarnListe": [
+        {
+          "barnPersonId": 2,
+          "bidragBelop": 6078
+        }
+      ]
+    },
+    {
+      "beregnetBidragSaksnr": 3,
+      "beregnetBidragDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "beregnetBidragPerBarnListe": [
+        {
+          "barnPersonId": 3,
+          "bidragBelop": 5415
+        }
+      ]
+    },
+    {
+      "beregnetBidragSaksnr": 4,
+      "beregnetBidragDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "beregnetBidragPerBarnListe": [
+        {
+          "barnPersonId": 4,
+          "bidragBelop": 5428
+        }
+      ]
+    },
+    {
+      "beregnetBidragSaksnr": 5,
+      "beregnetBidragDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "beregnetBidragPerBarnListe": [
+        {
+          "barnPersonId": 5,
+          "bidragBelop": 4676
+        }
+      ]
+    },
+    {
+      "beregnetBidragSaksnr": 6,
+      "beregnetBidragDatoFraTil": {
+        "periodeDatoFra": "2020-08-01",
+        "periodeDatoTil": "2021-01-01"
+      },
+      "beregnetBidragPerBarnListe": [
+        {
+          "barnPersonId": 6,
+          "bidragBelop": 3749
+        }
+      ]
+    }
+  ]
+}
