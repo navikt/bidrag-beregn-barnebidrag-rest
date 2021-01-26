@@ -1,5 +1,6 @@
 package no.nav.bidrag.beregn.barnebidrag.rest;
 
+import static com.google.common.base.Predicates.or;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,9 @@ public class SwaggerContext {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         .apis(RequestHandlerSelectors.basePackage(BidragBeregnBarnebidrag.class.getPackage().getName()))
-        .paths(regex("/beregn/barnebidrag" + ".*"))
+        .paths(or(
+            regex("/beregn/barnebidrag" + ".*"),
+            regex("/beregn/forholdsmessigfordeling" + ".*")))
         .build();
   }
 }
