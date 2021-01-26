@@ -150,6 +150,88 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
     );
   }
 
+  @Test
+  @DisplayName("skal kalle core og returnere et resultat - eksempel 3")
+  void skalKalleCoreOgReturnereEtResultat_Eksempel03() {
+    // 6 saker med 1 barn i hver sak
+    filnavn = "src/test/resources/testfiler/forholdsmessig_fordeling_eksempel3.json";
+
+    var request = lesFilOgByggRequest(filnavn);
+
+    // Kall rest-API for barnebidrag
+    var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnForholdsmessigFordelingResultat.class);
+    var forholdsmessigFordelingResultat = responseEntity.getBody();
+
+    assertAll(
+        () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
+        () -> assertThat(forholdsmessigFordelingResultat).isNotNull(),
+
+        // Sjekk resultatet av beregningen
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe()).isNotNull(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe()).isNotNull(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().size()).isEqualTo(6),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe()).isNotNull(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe().size()).isEqualTo(1),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0).getSaksnr())
+            .isEqualTo(1),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe().get(0).getBarnPersonId()).isEqualTo(1),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1340))).isZero(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(0)
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1).getSaksnr())
+            .isEqualTo(2),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
+            .getResultatPerBarnListe().get(0).getBarnPersonId()).isEqualTo(2),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(2180))).isZero(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(1)
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2).getSaksnr())
+            .isEqualTo(3),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2)
+            .getResultatPerBarnListe().get(0).getBarnPersonId()).isEqualTo(3),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1940))).isZero(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(2)
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(3).getSaksnr())
+            .isEqualTo(4),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(3)
+            .getResultatPerBarnListe().get(0).getBarnPersonId()).isEqualTo(4),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(3)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1940))).isZero(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(3)
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(4).getSaksnr())
+            .isEqualTo(5),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(4)
+            .getResultatPerBarnListe().get(0).getBarnPersonId()).isEqualTo(5),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(4)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1670))).isZero(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(4)
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
+
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(5).getSaksnr())
+            .isEqualTo(6),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(5)
+            .getResultatPerBarnListe().get(0).getBarnPersonId()).isEqualTo(6),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(5)
+            .getResultatPerBarnListe().get(0).getResultatBarnebidragBelop().compareTo(BigDecimal.valueOf(1340))).isZero(),
+        () -> assertThat(forholdsmessigFordelingResultat.getResultatPeriodeListe().get(0).getResultatBeregningListe().get(5)
+            .getResultatPerBarnListe().get(0).getResultatKode()).isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
+    );
+  }
+
   private HttpEntity<String> lesFilOgByggRequest(String filnavn) {
     var json = "";
 
