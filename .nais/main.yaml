@@ -1,0 +1,8 @@
+name: bidrag-beregn-barnebidrag-rest
+ingresses:
+  - https://bidrag-beregn-barnebidrag-rest.nais.preprod.local/
+  - https://bidrag-beregn-barnebidrag-rest.dev-fss.nais.io/
+  - https://bidrag-beregn-barnebidrag-rest.dev.adeo.no/
+env:
+  - name: SJABLON_URL
+    value: https://bidrag-sjablon.dev-fss.nais.io/bidrag-sjablon
