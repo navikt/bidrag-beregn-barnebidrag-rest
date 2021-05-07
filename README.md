@@ -1,6 +1,8 @@
 # bidrag-beregn-barnebidrag-rest
 
 ![](https://github.com/navikt/bidrag-beregn-barnebidrag-rest/workflows/continuous%20integration/badge.svg)
+[![test build on pull request](https://github.com/navikt/bidrag-beregn-barnebidrag-rest/actions/workflows/pr.yaml/badge.svg)](https://github.com/navikt/bidrag-beregn-barnebidrag-rest/actions/workflows/pr.yaml)
+[![release bidrag-beregn-barnebidrag-rest](https://github.com/navikt/bidrag-beregn-barnebidrag-rest/actions/workflows/release.yaml/badge.svg)](https://github.com/navikt/bidrag-beregn-barnebidrag-rest/actions/workflows/release.yaml)
 
 Mikrotjeneste / Rest-API for beregning av barnebidrag som er satt opp til å kjøre på NAIS.
 
