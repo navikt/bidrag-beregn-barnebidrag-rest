@@ -1,7 +1,6 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.dto.http
 
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
 import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BeregnForholdsmessigFordelingGrunnlagCore
 import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BeregnForholdsmessigFordelingResultatCore
@@ -18,12 +17,12 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 // Grunnlag
-@ApiModel(value = "Grunnlaget for en beregning av forholdsmessig fordeling")
+@Schema(description = "Grunnlaget for en beregning av forholdsmessig fordeling")
 data class BeregnForholdsmessigFordelingGrunnlag(
-  @ApiModelProperty(value = "Beregn fra-dato") val beregnDatoFra: LocalDate? = null,
-  @ApiModelProperty(value = "Beregn til-dato") val beregnDatoTil: LocalDate? = null,
-  @ApiModelProperty(value = "Periodisert liste over bidragspliktiges bidragsevne") val bidragsevnePeriodeListe: List<BidragsevnePeriode>? = null,
-  @ApiModelProperty(value = "Periodisert liste over bidragspliktiges beregnede bidrag") val beregnetBidragSakPeriodeListe: List<BeregnetBidragSakPeriode>? = null
+  @Schema(description = "Beregn fra-dato") val beregnDatoFra: LocalDate? = null,
+  @Schema(description = "Beregn til-dato") val beregnDatoTil: LocalDate? = null,
+  @Schema(description = "Periodisert liste over bidragspliktiges bidragsevne") val bidragsevnePeriodeListe: List<BidragsevnePeriode>? = null,
+  @Schema(description = "Periodisert liste over bidragspliktiges beregnede bidrag") val beregnetBidragSakPeriodeListe: List<BeregnetBidragSakPeriode>? = null
 ) {
 
   fun tilCore() = BeregnForholdsmessigFordelingGrunnlagCore(
@@ -36,11 +35,11 @@ data class BeregnForholdsmessigFordelingGrunnlag(
   )
 }
 
-@ApiModel(value = "Bidragspliktiges bidragsevne")
+@Schema(description = "Bidragspliktiges bidragsevne")
 data class BidragsevnePeriode(
-  @ApiModelProperty(value = "Bidragspliktiges bidragsevne fra-til-dato") val bidragsevneDatoFraTil: Periode? = null,
-  @ApiModelProperty(value = "Bidragspliktiges bidragsevne beløp") val bidragsevneBelop: BigDecimal? = null,
-  @ApiModelProperty(value = "Bidragspliktiges bidragsevne 25 prosent inntekt") val bidragsevne25ProsentInntekt: BigDecimal? = null
+  @Schema(description = "Bidragspliktiges bidragsevne fra-til-dato") val bidragsevneDatoFraTil: Periode? = null,
+  @Schema(description = "Bidragspliktiges bidragsevne beløp") val bidragsevneBelop: BigDecimal? = null,
+  @Schema(description = "Bidragspliktiges bidragsevne 25 prosent inntekt") val bidragsevne25ProsentInntekt: BigDecimal? = null
 ) {
 
   fun tilCore() = BidragsevnePeriodeCore(
@@ -50,11 +49,11 @@ data class BidragsevnePeriode(
   )
 }
 
-@ApiModel(value = "Bidragspliktiges beregnede bidrag")
+@Schema(description = "Bidragspliktiges beregnede bidrag")
 data class BeregnetBidragSakPeriode(
-  @ApiModelProperty(value = "Bidragspliktiges beregnede bidrag saksnr") val beregnetBidragSaksnr: Int? = null,
-  @ApiModelProperty(value = "Bidragspliktiges beregnede bidrag fra-til-dato") val beregnetBidragDatoFraTil: Periode? = null,
-  @ApiModelProperty(value = "Liste over bidragspliktiges beregnede bidrag grunnlag per barn") val beregnetBidragPerBarnListe: List<BeregnetBidragPerBarn>? = null
+  @Schema(description = "Bidragspliktiges beregnede bidrag saksnr") val beregnetBidragSaksnr: Int? = null,
+  @Schema(description = "Bidragspliktiges beregnede bidrag fra-til-dato") val beregnetBidragDatoFraTil: Periode? = null,
+  @Schema(description = "Liste over bidragspliktiges beregnede bidrag grunnlag per barn") val beregnetBidragPerBarnListe: List<BeregnetBidragPerBarn>? = null
 ) {
 
   fun tilCore() = BeregnetBidragSakPeriodeCore(
@@ -66,10 +65,10 @@ data class BeregnetBidragSakPeriode(
   )
 }
 
-@ApiModel(value = "Beregnet bidrag per barn")
+@Schema(description = "Beregnet bidrag per barn")
 data class BeregnetBidragPerBarn(
-  @ApiModelProperty(value = "Barnets person-id") val barnPersonId: Int? = null,
-  @ApiModelProperty(value = "Bidrag beløp") val bidragBelop: BigDecimal? = null
+  @Schema(description = "Barnets person-id") val barnPersonId: Int? = null,
+  @Schema(description = "Bidrag beløp") val bidragBelop: BigDecimal? = null
 ) {
 
   fun tilCore() = GrunnlagPerBarnCore(
@@ -84,9 +83,9 @@ data class BeregnetBidragPerBarn(
 }
 
 // Resultat
-@ApiModel(value = "Resultatet av en beregning av forholdsmessig fordeling")
+@Schema(description = "Resultatet av en beregning av forholdsmessig fordeling")
 data class BeregnForholdsmessigFordelingResultat(
-  @ApiModelProperty(value = "Periodisert liste over resultatet av av en beregning av forholdsmessig fordeling")
+  @Schema(description = "Periodisert liste over resultatet av av en beregning av forholdsmessig fordeling")
   var resultatPeriodeListe: List<ResultatPeriodeForholdsmessigFordeling> = emptyList()
 ) {
 
@@ -95,11 +94,11 @@ data class BeregnForholdsmessigFordelingResultat(
   )
 }
 
-@ApiModel(value = "Resultatet av en beregning for en gitt periode")
+@Schema(description = "Resultatet av en beregning for en gitt periode")
 data class ResultatPeriodeForholdsmessigFordeling(
-  @ApiModelProperty(value = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
-  @ApiModelProperty(value = "Liste over beregning resultat innhold") var resultatBeregningListe: List<ResultatBeregningForholdsmessigFordeling> = emptyList(),
-  @ApiModelProperty(value = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagForholdsmessigFordeling = ResultatGrunnlagForholdsmessigFordeling()
+  @Schema(description = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
+  @Schema(description = "Liste over beregning resultat innhold") var resultatBeregningListe: List<ResultatBeregningForholdsmessigFordeling> = emptyList(),
+  @Schema(description = "Beregning grunnlag innhold") var resultatGrunnlag: ResultatGrunnlagForholdsmessigFordeling = ResultatGrunnlagForholdsmessigFordeling()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
@@ -109,10 +108,10 @@ data class ResultatPeriodeForholdsmessigFordeling(
   )
 }
 
-@ApiModel(value = "Resultatet av en beregning")
+@Schema(description = "Resultatet av en beregning")
 data class ResultatBeregningForholdsmessigFordeling(
-  @ApiModelProperty(value = "Saksnummer") var saksnr: Int = 0,
-  @ApiModelProperty(value = "Liste over resultat per barn") var resultatPerBarnListe: List<ResultatPerBarn> = emptyList()
+  @Schema(description = "Saksnummer") var saksnr: Int = 0,
+  @Schema(description = "Liste over resultat per barn") var resultatPerBarnListe: List<ResultatPerBarn> = emptyList()
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
@@ -121,11 +120,11 @@ data class ResultatBeregningForholdsmessigFordeling(
   )
 }
 
-@ApiModel(value = "Resultatet av en beregning per barn")
+@Schema(description = "Resultatet av en beregning per barn")
 data class ResultatPerBarn(
-  @ApiModelProperty(value = "Barnets person-id") var barnPersonId: Int = 0,
-  @ApiModelProperty(value = "Barnebidrag beløp") var resultatBarnebidragBelop: BigDecimal = BigDecimal.ZERO,
-  @ApiModelProperty(value = "Resultatkode") var resultatKode: String = "",
+  @Schema(description = "Barnets person-id") var barnPersonId: Int = 0,
+  @Schema(description = "Barnebidrag beløp") var resultatBarnebidragBelop: BigDecimal = BigDecimal.ZERO,
+  @Schema(description = "Resultatkode") var resultatKode: String = "",
 ) {
 
   constructor(resultatPerBarn: ResultatPerBarnCore) : this(
@@ -135,10 +134,10 @@ data class ResultatPerBarn(
   )
 }
 
-@ApiModel(value = "Grunnlaget for en beregning")
+@Schema(description = "Grunnlaget for en beregning")
 data class ResultatGrunnlagForholdsmessigFordeling(
-  @ApiModelProperty(value = "Bidragsevne") var bidragsevneResultatGrunnlag: BidragsevneResultatGrunnlag = BidragsevneResultatGrunnlag(),
-  @ApiModelProperty(value = "Liste over beregnet bidrag per sak") var beregnetBidragSakListe: List<BeregnetBidragSakResultatGrunnlag> = emptyList()
+  @Schema(description = "Bidragsevne") var bidragsevneResultatGrunnlag: BidragsevneResultatGrunnlag = BidragsevneResultatGrunnlag(),
+  @Schema(description = "Liste over beregnet bidrag per sak") var beregnetBidragSakListe: List<BeregnetBidragSakResultatGrunnlag> = emptyList()
 ) {
 
   constructor(resultatGrunnlag: GrunnlagBeregningPeriodisertCore) : this(
@@ -147,10 +146,10 @@ data class ResultatGrunnlagForholdsmessigFordeling(
   )
 }
 
-@ApiModel(value = "Bidragsevne grunnlag")
+@Schema(description = "Bidragsevne grunnlag")
 data class BidragsevneResultatGrunnlag(
-  @ApiModelProperty(value = "Bidragsevne beløp") var bidragsevneBelop: BigDecimal = BigDecimal.ZERO,
-  @ApiModelProperty(value = "bidragsevne 25 prosent inntekt") var bidragsevne25ProsentInntekt: BigDecimal = BigDecimal.ZERO
+  @Schema(description = "Bidragsevne beløp") var bidragsevneBelop: BigDecimal = BigDecimal.ZERO,
+  @Schema(description = "bidragsevne 25 prosent inntekt") var bidragsevne25ProsentInntekt: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(bidragsevne: BidragsevneCore) : this(
@@ -159,10 +158,10 @@ data class BidragsevneResultatGrunnlag(
   )
 }
 
-@ApiModel(value = "Beregnet bidrag sak grunnlag")
+@Schema(description = "Beregnet bidrag sak grunnlag")
 data class BeregnetBidragSakResultatGrunnlag(
-  @ApiModelProperty(value = "Saksnummer") var saksnr: Int = 0,
-  @ApiModelProperty(value = "Liste over grunnlag per barn") var grunnlagPerBarnListe: List<BeregnetBidragPerBarn> = emptyList()
+  @Schema(description = "Saksnummer") var saksnr: Int = 0,
+  @Schema(description = "Liste over grunnlag per barn") var grunnlagPerBarnListe: List<BeregnetBidragPerBarn> = emptyList()
 ) {
 
   constructor(beregnetBidragSak: BeregnetBidragSakCore) : this(
