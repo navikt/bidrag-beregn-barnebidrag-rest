@@ -82,7 +82,7 @@ data class BeregnTotalBarnebidragGrunnlag(
             beregnBPBidragsevneGrunnlag!!.bostatusPeriodeListe!!.map { it.tilCore() }
         else throw UgyldigInputException("bostatusPeriodeListe kan ikke være null"),
 
-        antallBarnIEgetHusholdPeriodeListe =
+        barnIHusstandPeriodeListe =
         if (beregnBPBidragsevneGrunnlag!!.antallBarnIEgetHusholdPeriodeListe != null)
             beregnBPBidragsevneGrunnlag!!.antallBarnIEgetHusholdPeriodeListe!!.map { it.tilCore() }
         else throw UgyldigInputException("antallBarnIEgetHusholdPeriodeListe kan ikke være null"),

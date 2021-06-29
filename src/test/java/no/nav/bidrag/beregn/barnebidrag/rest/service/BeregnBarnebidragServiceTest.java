@@ -227,7 +227,7 @@ class BeregnBarnebidragServiceTest {
 
         // Sjekk at det mappes ut riktig antall for en gitt sjablon av type Sjablontall
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().stream()
-            .filter(sjablonPeriodeCore -> sjablonPeriodeCore.getSjablonNavn().equals(SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn())).count())
+            .filter(sjablonPeriodeCore -> sjablonPeriodeCore.getNavn().equals(SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn())).count())
             .isEqualTo(TestUtil.dummySjablonSjablontallListe().stream()
                 .filter(sjablontall -> sjablontall.getTypeSjablon().equals("0001"))
                 .filter(sjablon -> ((!(sjablon.getDatoFom().isAfter(LocalDate.parse("2020-01-01")))) && (!(sjablon.getDatoTom()
@@ -235,30 +235,30 @@ class BeregnBarnebidragServiceTest {
 
         // Sjekk at det mappes ut riktig antall sjabloner av type Forbruksutgifter
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().stream()
-            .filter(sjablonPeriodeCore -> sjablonPeriodeCore.getSjablonNavn().equals(SjablonNavn.FORBRUKSUTGIFTER.getNavn())).count())
+            .filter(sjablonPeriodeCore -> sjablonPeriodeCore.getNavn().equals(SjablonNavn.FORBRUKSUTGIFTER.getNavn())).count())
             .isEqualTo(TestUtil.dummySjablonForbruksutgifterListe().stream()
                 .filter(sjablon -> ((!(sjablon.getDatoFom().isAfter(LocalDate.parse("2020-01-01")))) && (!(sjablon.getDatoTom()
                     .isBefore(LocalDate.parse("2017-01-01")))))).count()),
 
         // Sjekk at det mappes ut riktig verdi for en gitt sjablon av type Sjablontall
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().stream()
-            .filter(sjablonPeriodeCore -> (sjablonPeriodeCore.getSjablonNavn().equals(SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn())) &&
-                (sjablonPeriodeCore.getSjablonPeriodeDatoFraTil().getPeriodeDatoFra().equals(LocalDate.parse("2019-07-01"))))
-            .map(SjablonPeriodeCore::getSjablonInnholdListe)
+            .filter(sjablonPeriodeCore -> (sjablonPeriodeCore.getNavn().equals(SjablonTallNavn.ORDINAER_BARNETRYGD_BELOP.getNavn())) &&
+                (sjablonPeriodeCore.getPeriode().getDatoFom().equals(LocalDate.parse("2019-07-01"))))
+            .map(SjablonPeriodeCore::getInnholdListe)
             .flatMap(Collection::stream)
             .findFirst()
-            .map(SjablonInnholdCore::getSjablonInnholdVerdi)
+            .map(SjablonInnholdCore::getVerdi)
             .orElse(BigDecimal.ZERO))
             .isEqualTo(BigDecimal.valueOf(1054)),
 
         // Sjekk at det mappes ut riktig verdi for en gitt sjablon av type MaksFradrag
         () -> assertThat(nettoBarnetilsynGrunnlagTilCore.getSjablonPeriodeListe().stream()
-            .filter(sjablonPeriodeCore -> (sjablonPeriodeCore.getSjablonNavn().equals(SjablonNavn.MAKS_FRADRAG.getNavn())) &&
-                (sjablonPeriodeCore.getSjablonPeriodeDatoFraTil().getPeriodeDatoFra().equals(LocalDate.parse("2008-07-01"))))
-            .map(SjablonPeriodeCore::getSjablonInnholdListe)
+            .filter(sjablonPeriodeCore -> (sjablonPeriodeCore.getNavn().equals(SjablonNavn.MAKS_FRADRAG.getNavn())) &&
+                (sjablonPeriodeCore.getPeriode().getDatoFom().equals(LocalDate.parse("2008-07-01"))))
+            .map(SjablonPeriodeCore::getInnholdListe)
             .flatMap(Collection::stream)
             .findFirst()
-            .map(SjablonInnholdCore::getSjablonInnholdVerdi)
+            .map(SjablonInnholdCore::getVerdi)
             .orElse(BigDecimal.ZERO))
             .isEqualTo(BigDecimal.valueOf(3333)));
   }

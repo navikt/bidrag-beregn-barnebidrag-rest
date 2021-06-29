@@ -6,9 +6,9 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Bidragsevne(
-    val bostatus: String? = null,
-    val datoFom: LocalDate? = null,
-    val datoTom: LocalDate? = null,
-    val belopBoutgift: BigDecimal? = null,
-    val belopUnderhold: BigDecimal? = null
+  val bostatus: String? = null,
+  val datoFom: LocalDate? = null,
+  val datoTom: LocalDate? = null,
+  val belopBoutgift: BigDecimal? = null,
+  val belopUnderhold: BigDecimal? = null
 )

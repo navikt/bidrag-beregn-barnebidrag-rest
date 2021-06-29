@@ -6,12 +6,12 @@ import java.math.BigDecimal
 
 @Schema(description = "Sjabloner brukt i beregning")
 data class Sjablon(
-    @Schema(description = "Sjablonnavn") var sjablonNavn: String = "",
-    @Schema(description = "Sjablonverdi") var sjablonVerdi: BigDecimal = BigDecimal.ZERO
+  @Schema(description = "Sjablonnavn") var sjablonNavn: String = "",
+  @Schema(description = "Sjablonverdi") var sjablonVerdi: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(sjablon: SjablonNavnVerdiCore) : this(
-      sjablonNavn = sjablon.sjablonNavn,
-      sjablonVerdi = sjablon.sjablonVerdi
+    sjablonNavn = sjablon.navn,
+    sjablonVerdi = sjablon.verdi
   )
 }
