@@ -27,11 +27,11 @@ data class FaktiskUtgiftPeriode(
     referanse = "",
     periode = if (faktiskUtgiftDatoFraTil != null) faktiskUtgiftDatoFraTil!!.tilCore("faktiskUtgift")
     else throw UgyldigInputException("faktiskUtgiftDatoFraTil kan ikke være null"),
-    soknadsbarnFodselsdato = SoknadsbarnUtil.hentFodselsdatoForId(faktiskUtgiftSoknadsbarnPersonId, soknadsbarnMap)
-      ?: throw UgyldigInputException("Søknadsbarn med id $faktiskUtgiftSoknadsbarnPersonId har ingen korresponderende fødselsdato i soknadsbarnListe"),
     soknadsbarnPersonId = if (faktiskUtgiftSoknadsbarnPersonId != null) faktiskUtgiftSoknadsbarnPersonId!!
     else throw UgyldigInputException("faktiskUtgiftSoknadsbarnPersonId kan ikke være null"),
-    belop = if (faktiskUtgiftBelop != null) faktiskUtgiftBelop!! else throw UgyldigInputException("faktiskUtgiftBelop kan ikke være null")
+    belop = if (faktiskUtgiftBelop != null) faktiskUtgiftBelop!! else throw UgyldigInputException("faktiskUtgiftBelop kan ikke være null"),
+    soknadsbarnFodselsdato = SoknadsbarnUtil.hentFodselsdatoForId(faktiskUtgiftSoknadsbarnPersonId, soknadsbarnMap)
+      ?: throw UgyldigInputException("Søknadsbarn med id $faktiskUtgiftSoknadsbarnPersonId har ingen korresponderende fødselsdato i soknadsbarnListe"),
   )
 }
 
