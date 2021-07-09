@@ -42,6 +42,7 @@ public class BeregnBarnebidragControllerIntegrationTest {
   private int port;
 
   private String url;
+  private String urlNy;
   private String filnavn;
 
   private BigDecimal forventetBidragsevneBelop;

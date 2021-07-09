@@ -54,10 +54,10 @@ class BeregnBarnebidragControllerMockTest {
     when(beregnBarnebidragServiceMock.beregn(any(BeregnTotalBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(OK,
         new BeregnTotalBarnebidragResultat(TestUtil.dummyBidragsevneResultat(), TestUtil.dummyNettoBarnetilsynResultat(),
             TestUtil.dummyUnderholdskostnadResultat(), TestUtil.dummyBPsAndelUnderholdskostnadResultat(), TestUtil.dummySamvaersfradragResultat(),
-            TestUtil.dummyKostnadsberegnetBidragResultat(), TestUtil.dummyBarnebidragResultat())));
+            TestUtil.dummyBarnebidragResultat())));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
-    var request = initHttpEntity(TestUtil.byggTotalBarnebidragGrunnlag());
+    var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
     var totalBarnebidragResultat = responseEntity.getBody();
 
@@ -154,18 +154,6 @@ class BeregnBarnebidragControllerMockTest {
         () -> assertThat(totalBarnebidragResultat.getBeregnBPSamvaersfradragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
             .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
 
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe()).isNotNull(),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0)
-            .getResultatSoknadsbarnPersonId()).isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
-            .getPeriodeDatoFra()).isEqualTo(LocalDate.parse("2017-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatDatoFraTil()
-            .getPeriodeDatoTil()).isEqualTo(LocalDate.parse("2019-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnBPKostnadsberegnetBidragResultat().getResultatPeriodeListe().get(0).getResultatBeregning()
-            .getResultatBelop()).isEqualTo(BigDecimal.valueOf(100)),
-
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe()).isNotNull(),
         () -> assertThat(totalBarnebidragResultat.getBeregnBarnebidragResultat().getResultatPeriodeListe().size()).isEqualTo(1),
@@ -189,7 +177,7 @@ class BeregnBarnebidragControllerMockTest {
     when(beregnBarnebidragServiceMock.beregn(any(BeregnTotalBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
-    var request = initHttpEntity(TestUtil.byggTotalBarnebidragGrunnlag());
+    var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
     var totalBarnebidragResultat = responseEntity.getBody();
 
@@ -206,7 +194,7 @@ class BeregnBarnebidragControllerMockTest {
     when(beregnBarnebidragServiceMock.beregn(any(BeregnTotalBarnebidragGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
 
     var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
-    var request = initHttpEntity(TestUtil.byggTotalBarnebidragGrunnlag());
+    var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnTotalBarnebidragResultat.class);
     var totalBarnebidragResultat = responseEntity.getBody();
 
