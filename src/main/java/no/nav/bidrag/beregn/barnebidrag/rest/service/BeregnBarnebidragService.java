@@ -1,26 +1,30 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.service;
 
 import static java.util.Collections.emptyList;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 import static no.nav.bidrag.beregn.barnebidrag.rest.service.SoknadsbarnUtil.validerSoknadsbarnId;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
+import no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadPeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnetBarnebidragResultatCore;
+import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevnePeriodeCore;
+import no.nav.bidrag.beregn.barnebidrag.dto.SamvaersfradragPeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBMNettoBarnetilsynResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBMUnderholdskostnadResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPAndelUnderholdskostnadResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPBidragsevneResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBPSamvaersfradragResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.ResultatGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BPAndelUnderholdskostnadCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BarnebidragCoreMapper;
@@ -31,10 +35,13 @@ import no.nav.bidrag.beregn.barnebidrag.rest.mapper.UnderholdskostnadCoreMapper;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnetBidragsevneResultatCore;
+import no.nav.bidrag.beregn.bidragsevne.dto.ResultatPeriodeCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnetBPsAndelUnderholdskostnadResultatCore;
+import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.UnderholdskostnadPeriodeCore;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
+import no.nav.bidrag.beregn.felles.dto.SjablonResultatGrunnlagCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.NettoBarnetilsynCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnetNettoBarnetilsynResultatCore;
@@ -44,6 +51,7 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnetSamvaersfradragResultatC
 import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnetUnderholdskostnadResultatCore;
+import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore;
 import no.nav.bidrag.commons.web.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +104,7 @@ public class BeregnBarnebidragService {
     this.barnebidragCore = barnebidragCore;
   }
 
-  public HttpResponse<BeregnTotalBarnebidragResultat> beregn(BeregnTotalBarnebidragGrunnlag grunnlag) {
+  public HttpResponse<BeregnetTotalBarnebidragResultat> beregn(BeregnTotalBarnebidragGrunnlag grunnlag) {
 
     // Kontroll av inputdata
     grunnlag.valider();
@@ -115,49 +123,60 @@ public class BeregnBarnebidragService {
   //==================================================================================================================================================
 
   // Bygger grunnlag til core og kaller delberegninger
-  private HttpResponse<BeregnTotalBarnebidragResultat> utfoerDelberegninger(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
+  private HttpResponse<BeregnetTotalBarnebidragResultat> utfoerDelberegninger(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
       Map<Integer, String> soknadsbarnMap, SjablonListe sjablonListe) {
+
+    var grunnlagReferanseListe = new ArrayList<ResultatGrunnlag>();
 
     // ++ Bidragsevne
     var bidragsevneGrunnlagTilCore = bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, sjablonListe);
     var bidragsevneResultatFraCore = beregnBidragsevne(bidragsevneGrunnlagTilCore);
+    grunnlagReferanseListe.addAll(lagGrunnlagListeBidragsevne(beregnTotalBarnebidragGrunnlag, bidragsevneResultatFraCore));
 
     // ++ Netto barnetilsyn
     var nettoBarnetilsynGrunnlagTilCore = nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, sjablonListe,
         soknadsbarnMap);
     var nettoBarnetilsynResultatFraCore = beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCore);
+    grunnlagReferanseListe.addAll(lagGrunnlagListeNettoBarnetilsyn(beregnTotalBarnebidragGrunnlag, nettoBarnetilsynResultatFraCore));
 
     // ++ Underholdskostnad
     var underholdskostnadResultatFraCore = utfoerDelberegningUnderholdskostnad(beregnTotalBarnebidragGrunnlag, soknadsbarnMap,
-        nettoBarnetilsynResultatFraCore, sjablonListe);
+        nettoBarnetilsynResultatFraCore, sjablonListe, grunnlagReferanseListe);
 
     // ++ BPs andel av underholdskostnad
     var bpAndelUnderholdskostnadResultatFraCore = utfoerDelberegningBPAndelUnderholdskostnad(beregnTotalBarnebidragGrunnlag, soknadsbarnMap,
-        underholdskostnadResultatFraCore, sjablonListe);
+        underholdskostnadResultatFraCore, sjablonListe, grunnlagReferanseListe);
 
     // ++ Samværsfradrag
-    var samvaersfradragResultatFraCore = utfoerDelberegningSamvaersfradrag(beregnTotalBarnebidragGrunnlag, soknadsbarnMap, sjablonListe);
+    var samvaersfradragResultatFraCore = utfoerDelberegningSamvaersfradrag(beregnTotalBarnebidragGrunnlag, soknadsbarnMap, sjablonListe,
+        grunnlagReferanseListe);
 
     // ++ Barnebidrag (totalberegning)
     var barnebidragGrunnlagTilCore = barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, sjablonListe,
         bidragsevneResultatFraCore, bpAndelUnderholdskostnadResultatFraCore, samvaersfradragResultatFraCore);
     var barnebidragResultatFraCore = beregnBarnebidrag(barnebidragGrunnlagTilCore);
+    grunnlagReferanseListe.addAll(lagGrunnlagReferanseListeBarnebidrag(beregnTotalBarnebidragGrunnlag, barnebidragResultatFraCore,
+        barnebidragGrunnlagTilCore, bidragsevneResultatFraCore, bpAndelUnderholdskostnadResultatFraCore, samvaersfradragResultatFraCore));
 
     // Bygger responsobjekt
-    return HttpResponse.from(HttpStatus.OK, new BeregnTotalBarnebidragResultat(
-        new BeregnBPBidragsevneResultat(bidragsevneResultatFraCore),
-        new BeregnBMNettoBarnetilsynResultat(nettoBarnetilsynResultatFraCore),
-        new BeregnBMUnderholdskostnadResultat(underholdskostnadResultatFraCore),
-        new BeregnBPAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultatFraCore),
-        new BeregnBPSamvaersfradragResultat(samvaersfradragResultatFraCore),
-        new BeregnBarnebidragResultat(barnebidragResultatFraCore)));
+    return HttpResponse.from(HttpStatus.OK, new BeregnetTotalBarnebidragResultat(barnebidragResultatFraCore,
+        grunnlagReferanseListe.stream().sorted(comparing(ResultatGrunnlag::getReferanse)).distinct().toList()));
+
+//    return HttpResponse.from(HttpStatus.OK, new BeregnTotalBarnebidragResultat(
+//        new BeregnBPBidragsevneResultat(bidragsevneResultatFraCore),
+//        new BeregnBMNettoBarnetilsynResultat(nettoBarnetilsynResultatFraCore),
+//        new BeregnBMUnderholdskostnadResultat(underholdskostnadResultatFraCore),
+//        new BeregnBPAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultatFraCore),
+//        new BeregnBPSamvaersfradragResultat(samvaersfradragResultatFraCore),
+//        new BeregnBarnebidragResultat(barnebidragResultatFraCore)));
   }
 
   //==================================================================================================================================================
 
   // Delberegning underholdskostnad
   private BeregnetUnderholdskostnadResultatCore utfoerDelberegningUnderholdskostnad(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
-      Map<Integer, String> soknadsbarnMap, BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore, SjablonListe sjablonListe) {
+      Map<Integer, String> soknadsbarnMap, BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore, SjablonListe sjablonListe,
+      List<ResultatGrunnlag> grunnlagReferanseListe) {
 
     // Bygger opp liste med grunnlag for hvert søknadsbarn
     var underholdskostnadGrunnlagTilCoreListe = new ArrayList<BeregnUnderholdskostnadGrunnlagCore>();
@@ -167,16 +186,22 @@ public class BeregnBarnebidragService {
 
     // Kaller beregning for hvert søknadsbarn
     var resultatUnderholdskostnadListe = new ArrayList<no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore>();
-    underholdskostnadGrunnlagTilCoreListe.forEach(underholdskostnadGrunnlagTilCore ->
-        resultatUnderholdskostnadListe.addAll(beregnUnderholdskostnad(underholdskostnadGrunnlagTilCore)));
-
-    return new BeregnetUnderholdskostnadResultatCore(resultatUnderholdskostnadListe, emptyList(), emptyList());
+    var sjablonUnderholdskostnadListe = new ArrayList<SjablonResultatGrunnlagCore>();
+    underholdskostnadGrunnlagTilCoreListe.forEach(underholdskostnadGrunnlagTilCore -> {
+      var beregnetUnderholdskostnad = beregnUnderholdskostnad(underholdskostnadGrunnlagTilCore);
+      grunnlagReferanseListe.addAll(lagGrunnlagListeUnderholdskostnad(beregnTotalBarnebidragGrunnlag, beregnetUnderholdskostnad,
+          underholdskostnadGrunnlagTilCore, nettoBarnetilsynResultatFraCore));
+      resultatUnderholdskostnadListe.addAll(beregnetUnderholdskostnad.getResultatPeriodeListe());
+      sjablonUnderholdskostnadListe.addAll(beregnetUnderholdskostnad.getSjablonListe());
+    });
+    return new BeregnetUnderholdskostnadResultatCore(resultatUnderholdskostnadListe, sjablonUnderholdskostnadListe, emptyList());
   }
 
   // Delberegning BPs andel av underholdskostnad
   private BeregnetBPsAndelUnderholdskostnadResultatCore utfoerDelberegningBPAndelUnderholdskostnad(
       BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag, Map<Integer, String> soknadsbarnMap,
-      BeregnetUnderholdskostnadResultatCore underholdskostnadResultatFraCore, SjablonListe sjablonListe) {
+      BeregnetUnderholdskostnadResultatCore underholdskostnadResultatFraCore, SjablonListe sjablonListe,
+      List<ResultatGrunnlag> grunnlagReferanseListe) {
 
     // Bygger opp liste med grunnlag for hvert søknadsbarn
     var bpAndelUnderholdskostnadGrunnlagTilCoreListe = new ArrayList<BeregnBPsAndelUnderholdskostnadGrunnlagCore>();
@@ -187,15 +212,21 @@ public class BeregnBarnebidragService {
 
     // Kaller beregning for hvert søknadsbarn
     var resultatBPAndelUnderholdskostnadListe = new ArrayList<no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore>();
-    bpAndelUnderholdskostnadGrunnlagTilCoreListe.forEach(bpAndelUnderholdskostnadGrunnlagTilCore ->
-        resultatBPAndelUnderholdskostnadListe.addAll(beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore)));
-
-    return new BeregnetBPsAndelUnderholdskostnadResultatCore(resultatBPAndelUnderholdskostnadListe, emptyList(), emptyList());
+    var sjablonBPAndelUnderholdskostnadListe = new ArrayList<SjablonResultatGrunnlagCore>();
+    bpAndelUnderholdskostnadGrunnlagTilCoreListe.forEach(bpAndelUnderholdskostnadGrunnlagTilCore -> {
+      var beregnetBPAndelUnderholdskostnad = beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore);
+      grunnlagReferanseListe.addAll(lagGrunnlagListeBPAndelUnderholdskostnad(beregnTotalBarnebidragGrunnlag,
+          beregnetBPAndelUnderholdskostnad, bpAndelUnderholdskostnadGrunnlagTilCore, underholdskostnadResultatFraCore));
+      resultatBPAndelUnderholdskostnadListe.addAll(beregnetBPAndelUnderholdskostnad.getResultatPeriodeListe());
+      sjablonBPAndelUnderholdskostnadListe.addAll(beregnetBPAndelUnderholdskostnad.getSjablonListe());
+    });
+    return new BeregnetBPsAndelUnderholdskostnadResultatCore(resultatBPAndelUnderholdskostnadListe, sjablonBPAndelUnderholdskostnadListe,
+        emptyList());
   }
 
   // Delberegning samværsfradrag
   private BeregnetSamvaersfradragResultatCore utfoerDelberegningSamvaersfradrag(BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag,
-      Map<Integer, String> soknadsbarnMap, SjablonListe sjablonListe) {
+      Map<Integer, String> soknadsbarnMap, SjablonListe sjablonListe, List<ResultatGrunnlag> grunnlagReferanseListe) {
 
     // Bygger opp liste med grunnlag for hvert søknadsbarn
     var samvaersfradragGrunnlagTilCoreListe = new ArrayList<BeregnSamvaersfradragGrunnlagCore>();
@@ -205,9 +236,14 @@ public class BeregnBarnebidragService {
 
     // Kaller beregning for hvert søknadsbarn
     var resultatSamvaersfradragListe = new ArrayList<no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore>();
-    samvaersfradragGrunnlagTilCoreListe.forEach(samvaersfradragGrunnlagTilCore ->
-        resultatSamvaersfradragListe.addAll(beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore)));
-    return new BeregnetSamvaersfradragResultatCore(resultatSamvaersfradragListe, emptyList(), emptyList());
+    var sjablonSamvaersfradragListe = new ArrayList<SjablonResultatGrunnlagCore>();
+    samvaersfradragGrunnlagTilCoreListe.forEach(samvaersfradragGrunnlagTilCore -> {
+      var beregnetSamvaersfradrag = beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
+      grunnlagReferanseListe.addAll(lagGrunnlagListeSamvaersfradrag(beregnTotalBarnebidragGrunnlag, beregnetSamvaersfradrag));
+      resultatSamvaersfradragListe.addAll(beregnetSamvaersfradrag.getResultatPeriodeListe());
+      sjablonSamvaersfradragListe.addAll(beregnetSamvaersfradrag.getSjablonListe());
+    });
+    return new BeregnetSamvaersfradragResultatCore(resultatSamvaersfradragListe, sjablonSamvaersfradragListe, emptyList());
   }
 
   //==================================================================================================================================================
@@ -262,7 +298,7 @@ public class BeregnBarnebidragService {
   }
 
   // Kaller core for beregning av underholdskostnad
-  private List<no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore> beregnUnderholdskostnad(
+  private BeregnetUnderholdskostnadResultatCore beregnUnderholdskostnad(
       BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore) {
 
     // Kaller core-modulen for beregning av underholdskostnad
@@ -286,11 +322,11 @@ public class BeregnBarnebidragService {
     }
 
     LOGGER.debug("Underholdskostnad - resultat av beregning: {}", underholdskostnadResultatFraCore.getResultatPeriodeListe());
-    return underholdskostnadResultatFraCore.getResultatPeriodeListe();
+    return underholdskostnadResultatFraCore;
   }
 
   // Kaller core for beregning av BPs andel av underholdskostnad
-  private List<no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore> beregnBPsAndelUnderholdskostnad(
+  private BeregnetBPsAndelUnderholdskostnadResultatCore beregnBPsAndelUnderholdskostnad(
       BeregnBPsAndelUnderholdskostnadGrunnlagCore bpAndelUnderholdskostnadGrunnlagTilCore) {
 
     // Kaller core-modulen for beregning av BPs andel av underholdskostnad
@@ -315,11 +351,11 @@ public class BeregnBarnebidragService {
     }
 
     LOGGER.debug("BPs andel av underholdskostnad - resultat av beregning: {}", bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe());
-    return bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe();
+    return bpAndelUnderholdskostnadResultatFraCore;
   }
 
   // Kaller core for beregning av samværsfradrag
-  private List<no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore> beregnSamvaersfradrag(
+  private BeregnetSamvaersfradragResultatCore beregnSamvaersfradrag(
       BeregnSamvaersfradragGrunnlagCore samvaersfradragGrunnlagTilCore) {
 
     // Kaller core-modulen for beregning av samværsfradrag
@@ -341,7 +377,7 @@ public class BeregnBarnebidragService {
     }
 
     LOGGER.debug("Samværsfradrag - resultat av beregning: {}", samvaersfradragResultatFraCore.getResultatPeriodeListe());
-    return samvaersfradragResultatFraCore.getResultatPeriodeListe();
+    return samvaersfradragResultatFraCore;
   }
 
   // Kaller core for beregning av barnebidrag
@@ -421,5 +457,314 @@ public class BeregnBarnebidragService {
 
     return new SjablonListe(sjablonSjablontallListe, sjablonForbruksutgifterListe, sjablonMaksTilsynListe, sjablonMaksFradragListe,
         sjablonSamvaersfradragListe, sjablonBidragsevneListe, sjablonTrinnvisSkattesatsListe, sjablonBarnetilsynListe);
+  }
+
+  //==================================================================================================================================================
+
+  // Lager en liste over resultatgrunnlag som inneholder:
+  //   - mottatte grunnlag som er brukt i beregningen
+  //   - tidligere delberegninger som er brukt i beregningen
+  //   - sjabloner som er brukt i beregningen
+
+  // Bidragsevne
+  private List<ResultatGrunnlag> lagGrunnlagListeBidragsevne(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+      BeregnetBidragsevneResultatCore bidragsevneResultatFraCore) {
+    var resultatGrunnlagListe = new ArrayList<ResultatGrunnlag>();
+
+    // Bygger opp oversikt over alle grunnlag som er brukt i beregningen
+    var grunnlagReferanseListe = bidragsevneResultatFraCore.getResultatPeriodeListe().stream()
+        .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
+            .map(String::new))
+        .distinct()
+        .collect(toList());
+
+    // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
+    resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
+        .collect(toList()));
+
+    // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
+    resultatGrunnlagListe.addAll(mapSjabloner(bidragsevneResultatFraCore.getSjablonListe()));
+
+    return resultatGrunnlagListe;
+  }
+
+  // Netto barnetilsyn
+  private List<ResultatGrunnlag> lagGrunnlagListeNettoBarnetilsyn(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+      BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore) {
+    var resultatGrunnlagListe = new ArrayList<ResultatGrunnlag>();
+
+    // Bygger opp oversikt over alle grunnlag som er brukt i beregningen
+    var grunnlagReferanseListe = nettoBarnetilsynResultatFraCore.getResultatPeriodeListe().stream()
+        .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
+            .map(String::new))
+        .distinct()
+        .collect(toList());
+
+    // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
+    resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
+        .collect(toList()));
+
+    // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
+    resultatGrunnlagListe.addAll(mapSjabloner(nettoBarnetilsynResultatFraCore.getSjablonListe()));
+
+    return resultatGrunnlagListe;
+  }
+
+  // Underholdskostnad
+  private List<ResultatGrunnlag> lagGrunnlagListeUnderholdskostnad(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+      BeregnetUnderholdskostnadResultatCore underholdskostnadResultatFraCore, BeregnUnderholdskostnadGrunnlagCore underholdskostnadGrunnlagTilCore,
+      BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore) {
+    var resultatGrunnlagListe = new ArrayList<ResultatGrunnlag>();
+
+    // Bygger opp oversikt over alle grunnlag som er brukt i beregningen
+    var grunnlagReferanseListe = underholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
+        .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
+            .map(String::new))
+        .distinct()
+        .collect(toList());
+
+    // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
+    resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
+        .collect(toList()));
+
+    // Mapper ut delberegninger som er brukt som grunnlag
+    resultatGrunnlagListe.addAll(underholdskostnadGrunnlagTilCore.getNettoBarnetilsynPeriodeListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
+            lagInnholdNettoBarnetilsyn(grunnlag, nettoBarnetilsynResultatFraCore)))
+        .collect(toList()));
+
+    // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
+    resultatGrunnlagListe.addAll(mapSjabloner(underholdskostnadResultatFraCore.getSjablonListe()));
+
+    return resultatGrunnlagListe;
+  }
+
+  // BP's andel underholdskostnad
+  private List<ResultatGrunnlag> lagGrunnlagListeBPAndelUnderholdskostnad(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+      BeregnetBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore,
+      BeregnBPsAndelUnderholdskostnadGrunnlagCore bpAndelUnderholdskostnadGrunnlagTilCore,
+      BeregnetUnderholdskostnadResultatCore underholdskostnadResultatFraCore) {
+    var resultatGrunnlagListe = new ArrayList<ResultatGrunnlag>();
+
+    // Bygger opp oversikt over alle grunnlag som er brukt i beregningen
+    var grunnlagReferanseListe = bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
+        .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
+            .map(String::new))
+        .distinct()
+        .collect(toList());
+
+    // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
+    resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
+        .collect(toList()));
+
+    // Mapper ut delberegninger som er brukt som grunnlag
+    resultatGrunnlagListe.addAll(bpAndelUnderholdskostnadGrunnlagTilCore.getUnderholdskostnadPeriodeListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning", lagInnholdUnderholdskostnad(grunnlag,
+            bpAndelUnderholdskostnadGrunnlagTilCore.getSoknadsbarnPersonId(), underholdskostnadResultatFraCore)))
+        .collect(toList()));
+
+    // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
+    resultatGrunnlagListe.addAll(mapSjabloner(bpAndelUnderholdskostnadResultatFraCore.getSjablonListe()));
+
+    return resultatGrunnlagListe;
+  }
+
+  // Samværsfradrag
+  private List<ResultatGrunnlag> lagGrunnlagListeSamvaersfradrag(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+      BeregnetSamvaersfradragResultatCore samvaersfradragResultatFraCore) {
+    var resultatGrunnlagListe = new ArrayList<ResultatGrunnlag>();
+
+    // Bygger opp oversikt over alle grunnlag som er brukt i beregningen
+    var grunnlagReferanseListe = samvaersfradragResultatFraCore.getResultatPeriodeListe().stream()
+        .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
+            .map(String::new))
+        .distinct()
+        .collect(toList());
+
+    // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
+    resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
+        .collect(toList()));
+
+    // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
+    resultatGrunnlagListe.addAll(mapSjabloner(samvaersfradragResultatFraCore.getSjablonListe()));
+
+    return resultatGrunnlagListe;
+  }
+
+  // Barnebidrag
+  private List<ResultatGrunnlag> lagGrunnlagReferanseListeBarnebidrag(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+      BeregnetBarnebidragResultatCore barnebidragResultatFraCore, BeregnBarnebidragGrunnlagCore barnebidragGrunnlagTilCore,
+      BeregnetBidragsevneResultatCore bidragsevneResultatFraCore,
+      BeregnetBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore,
+      BeregnetSamvaersfradragResultatCore samvaersfradragResultatFraCore) {
+    var resultatGrunnlagListe = new ArrayList<ResultatGrunnlag>();
+
+    // Bygger opp oversikt over alle grunnlag som er brukt i beregningen
+    var grunnlagReferanseListe = barnebidragResultatFraCore.getResultatPeriodeListe().stream()
+        .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
+            .map(String::new))
+        .distinct()
+        .collect(toList());
+
+    // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
+    resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
+        .collect(toList()));
+
+    // Mapper ut delberegninger som er brukt som grunnlag
+    resultatGrunnlagListe.addAll(barnebidragGrunnlagTilCore.getBidragsevnePeriodeListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning", lagInnholdBidragsevne(grunnlag, bidragsevneResultatFraCore)))
+        .collect(toList()));
+
+    resultatGrunnlagListe.addAll(barnebidragGrunnlagTilCore.getBPsAndelUnderholdskostnadPeriodeListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
+            lagInnholdBPAndelUnderholdskostnad(grunnlag, bpAndelUnderholdskostnadResultatFraCore)))
+        .collect(toList()));
+
+    resultatGrunnlagListe.addAll(barnebidragGrunnlagTilCore.getSamvaersfradragPeriodeListe().stream()
+        .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
+        .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
+            lagInnholdSamvaersfradrag(grunnlag, samvaersfradragResultatFraCore)))
+        .collect(toList()));
+
+    // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
+    resultatGrunnlagListe.addAll(mapSjabloner(barnebidragResultatFraCore.getSjablonListe()));
+
+    return resultatGrunnlagListe;
+  }
+
+  // Mapper ut innhold fra delberegning Bidragsevne
+  private JsonNode lagInnholdBidragsevne(BidragsevnePeriodeCore bidragsevnePeriodeCore, BeregnetBidragsevneResultatCore bidragsevneResultatFraCore) {
+    var mapper = new ObjectMapper();
+    var map = new LinkedHashMap<String, Object>();
+    map.put("datoFom", mapDato(bidragsevnePeriodeCore.getPeriode().getDatoFom()));
+    map.put("datoTil", mapDato(bidragsevnePeriodeCore.getPeriode().getDatoTil()));
+    map.put("belop", bidragsevnePeriodeCore.getBelop());
+    map.put("25ProsentInntekt", bidragsevnePeriodeCore.getTjuefemProsentInntekt());
+
+    var grunnlagReferanseListe = bidragsevneResultatFraCore.getResultatPeriodeListe().stream()
+        .filter(resultatPeriodeCore -> bidragsevnePeriodeCore.getPeriode().getDatoFom().equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .findFirst()
+        .map(ResultatPeriodeCore::getGrunnlagReferanseListe)
+        .orElse(emptyList());
+
+    map.put("grunnlagReferanseListe", grunnlagReferanseListe);
+    return mapper.valueToTree(map);
+  }
+
+  // Mapper ut innhold fra delberegning Netto Barnetilsyn
+  private JsonNode lagInnholdNettoBarnetilsyn(NettoBarnetilsynPeriodeCore nettoBarnetilsynPeriodeCore,
+      BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore) {
+    var mapper = new ObjectMapper();
+    var map = new LinkedHashMap<String, Object>();
+    map.put("datoFom", mapDato(nettoBarnetilsynPeriodeCore.getPeriode().getDatoFom()));
+    map.put("datoTil", mapDato(nettoBarnetilsynPeriodeCore.getPeriode().getDatoTil()));
+    map.put("belop", nettoBarnetilsynPeriodeCore.getBelop());
+
+    var grunnlagReferanseListe = nettoBarnetilsynResultatFraCore.getResultatPeriodeListe().stream()
+        .filter(resultatPeriodeCore -> nettoBarnetilsynPeriodeCore.getPeriode().getDatoFom().equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .findFirst()
+        .map(no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
+        .orElse(emptyList());
+
+    map.put("grunnlagReferanseListe", grunnlagReferanseListe);
+    return mapper.valueToTree(map);
+  }
+
+  // Mapper ut innhold fra delberegning Underholdskostnad
+  private JsonNode lagInnholdUnderholdskostnad(UnderholdskostnadPeriodeCore underholdskostnadPeriodeCore, Integer soknadsbarnPersonId,
+      BeregnetUnderholdskostnadResultatCore underholdskostnadResultatFraCore) {
+    var mapper = new ObjectMapper();
+    var map = new LinkedHashMap<String, Object>();
+    map.put("barn", soknadsbarnPersonId);
+    map.put("datoFom", mapDato(underholdskostnadPeriodeCore.getPeriode().getDatoFom()));
+    map.put("datoTil", mapDato(underholdskostnadPeriodeCore.getPeriode().getDatoTil()));
+    map.put("belop", underholdskostnadPeriodeCore.getBelop());
+
+    var grunnlagReferanseListe = underholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
+        .filter(resultatPeriodeCore -> underholdskostnadPeriodeCore.getPeriode().getDatoFom().equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .findFirst()
+        .map(no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
+        .orElse(emptyList());
+
+    map.put("grunnlagReferanseListe", grunnlagReferanseListe);
+    return mapper.valueToTree(map);
+  }
+
+  // Mapper ut innhold fra delberegning BPsAndelUnderholdskostnad
+  private JsonNode lagInnholdBPAndelUnderholdskostnad(BPsAndelUnderholdskostnadPeriodeCore bpAndelUnderholdskostnadPeriodeCore,
+      BeregnetBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore) {
+    var mapper = new ObjectMapper();
+    var map = new LinkedHashMap<String, Object>();
+    map.put("barn", bpAndelUnderholdskostnadPeriodeCore.getSoknadsbarnPersonId());
+    map.put("datoFom", mapDato(bpAndelUnderholdskostnadPeriodeCore.getPeriode().getDatoFom()));
+    map.put("datoTil", mapDato(bpAndelUnderholdskostnadPeriodeCore.getPeriode().getDatoTil()));
+    map.put("belop", bpAndelUnderholdskostnadPeriodeCore.getAndelBelop());
+    map.put("prosent", bpAndelUnderholdskostnadPeriodeCore.getAndelProsent());
+    map.put("selvforsorget", bpAndelUnderholdskostnadPeriodeCore.getBarnetErSelvforsorget());
+
+    var grunnlagReferanseListe = bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
+        .filter(resultatPeriodeCore -> bpAndelUnderholdskostnadPeriodeCore.getPeriode().getDatoFom()
+            .equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .findFirst()
+        .map(no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
+        .orElse(emptyList());
+
+    map.put("grunnlagReferanseListe", grunnlagReferanseListe);
+    return mapper.valueToTree(map);
+  }
+
+  // Mapper ut innhold fra delberegning Samvaersfradrag
+  private JsonNode lagInnholdSamvaersfradrag(SamvaersfradragPeriodeCore samvaersfradragPeriodeCore,
+      BeregnetSamvaersfradragResultatCore samvaersfradragResultatFraCore) {
+    var mapper = new ObjectMapper();
+    var map = new LinkedHashMap<String, Object>();
+    map.put("barn", samvaersfradragPeriodeCore.getSoknadsbarnPersonId());
+    map.put("datoFom", mapDato(samvaersfradragPeriodeCore.getPeriode().getDatoFom()));
+    map.put("datoTil", mapDato(samvaersfradragPeriodeCore.getPeriode().getDatoTil()));
+    map.put("belop", samvaersfradragPeriodeCore.getBelop());
+
+    var grunnlagReferanseListe = samvaersfradragResultatFraCore.getResultatPeriodeListe().stream()
+        .filter(resultatPeriodeCore -> samvaersfradragPeriodeCore.getPeriode().getDatoFom().equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .findFirst()
+        .map(no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
+        .orElse(emptyList());
+
+    return mapper.valueToTree(map);
+  }
+
+  // Unngå å legge ut datoer høyere enn 9999-12-31
+  private static String mapDato(LocalDate dato) {
+    return dato.isAfter(LocalDate.parse("9999-12-31")) ? "9999-12-31" : dato.toString();
+  }
+
+  private List<ResultatGrunnlag> mapSjabloner(List<SjablonResultatGrunnlagCore> sjablonResultatGrunnlagCoreListe) {
+    var mapper = new ObjectMapper();
+    return sjablonResultatGrunnlagCoreListe.stream()
+        .map(sjablon -> {
+              var map = new LinkedHashMap<String, Object>();
+              map.put("datoFom", mapDato(sjablon.getPeriode().getDatoFom()));
+              map.put("datoTil", mapDato(sjablon.getPeriode().getDatoTil()));
+              map.put("sjablonNavn", sjablon.getNavn());
+              map.put("sjablonVerdi", sjablon.getVerdi().intValue());
+              return new ResultatGrunnlag(sjablon.getReferanse(), "Sjablon", mapper.valueToTree(map));
+            }
+        )
+        .collect(toList());
   }
 }

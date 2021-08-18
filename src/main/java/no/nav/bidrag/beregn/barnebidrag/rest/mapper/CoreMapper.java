@@ -14,6 +14,7 @@ import static org.apache.commons.validator.GenericValidator.isDate;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +65,7 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore;
 
 public class CoreMapper {
 
+  protected static final String SOKNADSBARN_INFO = "SoknadsbarnInfo";
   protected static final String INNTEKT_TYPE = "Inntekt";
   protected static final String BARN_I_HUSSTAND_TYPE = "BarnIHusstand";
   protected static final String BOSTATUS_TYPE = "Bostatus";
@@ -370,13 +372,12 @@ public class CoreMapper {
       Integer soknadsbarnPersonId) {
     var nettoBarnetilsynPeriodeCoreListe = new ArrayList<NettoBarnetilsynPeriodeCore>();
     for (var nettoBarnetilsynPeriodeCore : nettoBarnetilsynResultatFraCore.getResultatPeriodeListe()) {
-      for (var resultatBeregning : nettoBarnetilsynPeriodeCore.getResultatListe()) {
-        if (soknadsbarnPersonId == resultatBeregning.getSoknadsbarnPersonId()) {
-          nettoBarnetilsynPeriodeCoreListe.add(new NettoBarnetilsynPeriodeCore(
-              "",
-              nettoBarnetilsynPeriodeCore.getPeriode(),
-              resultatBeregning.getBelop()));
-        }
+      if (soknadsbarnPersonId == nettoBarnetilsynPeriodeCore.getSoknadsbarnPersonId()) {
+        nettoBarnetilsynPeriodeCoreListe.add(new NettoBarnetilsynPeriodeCore(
+            byggReferanseForDelberegning("Delberegning_BM_NettoBarnetilsyn", soknadsbarnPersonId.toString(),
+                nettoBarnetilsynPeriodeCore.getPeriode().getDatoFom()),
+            nettoBarnetilsynPeriodeCore.getPeriode(),
+            nettoBarnetilsynPeriodeCore.getResultat().getBelop()));
       }
     }
     return nettoBarnetilsynPeriodeCoreListe;
@@ -388,7 +389,8 @@ public class CoreMapper {
     return underholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
         .filter(resultat -> resultat.getSoknadsbarnPersonId() == soknadsbarnPersonId)
         .map(resultat -> new UnderholdskostnadPeriodeCore(
-            "",
+            byggReferanseForDelberegning("Delberegning_BM_Underholdskostnad", soknadsbarnPersonId.toString(),
+                resultat.getPeriode().getDatoFom()),
             new PeriodeCore(resultat.getPeriode().getDatoFom(), resultat.getPeriode().getDatoTil()),
             resultat.getResultat().getBelop()))
         .collect(toList());
@@ -398,7 +400,7 @@ public class CoreMapper {
   protected List<BidragsevnePeriodeCore> mapDelberegningBidragsevne(BeregnetBidragsevneResultatCore bidragsevneResultatFraCore) {
     return bidragsevneResultatFraCore.getResultatPeriodeListe().stream()
         .map(resultat -> new BidragsevnePeriodeCore(
-            "",
+            byggReferanseForDelberegning("Delberegning_BP_Bidragsevne", resultat.getPeriode().getDatoFom()),
             new PeriodeCore(resultat.getPeriode().getDatoFom(), resultat.getPeriode().getDatoTil()),
             resultat.getResultat().getBelop(),
             resultat.getResultat().getInntekt25Prosent()))
@@ -410,7 +412,8 @@ public class CoreMapper {
       BeregnetBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore) {
     return bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
         .map(resultat -> new no.nav.bidrag.beregn.barnebidrag.dto.BPsAndelUnderholdskostnadPeriodeCore(
-            "",
+            byggReferanseForDelberegning("Delberegning_BP_AndelUnderholdskostnad", String.valueOf(resultat.getSoknadsbarnPersonId()),
+                resultat.getPeriode().getDatoFom()),
             resultat.getSoknadsbarnPersonId(),
             new PeriodeCore(resultat.getPeriode().getDatoFom(), resultat.getPeriode().getDatoTil()),
             resultat.getResultat().getAndelProsent(),
@@ -423,7 +426,8 @@ public class CoreMapper {
   protected List<SamvaersfradragPeriodeCore> mapDelberegningSamvaersfradrag(BeregnetSamvaersfradragResultatCore samvaersfradragResultatFraCore) {
     return samvaersfradragResultatFraCore.getResultatPeriodeListe().stream()
         .map(resultat -> new no.nav.bidrag.beregn.barnebidrag.dto.SamvaersfradragPeriodeCore(
-            "",
+            byggReferanseForDelberegning("Delberegning_BP_Samvaersfradrag", String.valueOf(resultat.getSoknadsbarnPersonId()),
+                resultat.getPeriode().getDatoFom()),
             resultat.getSoknadsbarnPersonId(),
             new PeriodeCore(resultat.getPeriode().getDatoFom(), resultat.getPeriode().getDatoTil()),
             resultat.getResultat().getBelop()))
@@ -591,5 +595,14 @@ public class CoreMapper {
       case BARNEBIDRAG -> sjablonTallNavn.getBarnebidrag();
       default -> false;
     };
+  }
+
+  // Bygger referanse for delberegning
+  private String byggReferanseForDelberegning(String delberegning, String soknadsbarn, LocalDate dato) {
+    return delberegning + "_SB" + soknadsbarn + "_" + dato.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+  }
+
+  private String byggReferanseForDelberegning(String delberegning, LocalDate dato) {
+    return delberegning + "_" + dato.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
   }
 }

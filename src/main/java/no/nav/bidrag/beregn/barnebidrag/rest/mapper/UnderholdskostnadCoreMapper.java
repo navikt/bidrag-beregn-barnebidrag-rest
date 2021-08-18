@@ -24,12 +24,18 @@ public class UnderholdskostnadCoreMapper extends CoreMapper {
     var barnetilsynMedStonadPeriodeCoreListe = new ArrayList<BarnetilsynMedStonadPeriodeCore>();
     var forpleiningUtgiftPeriodeCoreListe = new ArrayList<ForpleiningUtgiftPeriodeCore>();
     var sjablonPeriodeCoreListe = new ArrayList<SjablonPeriodeCore>();
-    var soknadsbarnCore = new SoknadsbarnCore("", soknadsbarnIdTilBehandling,
-        LocalDate.parse(hentFodselsdato(soknadsbarnIdTilBehandling, soknadsbarnMap)));
+    var soknadsbarnInfoReferanse = "";
 
     // Løper gjennom alle grunnlagene og identifiserer de som skal mappes til underholdskostnad core
     for (Grunnlag grunnlag : beregnBarnebidragGrunnlag.getGrunnlagListe()) {
       switch (grunnlag.getType()) {
+        case SOKNADSBARN_INFO -> {
+          var soknadsbarnId = hentSoknadsbarnId(grunnlag.getInnhold(), grunnlag.getType());
+          // Søknadsbarn må matche
+          if (Integer.valueOf(soknadsbarnId).equals(soknadsbarnIdTilBehandling)) {
+            soknadsbarnInfoReferanse = grunnlag.getReferanse();
+          }
+        }
         case BARNETILSYN_MED_STONAD_TYPE -> {
           var soknadsbarnId = hentSoknadsbarnId(grunnlag.getInnhold(), grunnlag.getType());
           // Søknadsbarn må matche
@@ -46,6 +52,9 @@ public class UnderholdskostnadCoreMapper extends CoreMapper {
         }
       }
     }
+
+    var soknadsbarnCore = new SoknadsbarnCore(soknadsbarnInfoReferanse, soknadsbarnIdTilBehandling,
+        LocalDate.parse(hentFodselsdato(soknadsbarnIdTilBehandling, soknadsbarnMap)));
 
     // Filtrerer netto barnetilsyn på soknadsbarn id
     var filtrertNettoBarnetilsynCoreListe = mapDelberegningNettoBarnetilsyn(nettoBarnetilsynResultatFraCore, soknadsbarnIdTilBehandling);

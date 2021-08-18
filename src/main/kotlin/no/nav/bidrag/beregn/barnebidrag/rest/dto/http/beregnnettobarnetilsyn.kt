@@ -19,26 +19,25 @@ data class BeregnBMNettoBarnetilsynResultat(
 
 @Schema(description = "Resultatet av beregning av netto barnetilsyn for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeNettoBarnetilsyn(
+  @Schema(description = "Søknadsbarn") var barn: Int = 0,
   @Schema(description = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
-  @Schema(description = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningNettoBarnetilsyn> = emptyList(),
+  @Schema(description = "Beregning resultat innhold liste") var resultatBeregningListe: ResultatBeregningNettoBarnetilsyn = ResultatBeregningNettoBarnetilsyn(),
   @Schema(description = "Beregning grunnlag innhold") var resultatGrunnlag: List<String> = emptyList()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
     resultatDatoFraTil = Periode(resultatPeriode.periode),
-    resultatBeregningListe = resultatPeriode.resultatListe.map { ResultatBeregningNettoBarnetilsyn(it) },
+    resultatBeregningListe = ResultatBeregningNettoBarnetilsyn(resultatPeriode.resultat),
     resultatGrunnlag = resultatPeriode.grunnlagReferanseListe
   )
 }
 
 @Schema(description = "Resultatet av beregning av netto barnetilsyn")
 data class ResultatBeregningNettoBarnetilsyn(
-  @Schema(description = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
   @Schema(description = "Beløp netto barnetilsyn") var resultatBelop: BigDecimal = BigDecimal.ZERO
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
-    resultatSoknadsbarnPersonId = resultatBeregning.soknadsbarnPersonId,
     resultatBelop = resultatBeregning.belop
   )
 }

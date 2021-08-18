@@ -54,14 +54,16 @@ data class BeregnetTotalBarnebidragResultat(
 
 @Schema(description = "Resultatet av en beregning for en gitt periode")
 data class ResultatPeriode(
+  @Schema(description = "Søknadsbarn") var barn: Int = 0,
   @Schema(description = "Beregnet resultat periode") var periode: Periode = Periode(),
   @Schema(description = "Beregnet resultat innhold") var resultat: ResultatBeregning = ResultatBeregning(),
   @Schema(description = "Beregnet grunnlag innhold") var grunnlagReferanseListe: List<String> = emptyList()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
+    barn = resultatPeriode.soknadsbarnPersonId,
     periode = Periode(resultatPeriode.periode),
-    resultat = ResultatBeregning(resultatPeriode.resultatListe[0]),
+    resultat = ResultatBeregning(resultatPeriode.resultat),
     grunnlagReferanseListe = resultatPeriode.grunnlagReferanseListe
   )
 }

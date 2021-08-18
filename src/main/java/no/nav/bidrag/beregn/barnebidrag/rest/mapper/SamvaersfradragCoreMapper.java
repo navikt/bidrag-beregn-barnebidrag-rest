@@ -16,19 +16,30 @@ public class SamvaersfradragCoreMapper extends CoreMapper {
       SjablonListe sjablonListe, Integer soknadsbarnIdTilBehandling, Map<Integer, String> soknadsbarnMap) {
 
     var samvaersklassePeriodeCoreListe = new ArrayList<SamvaersklassePeriodeCore>();
-    var soknadsbarnCore = new SoknadsbarnCore("", soknadsbarnIdTilBehandling,
-        LocalDate.parse(hentFodselsdato(soknadsbarnIdTilBehandling, soknadsbarnMap)));
+    var soknadsbarnInfoReferanse = "";
 
     // Løper gjennom alle grunnlagene og identifiserer de som skal mappes til samværsfradrag core
     for (Grunnlag grunnlag : beregnBarnebidragGrunnlag.getGrunnlagListe()) {
-      if (SAMVAERSKLASSE_TYPE.equals(grunnlag.getType())) {
-        var soknadsbarnId = hentSoknadsbarnId(grunnlag.getInnhold(), grunnlag.getType());
-        // Søknadsbarn må matche
-        if (Integer.valueOf(soknadsbarnId).equals(soknadsbarnIdTilBehandling)) {
-          samvaersklassePeriodeCoreListe.add(mapSamvaersklasse(grunnlag));
+      switch (grunnlag.getType()) {
+        case SOKNADSBARN_INFO -> {
+          var soknadsbarnId = hentSoknadsbarnId(grunnlag.getInnhold(), grunnlag.getType());
+          // Søknadsbarn må matche
+          if (Integer.valueOf(soknadsbarnId).equals(soknadsbarnIdTilBehandling)) {
+            soknadsbarnInfoReferanse = grunnlag.getReferanse();
+          }
+        }
+        case SAMVAERSKLASSE_TYPE -> {
+          var soknadsbarnId = hentSoknadsbarnId(grunnlag.getInnhold(), grunnlag.getType());
+          // Søknadsbarn må matche
+          if (Integer.valueOf(soknadsbarnId).equals(soknadsbarnIdTilBehandling)) {
+            samvaersklassePeriodeCoreListe.add(mapSamvaersklasse(grunnlag));
+          }
         }
       }
     }
+
+    var soknadsbarnCore = new SoknadsbarnCore(soknadsbarnInfoReferanse, soknadsbarnIdTilBehandling,
+        LocalDate.parse(hentFodselsdato(soknadsbarnIdTilBehandling, soknadsbarnMap)));
 
     // Henter aktuelle sjabloner
     var sjablonPeriodeCoreListe = new ArrayList<>(mapSjablonSamvaersfradrag(sjablonListe.getSjablonSamvaersfradragResponse(),

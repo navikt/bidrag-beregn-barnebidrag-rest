@@ -960,16 +960,16 @@ public class TestUtil {
 
     // Spesialvariant for å unngå at inntekt ikke plukkes opp hvis id ikke matcher
     if (StringUtils.isNumeric(soknadsbarnIdKnytningInntekt)) {
-      jsonMap.put("id", soknadsbarnIdKnytningInntekt);
+      jsonMap.put("soknadsbarnId", Integer.parseInt(soknadsbarnIdKnytningInntekt));
       jsonMap.put("fodselsdato", "2010-01-01");
     } else {
 
-      if ("SoknadsbarnInfo_id".equals(feltNavn)) {
+      if ("SoknadsbarnInfo_soknadsbarnId".equals(feltNavn)) {
         if (!manglerVerdi) {
-          jsonMap.put("id", nullVerdi ? null : (ugyldigVerdi ? "xx" : 1));
+          jsonMap.put("soknadsbarnId", nullVerdi ? null : (ugyldigVerdi ? "xx" : 1));
         }
       } else {
-        jsonMap.put("id", 1);
+        jsonMap.put("soknadsbarnId", 1);
       }
 
       if ("SoknadsbarnInfo_fodselsdato".equals(feltNavn)) {
@@ -1695,8 +1695,10 @@ public class TestUtil {
   // Bygger opp BeregnNettoBarnetilsynResultat
   public static BeregnBMNettoBarnetilsynResultat dummyNettoBarnetilsynResultat() {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeNettoBarnetilsyn>();
-    bidragPeriodeResultatListe.add(new ResultatPeriodeNettoBarnetilsyn(new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        singletonList(new ResultatBeregningNettoBarnetilsyn(1, BigDecimal.valueOf(100))),
+    bidragPeriodeResultatListe.add(new ResultatPeriodeNettoBarnetilsyn(
+        1,
+        new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
+        new ResultatBeregningNettoBarnetilsyn(BigDecimal.valueOf(100)),
         emptyList()));
     return new BeregnBMNettoBarnetilsynResultat(bidragPeriodeResultatListe);
   }
@@ -1705,8 +1707,9 @@ public class TestUtil {
   public static BeregnetNettoBarnetilsynResultatCore dummyNettoBarnetilsynResultatCore() {
     var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore>();
     bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatPeriodeCore(
+        1,
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        singletonList(new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatBeregningCore(1, BigDecimal.valueOf(100))),
+        new no.nav.bidrag.beregn.nettobarnetilsyn.dto.ResultatBeregningCore(BigDecimal.valueOf(100)),
         emptyList()));
     return new BeregnetNettoBarnetilsynResultatCore(bidragPeriodeResultatListe, emptyList(), emptyList());
   }
@@ -1820,8 +1823,9 @@ public class TestUtil {
   public static BeregnBarnebidragResultat dummyBarnebidragResultat() {
     var bidragPeriodeResultatListe = new ArrayList<ResultatPeriodeBarnebidrag>();
     bidragPeriodeResultatListe.add(new ResultatPeriodeBarnebidrag(
+        1,
         new Periode(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        singletonList(new ResultatBeregningBarnebidrag(1, BigDecimal.valueOf(100), "RESULTATKODE")),
+        new ResultatBeregningBarnebidrag(BigDecimal.valueOf(100), "RESULTATKODE"),
         emptyList()));
     return new BeregnBarnebidragResultat(bidragPeriodeResultatListe);
   }
@@ -1830,8 +1834,9 @@ public class TestUtil {
   public static BeregnetBarnebidragResultatCore dummyBarnebidragResultatCore() {
     var bidragPeriodeResultatListe = new ArrayList<no.nav.bidrag.beregn.barnebidrag.dto.ResultatPeriodeCore>();
     bidragPeriodeResultatListe.add(new no.nav.bidrag.beregn.barnebidrag.dto.ResultatPeriodeCore(
+        1,
         new PeriodeCore(LocalDate.parse("2017-01-01"), LocalDate.parse("2019-01-01")),
-        singletonList(new no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore(1, BigDecimal.valueOf(100), "RESULTATKODE")),
+        new no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore(BigDecimal.valueOf(100), "RESULTATKODE"),
         emptyList()));
     return new BeregnetBarnebidragResultatCore(bidragPeriodeResultatListe, emptyList(), emptyList());
   }

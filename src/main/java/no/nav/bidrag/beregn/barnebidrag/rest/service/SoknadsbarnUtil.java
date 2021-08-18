@@ -29,8 +29,8 @@ public class SoknadsbarnUtil {
 
   private static Map<Integer, String> mapSoknadsbarnInfo(Grunnlag grunnlag) {
     var soknadsbarnMap = new HashMap<Integer, String>();
-    var id = Optional.of(grunnlag.getInnhold().get("id"))
-        .orElseThrow(() -> new UgyldigInputException("id mangler i objekt av type SoknadsbarnInfo")).asInt();
+    var id = Optional.of(grunnlag.getInnhold().get("soknadsbarnId"))
+        .orElseThrow(() -> new UgyldigInputException("soknadsbarnId mangler i objekt av type SoknadsbarnInfo")).asInt();
     var fodselsdato = Optional.of(grunnlag.getInnhold().get("fodselsdato"))
         .orElseThrow(() -> new UgyldigInputException("fodselsdato mangler i objekt av type SoknadsbarnInfo")).asText();
     soknadsbarnMap.put(id, fodselsdato);

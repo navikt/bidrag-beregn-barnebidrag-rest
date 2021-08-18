@@ -21,27 +21,26 @@ data class BeregnBarnebidragResultat(
 
 @Schema(description = "Resultatet av beregning av barnebidrag for et søknadsbarn for en gitt periode")
 data class ResultatPeriodeBarnebidrag(
+  @Schema(description = "Søknadsbarn") var barn: Int = 0,
   @Schema(description = "Beregning resultat fra-til-dato") var resultatDatoFraTil: Periode = Periode(),
-  @Schema(description = "Beregning resultat innhold liste") var resultatBeregningListe: List<ResultatBeregningBarnebidrag> = emptyList(),
+  @Schema(description = "Beregning resultat innhold liste") var resultatBeregningListe: ResultatBeregningBarnebidrag = ResultatBeregningBarnebidrag(),
   @Schema(description = "Beregning grunnlag innhold") var resultatGrunnlag: List<String> = emptyList()
 ) {
 
   constructor(resultatPeriode: ResultatPeriodeCore) : this(
     resultatDatoFraTil = Periode(resultatPeriode.periode),
-    resultatBeregningListe = resultatPeriode.resultatListe.map { ResultatBeregningBarnebidrag(it) },
+    resultatBeregningListe = ResultatBeregningBarnebidrag(resultatPeriode.resultat),
     resultatGrunnlag = resultatPeriode.grunnlagReferanseListe
   )
 }
 
 @Schema(description = "Resultatet av beregning av barnebidrag")
 data class ResultatBeregningBarnebidrag(
-  @Schema(description = "Søknadsbarnets person-id") var resultatSoknadsbarnPersonId: Int = 0,
   @Schema(description = "Beløp barnebidrag") var resultatBelop: BigDecimal = BigDecimal.ZERO,
   @Schema(description = "Resultatkode barnebidrag") var resultatKode: String = ""
 ) {
 
   constructor(resultatBeregning: ResultatBeregningCore) : this(
-    resultatSoknadsbarnPersonId = resultatBeregning.soknadsbarnPersonId,
     resultatBelop = resultatBeregning.belop,
     resultatKode = resultatBeregning.kode
   )

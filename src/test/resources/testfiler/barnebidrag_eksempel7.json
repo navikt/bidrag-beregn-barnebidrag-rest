@@ -3,23 +3,23 @@
   "beregnDatoTil": "2021-01-01",
   "grunnlagListe": [
     {
-      "referanse": "Mottatt_SoknadsbarnInfo_SB_1",
+      "referanse": "Mottatt_SoknadsbarnInfo_SB1",
       "type": "SoknadsbarnInfo",
       "innhold": {
-        "id": 1,
+        "soknadsbarnId": 1,
         "fodselsdato": "2006-01-01"
       }
     },
     {
-      "referanse": "Mottatt_SoknadsbarnInfo_SB_2",
+      "referanse": "Mottatt_SoknadsbarnInfo_SB2",
       "type": "SoknadsbarnInfo",
       "innhold": {
-        "id": 2,
+        "soknadsbarnId": 2,
         "fodselsdato": "2012-01-01"
       }
     },
     {
-      "referanse": "Mottatt_Inntekt_AG_20200801_SB_1",
+      "referanse": "Mottatt_Inntekt_AG_20200801_SB1",
       "type": "Inntekt",
       "innhold": {
         "rolle": "SB",
@@ -31,7 +31,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Inntekt_AG_20200801_SB_2",
+      "referanse": "Mottatt_Inntekt_AG_20200801_SB2",
       "type": "Inntekt",
       "innhold": {
         "rolle": "SB",
@@ -101,7 +101,7 @@
       }
     },
     {
-      "referanse": "Mottatt_FaktiskUtgift_20200801_SB_1",
+      "referanse": "Mottatt_FaktiskUtgift_20200801_SB1",
       "type": "FaktiskUtgift",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -111,7 +111,7 @@
       }
     },
     {
-      "referanse": "Mottatt_FaktiskUtgift_20200801_SB_2",
+      "referanse": "Mottatt_FaktiskUtgift_20200801_SB2",
       "type": "FaktiskUtgift",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -121,7 +121,7 @@
       }
     },
     {
-      "referanse": "Mottatt_BarnetilsynMedStonad_20200801_SB_1",
+      "referanse": "Mottatt_BarnetilsynMedStonad_20200801_SB1",
       "type": "BarnetilsynMedStonad",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -132,7 +132,7 @@
       }
     },
     {
-      "referanse": "Mottatt_BarnetilsynMedStonad_20200801_SB_2",
+      "referanse": "Mottatt_BarnetilsynMedStonad_20200801_SB2",
       "type": "BarnetilsynMedStonad",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -143,7 +143,7 @@
       }
     },
     {
-      "referanse": "Mottatt_ForpleiningUtgift_20200801_SB_1",
+      "referanse": "Mottatt_ForpleiningUtgift_20200801_SB1",
       "type": "ForpleiningUtgift",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -153,7 +153,7 @@
       }
     },
     {
-      "referanse": "Mottatt_ForpleiningUtgift_20200801_SB_2",
+      "referanse": "Mottatt_ForpleiningUtgift_20200801_SB2",
       "type": "ForpleiningUtgift",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -163,7 +163,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Samvaersklasse_20200801_SB_1",
+      "referanse": "Mottatt_Samvaersklasse_20200801_SB1",
       "type": "Samvaersklasse",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -173,7 +173,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Samvaersklasse_20200801_SB_2",
+      "referanse": "Mottatt_Samvaersklasse_20200801_SB2",
       "type": "Samvaersklasse",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -183,7 +183,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Barnetillegg_20200801_BM_SB_1",
+      "referanse": "Mottatt_Barnetillegg_20200801_BM_SB1",
       "type": "Barnetillegg",
       "innhold": {
         "rolle": "BM",
@@ -195,7 +195,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Barnetillegg_20200801_BM_SB_2",
+      "referanse": "Mottatt_Barnetillegg_20200801_BM_SB2",
       "type": "Barnetillegg",
       "innhold": {
         "rolle": "BM",
@@ -207,7 +207,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Barnetillegg_20200801_BP_SB_1",
+      "referanse": "Mottatt_Barnetillegg_20200801_BP_SB1",
       "type": "Barnetillegg",
       "innhold": {
         "rolle": "BP",
@@ -219,7 +219,7 @@
       }
     },
     {
-      "referanse": "Mottatt_Barnetillegg_20200801_BP_SB_2",
+      "referanse": "Mottatt_Barnetillegg_20200801_BP_SB2",
       "type": "Barnetillegg",
       "innhold": {
         "rolle": "BP",
@@ -240,7 +240,7 @@
       }
     },
     {
-      "referanse": "Mottatt_DeltBosted_20200801_SB_1",
+      "referanse": "Mottatt_DeltBosted_20200801_SB1",
       "type": "DeltBosted",
       "innhold": {
         "datoFom": "2020-08-01",
@@ -250,7 +250,7 @@
       }
     },
     {
-      "referanse": "Mottatt_DeltBosted_20200801_SB_2",
+      "referanse": "Mottatt_DeltBosted_20200801_SB2",
       "type": "DeltBosted",
       "innhold": {
         "datoFom": "2020-08-01",
