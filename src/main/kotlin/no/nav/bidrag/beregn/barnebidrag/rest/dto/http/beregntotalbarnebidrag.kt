@@ -86,14 +86,3 @@ data class ResultatGrunnlag(
   @Schema(description = "Type") val type: String = "",
   @Schema(description = "Innhold") val innhold: JsonNode = ObjectMapper().createObjectNode()
 )
-
-// Resultat
-@Schema(description = "Resultatet av en total barnebidragsberegning")
-data class BeregnTotalBarnebidragResultat(
-    @Schema(description = "Beregn BP bidragsevne resultat") var beregnBPBidragsevneResultat: BeregnBPBidragsevneResultat = BeregnBPBidragsevneResultat(),
-    @Schema(description = "Beregn BM netto barnetilsyn resultat") var beregnBMNettoBarnetilsynResultat: BeregnBMNettoBarnetilsynResultat = BeregnBMNettoBarnetilsynResultat(),
-    @Schema(description = "Beregn BM underholdskostnad resultat") var beregnBMUnderholdskostnadResultat: BeregnBMUnderholdskostnadResultat = BeregnBMUnderholdskostnadResultat(),
-    @Schema(description = "Beregn BP andel av underholdskostnad resultat") var beregnBPAndelUnderholdskostnadResultat: BeregnBPAndelUnderholdskostnadResultat = BeregnBPAndelUnderholdskostnadResultat(),
-    @Schema(description = "Beregn BP samværsfradrag resultat") var beregnBPSamvaersfradragResultat: BeregnBPSamvaersfradragResultat = BeregnBPSamvaersfradragResultat(),
-    @Schema(description = "Beregn barnebidrag resultat") var beregnBarnebidragResultat: BeregnBarnebidragResultat = BeregnBarnebidragResultat()
-)

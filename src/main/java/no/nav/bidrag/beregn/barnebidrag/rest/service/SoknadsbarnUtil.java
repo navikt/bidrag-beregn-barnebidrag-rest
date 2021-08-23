@@ -2,7 +2,6 @@ package no.nav.bidrag.beregn.barnebidrag.rest.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
@@ -29,11 +28,15 @@ public class SoknadsbarnUtil {
 
   private static Map<Integer, String> mapSoknadsbarnInfo(Grunnlag grunnlag) {
     var soknadsbarnMap = new HashMap<Integer, String>();
-    var id = Optional.of(grunnlag.getInnhold().get("soknadsbarnId"))
-        .orElseThrow(() -> new UgyldigInputException("soknadsbarnId mangler i objekt av type SoknadsbarnInfo")).asInt();
-    var fodselsdato = Optional.of(grunnlag.getInnhold().get("fodselsdato"))
-        .orElseThrow(() -> new UgyldigInputException("fodselsdato mangler i objekt av type SoknadsbarnInfo")).asText();
-    soknadsbarnMap.put(id, fodselsdato);
+    if (!grunnlag.getInnhold().has("soknadsbarnId")) {
+      throw new UgyldigInputException("soknadsbarnId mangler i objekt av type SoknadsbarnInfo");
+    } else if (!grunnlag.getInnhold().has("fodselsdato")) {
+      throw new UgyldigInputException("fodselsdato mangler i objekt av type SoknadsbarnInfo");
+    } else {
+      var id = grunnlag.getInnhold().get("soknadsbarnId").asInt();
+      var fodselsdato = grunnlag.getInnhold().get("fodselsdato").asText();
+      soknadsbarnMap.put(id, fodselsdato);
+    }
     return soknadsbarnMap;
   }
 

@@ -155,20 +155,12 @@ public class BeregnBarnebidragService {
     var barnebidragGrunnlagTilCore = barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(beregnTotalBarnebidragGrunnlag, sjablonListe,
         bidragsevneResultatFraCore, bpAndelUnderholdskostnadResultatFraCore, samvaersfradragResultatFraCore);
     var barnebidragResultatFraCore = beregnBarnebidrag(barnebidragGrunnlagTilCore);
-    grunnlagReferanseListe.addAll(lagGrunnlagReferanseListeBarnebidrag(beregnTotalBarnebidragGrunnlag, barnebidragResultatFraCore,
+    grunnlagReferanseListe.addAll(lagGrunnlagListeBarnebidrag(beregnTotalBarnebidragGrunnlag, barnebidragResultatFraCore,
         barnebidragGrunnlagTilCore, bidragsevneResultatFraCore, bpAndelUnderholdskostnadResultatFraCore, samvaersfradragResultatFraCore));
 
     // Bygger responsobjekt
     return HttpResponse.from(HttpStatus.OK, new BeregnetTotalBarnebidragResultat(barnebidragResultatFraCore,
         grunnlagReferanseListe.stream().sorted(comparing(ResultatGrunnlag::getReferanse)).distinct().toList()));
-
-//    return HttpResponse.from(HttpStatus.OK, new BeregnTotalBarnebidragResultat(
-//        new BeregnBPBidragsevneResultat(bidragsevneResultatFraCore),
-//        new BeregnBMNettoBarnetilsynResultat(nettoBarnetilsynResultatFraCore),
-//        new BeregnBMUnderholdskostnadResultat(underholdskostnadResultatFraCore),
-//        new BeregnBPAndelUnderholdskostnadResultat(bpAndelUnderholdskostnadResultatFraCore),
-//        new BeregnBPSamvaersfradragResultat(samvaersfradragResultatFraCore),
-//        new BeregnBarnebidragResultat(barnebidragResultatFraCore)));
   }
 
   //==================================================================================================================================================
@@ -537,7 +529,7 @@ public class BeregnBarnebidragService {
     resultatGrunnlagListe.addAll(underholdskostnadGrunnlagTilCore.getNettoBarnetilsynPeriodeListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
-            lagInnholdNettoBarnetilsyn(grunnlag, nettoBarnetilsynResultatFraCore)))
+            lagInnholdNettoBarnetilsyn(grunnlag, underholdskostnadGrunnlagTilCore.getSoknadsbarn().getPersonId(), nettoBarnetilsynResultatFraCore)))
         .collect(toList()));
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
@@ -604,7 +596,7 @@ public class BeregnBarnebidragService {
   }
 
   // Barnebidrag
-  private List<ResultatGrunnlag> lagGrunnlagReferanseListeBarnebidrag(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
+  private List<ResultatGrunnlag> lagGrunnlagListeBarnebidrag(BeregnTotalBarnebidragGrunnlag totalBarnebidragGrunnlag,
       BeregnetBarnebidragResultatCore barnebidragResultatFraCore, BeregnBarnebidragGrunnlagCore barnebidragGrunnlagTilCore,
       BeregnetBidragsevneResultatCore bidragsevneResultatFraCore,
       BeregnetBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore,
@@ -668,10 +660,11 @@ public class BeregnBarnebidragService {
   }
 
   // Mapper ut innhold fra delberegning Netto Barnetilsyn
-  private JsonNode lagInnholdNettoBarnetilsyn(NettoBarnetilsynPeriodeCore nettoBarnetilsynPeriodeCore,
+  private JsonNode lagInnholdNettoBarnetilsyn(NettoBarnetilsynPeriodeCore nettoBarnetilsynPeriodeCore, Integer soknadsbarnPersonId,
       BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore) {
     var mapper = new ObjectMapper();
     var map = new LinkedHashMap<String, Object>();
+    map.put("barn", soknadsbarnPersonId);
     map.put("datoFom", mapDato(nettoBarnetilsynPeriodeCore.getPeriode().getDatoFom()));
     map.put("datoTil", mapDato(nettoBarnetilsynPeriodeCore.getPeriode().getDatoTil()));
     map.put("belop", nettoBarnetilsynPeriodeCore.getBelop());
@@ -698,6 +691,7 @@ public class BeregnBarnebidragService {
 
     var grunnlagReferanseListe = underholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
         .filter(resultatPeriodeCore -> underholdskostnadPeriodeCore.getPeriode().getDatoFom().equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .filter(resultatPeriodeCore -> soknadsbarnPersonId.equals(resultatPeriodeCore.getSoknadsbarnPersonId()))
         .findFirst()
         .map(no.nav.bidrag.beregn.underholdskostnad.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
         .orElse(emptyList());
@@ -714,13 +708,14 @@ public class BeregnBarnebidragService {
     map.put("barn", bpAndelUnderholdskostnadPeriodeCore.getSoknadsbarnPersonId());
     map.put("datoFom", mapDato(bpAndelUnderholdskostnadPeriodeCore.getPeriode().getDatoFom()));
     map.put("datoTil", mapDato(bpAndelUnderholdskostnadPeriodeCore.getPeriode().getDatoTil()));
-    map.put("belop", bpAndelUnderholdskostnadPeriodeCore.getAndelBelop());
+    map.put("belop", bpAndelUnderholdskostnadPeriodeCore.getAndelBelop().toString());
     map.put("prosent", bpAndelUnderholdskostnadPeriodeCore.getAndelProsent());
     map.put("selvforsorget", bpAndelUnderholdskostnadPeriodeCore.getBarnetErSelvforsorget());
 
     var grunnlagReferanseListe = bpAndelUnderholdskostnadResultatFraCore.getResultatPeriodeListe().stream()
         .filter(resultatPeriodeCore -> bpAndelUnderholdskostnadPeriodeCore.getPeriode().getDatoFom()
             .equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .filter(resultatPeriodeCore -> bpAndelUnderholdskostnadPeriodeCore.getSoknadsbarnPersonId() == resultatPeriodeCore.getSoknadsbarnPersonId())
         .findFirst()
         .map(no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
         .orElse(emptyList());
@@ -741,10 +736,12 @@ public class BeregnBarnebidragService {
 
     var grunnlagReferanseListe = samvaersfradragResultatFraCore.getResultatPeriodeListe().stream()
         .filter(resultatPeriodeCore -> samvaersfradragPeriodeCore.getPeriode().getDatoFom().equals(resultatPeriodeCore.getPeriode().getDatoFom()))
+        .filter(resultatPeriodeCore -> samvaersfradragPeriodeCore.getSoknadsbarnPersonId() == resultatPeriodeCore.getSoknadsbarnPersonId())
         .findFirst()
         .map(no.nav.bidrag.beregn.samvaersfradrag.dto.ResultatPeriodeCore::getGrunnlagReferanseListe)
         .orElse(emptyList());
 
+    map.put("grunnlagReferanseListe", grunnlagReferanseListe);
     return mapper.valueToTree(map);
   }
 
@@ -761,7 +758,7 @@ public class BeregnBarnebidragService {
               map.put("datoFom", mapDato(sjablon.getPeriode().getDatoFom()));
               map.put("datoTil", mapDato(sjablon.getPeriode().getDatoTil()));
               map.put("sjablonNavn", sjablon.getNavn());
-              map.put("sjablonVerdi", sjablon.getVerdi().intValue());
+              map.put("sjablonVerdi", sjablon.getVerdi().toString());
               return new ResultatGrunnlag(sjablon.getReferanse(), "Sjablon", mapper.valueToTree(map));
             }
         )
