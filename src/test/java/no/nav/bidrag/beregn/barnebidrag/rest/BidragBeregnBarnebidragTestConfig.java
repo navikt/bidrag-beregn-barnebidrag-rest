@@ -14,5 +14,4 @@ public class BidragBeregnBarnebidragTestConfig {
     TestRestTemplate testRestTemplate = new TestRestTemplate(new RestTemplateBuilder());
     return new HttpHeaderTestRestTemplate(testRestTemplate);
   }
-
 }

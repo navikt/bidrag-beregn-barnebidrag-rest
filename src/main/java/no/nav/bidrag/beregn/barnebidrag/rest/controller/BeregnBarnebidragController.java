@@ -3,7 +3,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest.controller;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragResultat;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragService;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnForholdsmessigFordelingService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class BeregnBarnebidragController {
   }
 
   @PostMapping(path = "/barnebidrag")
-  public ResponseEntity<BeregnTotalBarnebidragResultat> beregnTotalBarnebidrag(
+  public ResponseEntity<BeregnetTotalBarnebidragResultat> beregnTotalBarnebidrag(
       @RequestBody BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
     var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(beregnTotalBarnebidragGrunnlag);
     return new ResponseEntity<>(beregnTotalBarnebidragResultat.getResponseEntity().getBody(),

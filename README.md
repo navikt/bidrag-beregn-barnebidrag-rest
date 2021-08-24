@@ -45,7 +45,6 @@ exception (avhengig av type feil).
 * Underholdskostnad (bidragsmottaker, utføres en gang for hvert bidragsbarn)
 * BP's andel av underholdskostnad (bidragspliktig, utføres en gang for hvert bidragsbarn)
 * Samværsfradrag (bidragspliktig, utføres en gang for hvert bidragsbarn)
-* Kostnadsberegnet bidrag (utføres en gang for hvert søknadsbarn)
 * Barnebidrag (totalberegning, utføres en gang)
 
 For hver delberegning returneres resultatet av beregningen og grunnlaget for beregningen.

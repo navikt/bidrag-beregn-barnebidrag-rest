@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Forbruksutgifter(
-    val alderTom: Int? = null,
-    val datoFom: LocalDate? = null,
-    val datoTom: LocalDate? = null,
-    val belopForbrukTot: BigDecimal? = null
+  val alderTom: Int? = null,
+  val datoFom: LocalDate? = null,
+  val datoTom: LocalDate? = null,
+  val belopForbrukTot: BigDecimal? = null
 )
