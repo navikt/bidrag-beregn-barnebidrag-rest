@@ -5,7 +5,7 @@ import static no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragSer
 import java.util.ArrayList;
 import java.util.Map;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.felles.dto.SjablonPeriodeCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnNettoBarnetilsynGrunnlagCore;
@@ -13,7 +13,7 @@ import no.nav.bidrag.beregn.nettobarnetilsyn.dto.FaktiskUtgiftPeriodeCore;
 
 public class NettoBarnetilsynCoreMapper extends CoreMapper {
 
-  public BeregnNettoBarnetilsynGrunnlagCore mapNettoBarnetilsynGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag,
+  public BeregnNettoBarnetilsynGrunnlagCore mapNettoBarnetilsynGrunnlagTilCore(BeregnGrunnlag beregnBarnebidragGrunnlag,
       SjablonListe sjablonListe, Map<Integer, String> soknadsbarnMap) {
 
     var faktiskUtgiftPeriodeCoreListe = new ArrayList<FaktiskUtgiftPeriodeCore>();

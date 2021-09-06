@@ -9,7 +9,7 @@ import no.nav.bidrag.beregn.barnebidrag.dto.BarnetilleggPeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.DeltBostedPeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnetBidragsevneResultatCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnetBPsAndelUnderholdskostnadResultatCore;
@@ -17,7 +17,7 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnetSamvaersfradragResultatC
 
 public class BarnebidragCoreMapper extends CoreMapper {
 
-  public BeregnBarnebidragGrunnlagCore mapBarnebidragGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag,
+  public BeregnBarnebidragGrunnlagCore mapBarnebidragGrunnlagTilCore(BeregnGrunnlag beregnBarnebidragGrunnlag,
       SjablonListe sjablonListe, BeregnetBidragsevneResultatCore bidragsevneResultatFraCore,
       BeregnetBPsAndelUnderholdskostnadResultatCore bpAndelUnderholdskostnadResultatFraCore,
       BeregnetSamvaersfradragResultatCore samvaersfradragResultatFraCore) {
@@ -32,7 +32,7 @@ public class BarnebidragCoreMapper extends CoreMapper {
     for (Grunnlag grunnlag : beregnBarnebidragGrunnlag.getGrunnlagListe()) {
       switch (grunnlag.getType()) {
         case BARNETILLEGG_TYPE -> {
-          var rolle = hentRolle(grunnlag.getInnhold(), grunnlag.getType());
+          var rolle = mapText(grunnlag.getInnhold(), "rolle", grunnlag.getType());
           var soknadsbarnId = hentSoknadsbarnId(grunnlag.getInnhold(), grunnlag.getType());
           switch (rolle) {
             case BIDRAGSPLIKTIG -> barnetilleggBPPeriodeCoreListe.add(mapBarnetillegg(grunnlag, Integer.valueOf(soknadsbarnId)));

@@ -4,9 +4,8 @@ import static no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragSer
 
 import java.util.ArrayList;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.bidragsevne.dto.BarnIHusstandPeriodeCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BostatusPeriodeCore;
@@ -17,7 +16,7 @@ import no.nav.bidrag.beregn.felles.dto.SjablonPeriodeCore;
 
 public class BidragsevneCoreMapper extends CoreMapper {
 
-  public BeregnBidragsevneGrunnlagCore mapBidragsevneGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag,
+  public BeregnBidragsevneGrunnlagCore mapBidragsevneGrunnlagTilCore(BeregnGrunnlag beregnBarnebidragGrunnlag,
       SjablonListe sjablonListe) {
 
     var inntektPeriodeCoreListe = new ArrayList<InntektPeriodeCore>();
@@ -31,13 +30,7 @@ public class BidragsevneCoreMapper extends CoreMapper {
     for (Grunnlag grunnlag : beregnBarnebidragGrunnlag.getGrunnlagListe()) {
       switch (grunnlag.getType()) {
         case INNTEKT_TYPE -> {
-          String rolle;
-          if (grunnlag.getInnhold().has("rolle")) {
-            rolle = grunnlag.getInnhold().get("rolle").asText();
-            evaluerStringType(rolle, "rolle", "Inntekt");
-          } else {
-            throw new UgyldigInputException("rolle i objekt av type Inntekt mangler");
-          }
+          var rolle = mapText(grunnlag.getInnhold(), "rolle", grunnlag.getType());
           if (BIDRAGSPLIKTIG.equals(rolle)) {
             inntektPeriodeCoreListe.add(mapInntektBidragsevne(grunnlag));
           }

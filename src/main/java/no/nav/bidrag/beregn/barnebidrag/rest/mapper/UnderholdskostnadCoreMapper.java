@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.felles.dto.SjablonPeriodeCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnetNettoBarnetilsynResultatCore;
@@ -17,7 +17,7 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.SoknadsbarnCore;
 
 public class UnderholdskostnadCoreMapper extends CoreMapper {
 
-  public BeregnUnderholdskostnadGrunnlagCore mapUnderholdskostnadGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag,
+  public BeregnUnderholdskostnadGrunnlagCore mapUnderholdskostnadGrunnlagTilCore(BeregnGrunnlag beregnBarnebidragGrunnlag,
       SjablonListe sjablonListe, Integer soknadsbarnIdTilBehandling, BeregnetNettoBarnetilsynResultatCore nettoBarnetilsynResultatFraCore,
       Map<Integer, String> soknadsbarnMap) {
 

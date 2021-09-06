@@ -6,40 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnetBarnebidragResultatCore
 import no.nav.bidrag.beregn.barnebidrag.dto.ResultatBeregningCore
 import no.nav.bidrag.beregn.barnebidrag.dto.ResultatPeriodeCore
-import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException
 import java.math.BigDecimal
-import java.time.LocalDate
 
-// Grunnlag
-@Schema(description = "Grunnlaget for en barnebidragsberegning")
-data class BeregnTotalBarnebidragGrunnlag(
-  @Schema(description = "Beregn forskudd fra-dato") val beregnDatoFra: LocalDate? = null,
-  @Schema(description = "Beregn forskudd til-dato") val beregnDatoTil: LocalDate? = null,
-  @Schema(description = "Periodisert liste over grunnlagselementer") val grunnlagListe: List<Grunnlag>? = null
-) {
-
-  fun valider() {
-    if (beregnDatoFra == null) throw UgyldigInputException("beregnDatoFra kan ikke være null")
-    if (beregnDatoTil == null) throw UgyldigInputException("beregnDatoTil kan ikke være null")
-    if (grunnlagListe != null) grunnlagListe.map { it.valider() } else throw UgyldigInputException("grunnlagListe kan ikke være null")
-  }
-}
-
-@Schema(description = "Grunnlag")
-data class Grunnlag(
-  @Schema(description = "Referanse") val referanse: String? = null,
-  @Schema(description = "Type") val type: String? = null,
-  @Schema(description = "Innhold") val innhold: JsonNode? = null
-) {
-
-  fun valider() {
-    if (referanse == null) throw UgyldigInputException("referanse kan ikke være null")
-    if (type == null) throw UgyldigInputException("type kan ikke være null")
-    if (innhold == null) throw UgyldigInputException("innhold kan ikke være null")
-  }
-}
-
-// Resultat
+// Barnebidrag
 @Schema(description = "Resultatet av en barnebidragsberegning")
 data class BeregnetTotalBarnebidragResultat(
   @Schema(description = "Periodisert liste over resultat av barnebidragsberegning") var beregnetBarnebidragPeriodeListe: List<ResultatPeriode> = emptyList(),
@@ -52,7 +21,7 @@ data class BeregnetTotalBarnebidragResultat(
   )
 }
 
-@Schema(description = "Resultatet av en beregning for en gitt periode")
+@Schema(description = "Resultatet av en beregning for en gitt periode - barnebidrag")
 data class ResultatPeriode(
   @Schema(description = "Søknadsbarn") var barn: Int = 0,
   @Schema(description = "Beregnet resultat periode") var periode: Periode = Periode(),
@@ -85,4 +54,18 @@ data class ResultatGrunnlag(
   @Schema(description = "Referanse") val referanse: String = "",
   @Schema(description = "Type") val type: String = "",
   @Schema(description = "Innhold") val innhold: JsonNode = ObjectMapper().createObjectNode()
+)
+
+// Forholdsmessig fordeling
+@Schema(description = "Resultatet av en beregning av forholdsmessig fordeling")
+data class BeregnetForholdsmessigFordelingResultat(
+  @Schema(description = "Periodisert liste over resultat av beregning av forholdsmessig fordeling") var beregnetForholdsmessigFordelingPeriodeListe: List<ResultatPeriodeFF> = emptyList(),
+)
+
+@Schema(description = "Resultatet av en beregning for en gitt periode - forholdsmessig fordeling")
+data class ResultatPeriodeFF(
+  @Schema(description = "Sak") var sakNr: Int = 0,
+  @Schema(description = "Søknadsbarn") var barn: Int = 0,
+  @Schema(description = "Beregnet resultat periode") var periode: Periode = Periode(),
+  @Schema(description = "Beregnet resultat innhold") var resultat: ResultatBeregning = ResultatBeregning()
 )

@@ -37,6 +37,9 @@ class CoreMapperTest {
   @Autowired
   private BarnebidragCoreMapper barnebidragCoreMapper;
 
+  @Autowired
+  private ForholdsmessigFordelingCoreMapper forholdsmessigFordelingCoreMapper;
+
   //==================================================================================================================================================
 
   // Test av validering i BidragsevneCoreMapper
@@ -67,7 +70,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenInntektBPDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -76,7 +79,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullInntektBPDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt er null");
   }
 
   @Test
@@ -85,7 +88,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiInntektBPDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektBP - datoTil
@@ -95,7 +98,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenInntektBPDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -104,7 +107,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullInntektBPDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt er null");
   }
 
   @Test
@@ -113,7 +116,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiInntektBPDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektBP - inntektType
@@ -171,7 +174,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenBarnIHusstandDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnIHusstand mangler");
   }
 
   @Test
@@ -180,7 +183,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullBarnIHusstandDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnIHusstand er null");
   }
 
   @Test
@@ -189,7 +192,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnIHusstand har ugyldig verdi");
   }
 
   // BarnIHusstand - datoTil
@@ -199,7 +202,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenBarnIHusstandDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnIHusstand mangler");
   }
 
   @Test
@@ -208,7 +211,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullBarnIHusstandDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnIHusstand er null");
   }
 
   @Test
@@ -217,7 +220,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnIHusstand har ugyldig verdi");
   }
 
   // BarnIHusstand - antall
@@ -255,7 +258,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenBostatusDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Bostatus mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Bostatus mangler");
   }
 
   @Test
@@ -264,7 +267,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullBostatusDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Bostatus mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Bostatus er null");
   }
 
   @Test
@@ -273,7 +276,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiBostatusDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Bostatus mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Bostatus har ugyldig verdi");
   }
 
   // Bostatus - datoTil
@@ -283,7 +286,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenBostatusDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Bostatus mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Bostatus mangler");
   }
 
   @Test
@@ -292,7 +295,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullBostatusDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Bostatus mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Bostatus er null");
   }
 
   @Test
@@ -301,7 +304,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiBostatusDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Bostatus mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Bostatus har ugyldig verdi");
   }
 
   // Bostatus - bostatusKode
@@ -330,7 +333,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenSaerfradragDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Saerfradrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Saerfradrag mangler");
   }
 
   @Test
@@ -339,7 +342,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullSaerfradragDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Saerfradrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Saerfradrag er null");
   }
 
   @Test
@@ -348,7 +351,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiSaerfradragDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Saerfradrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Saerfradrag har ugyldig verdi");
   }
 
   // Saerfradrag - datoTil
@@ -358,7 +361,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenSaerfradragDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Saerfradrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Saerfradrag mangler");
   }
 
   @Test
@@ -367,7 +370,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullSaerfradragDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Saerfradrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Saerfradrag er null");
   }
 
   @Test
@@ -376,7 +379,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiSaerfradragDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Saerfradrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Saerfradrag har ugyldig verdi");
   }
 
   // Saerfradrag - saerfradragKode
@@ -405,7 +408,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenSkatteklasseDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Skatteklasse mangler");
   }
 
   @Test
@@ -414,7 +417,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullSkatteklasseDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Skatteklasse er null");
   }
 
   @Test
@@ -423,7 +426,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseDatoFom();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoFom i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Skatteklasse har ugyldig verdi");
   }
 
   // Skatteklasse - datoTil
@@ -433,7 +436,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUtenSkatteklasseDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Skatteklasse mangler");
   }
 
   @Test
@@ -442,7 +445,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullSkatteklasseDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Skatteklasse er null");
   }
 
   @Test
@@ -451,7 +454,7 @@ class CoreMapperTest {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseDatoTil();
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bidragsevneCoreMapper.mapBidragsevneGrunnlagTilCore(grunnlag, new SjablonListe()))
-        .withMessage("datoTil i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Skatteklasse har ugyldig verdi");
   }
 
   // Skatteklasse - skatteklasseId
@@ -505,7 +508,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(
             () -> nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(grunnlag, new SjablonListe(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type FaktiskUtgift mangler");
   }
 
   @Test
@@ -515,7 +518,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(
             () -> nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(grunnlag, new SjablonListe(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type FaktiskUtgift er null");
   }
 
   @Test
@@ -525,7 +528,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(
             () -> nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(grunnlag, new SjablonListe(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type FaktiskUtgift har ugyldig verdi");
   }
 
   // FaktiskUtgift - datoTil
@@ -536,7 +539,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(
             () -> nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(grunnlag, new SjablonListe(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type FaktiskUtgift mangler");
   }
 
   @Test
@@ -546,7 +549,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(
             () -> nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(grunnlag, new SjablonListe(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type FaktiskUtgift er null");
   }
 
   @Test
@@ -556,7 +559,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(
             () -> nettoBarnetilsynCoreMapper.mapNettoBarnetilsynGrunnlagTilCore(grunnlag, new SjablonListe(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type FaktiskUtgift har ugyldig verdi");
   }
 
   // FaktiskUtgift - belop
@@ -613,7 +616,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type BarnetilsynMedStonad mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnetilsynMedStonad mangler");
   }
 
   @Test
@@ -623,7 +626,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type BarnetilsynMedStonad mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnetilsynMedStonad er null");
   }
 
   @Test
@@ -633,7 +636,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type BarnetilsynMedStonad mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnetilsynMedStonad har ugyldig verdi");
   }
 
   // BarnetilsynMedStonad - datoTil
@@ -644,7 +647,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type BarnetilsynMedStonad mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnetilsynMedStonad mangler");
   }
 
   @Test
@@ -654,7 +657,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type BarnetilsynMedStonad mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnetilsynMedStonad er null");
   }
 
   @Test
@@ -664,7 +667,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type BarnetilsynMedStonad mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnetilsynMedStonad har ugyldig verdi");
   }
 
   // BarnetilsynMedStonad - stonadType
@@ -728,7 +731,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type ForpleiningUtgift mangler");
   }
 
   @Test
@@ -738,7 +741,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type ForpleiningUtgift er null");
   }
 
   @Test
@@ -748,7 +751,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type ForpleiningUtgift har ugyldig verdi");
   }
 
   // ForpleiningUtgift - datoTil
@@ -759,7 +762,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type ForpleiningUtgift mangler");
   }
 
   @Test
@@ -769,7 +772,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type ForpleiningUtgift er null");
   }
 
   @Test
@@ -779,7 +782,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> underholdskostnadCoreMapper.mapUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyNettoBarnetilsynResultatCore(), new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type ForpleiningUtgift har ugyldig verdi");
   }
 
   // ForpleiningUtgift - belop
@@ -846,7 +849,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -856,7 +859,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt er null");
   }
 
   @Test
@@ -866,7 +869,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektSB - datoTil
@@ -877,7 +880,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -887,7 +890,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt er null");
   }
 
   @Test
@@ -897,7 +900,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektSB - soknadsbarnId
@@ -992,7 +995,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -1002,7 +1005,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt er null");
   }
 
   @Test
@@ -1012,7 +1015,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektBM - datoTil
@@ -1023,7 +1026,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -1033,7 +1036,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt er null");
   }
 
   @Test
@@ -1043,7 +1046,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektBM - soknadsbarnId
@@ -1136,7 +1139,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -1146,7 +1149,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt er null");
   }
 
   @Test
@@ -1156,7 +1159,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoFom i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektBP - datoTil
@@ -1167,7 +1170,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt mangler");
   }
 
   @Test
@@ -1177,7 +1180,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt er null");
   }
 
   @Test
@@ -1187,7 +1190,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> bpAndelUnderholdskostnadCoreMapper.mapBPAndelUnderholdskostnadGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             TestUtil.dummyUnderholdskostnadResultatCore()))
-        .withMessage("datoTil i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Inntekt har ugyldig verdi");
   }
 
   // InntektBP - inntektType
@@ -1254,7 +1257,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> samvaersfradragCoreMapper.mapSamvaersfradragGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type Samvaersklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Samvaersklasse mangler");
   }
 
   @Test
@@ -1264,7 +1267,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> samvaersfradragCoreMapper.mapSamvaersfradragGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type Samvaersklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Samvaersklasse er null");
   }
 
   @Test
@@ -1274,7 +1277,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> samvaersfradragCoreMapper.mapSamvaersfradragGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoFom i objekt av type Samvaersklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Samvaersklasse har ugyldig verdi");
   }
 
   // Samvaersklasse - datoTil
@@ -1285,7 +1288,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> samvaersfradragCoreMapper.mapSamvaersfradragGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type Samvaersklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Samvaersklasse mangler");
   }
 
   @Test
@@ -1295,7 +1298,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> samvaersfradragCoreMapper.mapSamvaersfradragGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type Samvaersklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Samvaersklasse er null");
   }
 
   @Test
@@ -1305,7 +1308,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> samvaersfradragCoreMapper.mapSamvaersfradragGrunnlagTilCore(grunnlag, new SjablonListe(), 1,
             new HashMap(Map.of(1, "2010-01-01"))))
-        .withMessage("datoTil i objekt av type Samvaersklasse mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Samvaersklasse har ugyldig verdi");
   }
 
   // Samvaersklasse - soknadsbarnId
@@ -1373,7 +1376,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Barnetillegg mangler");
   }
 
   @Test
@@ -1383,7 +1386,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Barnetillegg er null");
   }
 
   @Test
@@ -1393,7 +1396,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Barnetillegg har ugyldig verdi");
   }
 
   // BarnetilleggBM - datoTil
@@ -1404,7 +1407,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Barnetillegg mangler");
   }
 
   @Test
@@ -1414,7 +1417,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Barnetillegg er null");
   }
 
   @Test
@@ -1424,7 +1427,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Barnetillegg har ugyldig verdi");
   }
 
   // BarnetilleggBM - soknadsbarnId
@@ -1529,7 +1532,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Barnetillegg mangler");
   }
 
   @Test
@@ -1539,7 +1542,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Barnetillegg er null");
   }
 
   @Test
@@ -1549,7 +1552,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type Barnetillegg har ugyldig verdi");
   }
 
   // BarnetilleggBP - datoTil
@@ -1560,7 +1563,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Barnetillegg mangler");
   }
 
   @Test
@@ -1570,7 +1573,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Barnetillegg er null");
   }
 
   @Test
@@ -1580,7 +1583,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type Barnetillegg har ugyldig verdi");
   }
 
   // BarnetilleggBP - soknadsbarnId
@@ -1664,7 +1667,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type BarnetilleggForsvaret mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnetilleggForsvaret mangler");
   }
 
   @Test
@@ -1674,7 +1677,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type BarnetilleggForsvaret mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnetilleggForsvaret er null");
   }
 
   @Test
@@ -1684,7 +1687,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type BarnetilleggForsvaret mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type BarnetilleggForsvaret har ugyldig verdi");
   }
 
   // BarnetilleggForsvaret - datoTil
@@ -1695,7 +1698,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type BarnetilleggForsvaret mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnetilleggForsvaret mangler");
   }
 
   @Test
@@ -1705,7 +1708,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type BarnetilleggForsvaret mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnetilleggForsvaret er null");
   }
 
   @Test
@@ -1715,7 +1718,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type BarnetilleggForsvaret mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type BarnetilleggForsvaret har ugyldig verdi");
   }
 
   // BarnetilleggForsvaret - barnetilleggForsvaret
@@ -1732,27 +1735,23 @@ class CoreMapperTest {
   }
 
   @Test
-  @DisplayName("Skal ikke kaste UgyldigInputException når BarnetilleggForsvaret barnetilleggForsvaret er null")
-  void skalIkkeKasteUgyldigInputExceptionNaarBarnetilleggForsvaretBarnetilleggForsvaretErNull() {
+  @DisplayName("Skal kaste UgyldigInputException når BarnetilleggForsvaret barnetilleggForsvaret er null")
+  void skalKasteUgyldigInputExceptionNaarBarnetilleggForsvaretBarnetilleggForsvaretErNull() {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullBarnetilleggForsvaretBarnetilleggForsvaret();
-    assertThatNoException()
+    assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()));
-    var grunnlagTilCore = barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-        TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore());
-    assertThat(grunnlagTilCore.getBarnetilleggForsvaretPeriodeListe().get(0).getBarnetilleggForsvaretIPeriode()).isFalse();
+            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
+        .withMessage("barnetilleggForsvaret i objekt av type BarnetilleggForsvaret er null eller har ugyldig verdi");
   }
 
   @Test
   @DisplayName("Skal kaste UgyldigInputException når BarnetilleggForsvaret barnetilleggForsvaret har ugyldig verdi")
   void skalKasteUgyldigInputExceptionNaarBarnetilleggForsvaretBarnetilleggForsvaretHarUgyldigVerdi() {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretBarnetilleggForsvaret();
-    assertThatNoException()
+    assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()));
-    var grunnlagTilCore = barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-        TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore());
-    assertThat(grunnlagTilCore.getBarnetilleggForsvaretPeriodeListe().get(0).getBarnetilleggForsvaretIPeriode()).isFalse();
+            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
+        .withMessage("barnetilleggForsvaret i objekt av type BarnetilleggForsvaret er null eller har ugyldig verdi");
   }
 
   // DeltBosted - datoFom
@@ -1763,7 +1762,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type DeltBosted mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type DeltBosted mangler");
   }
 
   @Test
@@ -1773,7 +1772,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type DeltBosted mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type DeltBosted er null");
   }
 
   @Test
@@ -1783,7 +1782,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type DeltBosted mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type DeltBosted har ugyldig verdi");
   }
 
   // DeltBosted - datoTil
@@ -1794,7 +1793,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type DeltBosted mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type DeltBosted mangler");
   }
 
   @Test
@@ -1804,7 +1803,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type DeltBosted mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type DeltBosted er null");
   }
 
   @Test
@@ -1814,7 +1813,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type DeltBosted mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type DeltBosted har ugyldig verdi");
   }
 
   // DeltBosted - soknadsbarnId
@@ -1842,27 +1841,23 @@ class CoreMapperTest {
   }
 
   @Test
-  @DisplayName("Skal ikke kaste UgyldigInputException når DeltBosted deltBosted er null")
-  void skalIkkeKasteUgyldigInputExceptionNaarDeltBostedDeltBostedErNull() {
+  @DisplayName("Skal kaste UgyldigInputException når DeltBosted deltBosted er null")
+  void skalKasteUgyldigInputExceptionNaarDeltBostedDeltBostedErNull() {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullDeltBostedDeltBosted();
-    assertThatNoException()
+    assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()));
-    var grunnlagTilCore = barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-        TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore());
-    assertThat(grunnlagTilCore.getDeltBostedPeriodeListe().get(0).getDeltBostedIPeriode()).isFalse();
+            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
+        .withMessage("deltBosted i objekt av type DeltBosted er null eller har ugyldig verdi");
   }
 
   @Test
   @DisplayName("Skal kaste UgyldigInputException når DeltBosted deltBosted har ugyldig verdi")
   void skalKasteUgyldigInputExceptionNaarDeltBostedDeltBostedHarUgyldigVerdi() {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDeltBosted();
-    assertThatNoException()
+    assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()));
-    var grunnlagTilCore = barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
-        TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore());
-    assertThat(grunnlagTilCore.getDeltBostedPeriodeListe().get(0).getDeltBostedIPeriode()).isFalse();
+            TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
+        .withMessage("deltBosted i objekt av type DeltBosted er null eller har ugyldig verdi");
   }
 
   // AndreLopendeBidrag - datoFom
@@ -1873,7 +1868,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type AndreLopendeBidrag mangler");
   }
 
   @Test
@@ -1883,7 +1878,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type AndreLopendeBidrag er null");
   }
 
   @Test
@@ -1893,7 +1888,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoFom i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoFom i objekt av type AndreLopendeBidrag har ugyldig verdi");
   }
 
   // AndreLopendeBidrag - datoTil
@@ -1904,7 +1899,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type AndreLopendeBidrag mangler");
   }
 
   @Test
@@ -1914,7 +1909,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type AndreLopendeBidrag er null");
   }
 
   @Test
@@ -1924,7 +1919,7 @@ class CoreMapperTest {
     assertThatExceptionOfType(UgyldigInputException.class)
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
-        .withMessage("datoTil i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+        .withMessage("datoTil i objekt av type AndreLopendeBidrag har ugyldig verdi");
   }
 
   // AndreLopendeBidrag - soknadsbarnId
@@ -1998,5 +1993,268 @@ class CoreMapperTest {
         .isThrownBy(() -> barnebidragCoreMapper.mapBarnebidragGrunnlagTilCore(grunnlag, new SjablonListe(), TestUtil.dummyBidragsevneResultatCore(),
             TestUtil.dummyBPsAndelUnderholdskostnadResultatCore(), TestUtil.dummySamvaersfradragResultatCore()))
         .withMessage("samvaersfradragBelop i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  //==================================================================================================================================================
+
+  // Test av validering i ForholdsmessigFordelingCoreMapper
+
+  // Bidragsevne - datoFom
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne datoFom mangler")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneDatoFomMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFom();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoFom i objekt av type Bidragsevne mangler");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne datoFom er null")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneDatoFomErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBidragsevneDatoFom();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoFom i objekt av type Bidragsevne er null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne datoFom har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneDatoFomHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevneDatoFom();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoFom i objekt av type Bidragsevne har ugyldig verdi");
+  }
+
+  // Bidragsevne - datoTil
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne datoTil mangler")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneDatoTilMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoTil i objekt av type Bidragsevne mangler");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne datoTil er null")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneDatoTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBidragsevneDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoTil i objekt av type Bidragsevne er null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne datoTil har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneDatoTilHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevneDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoTil i objekt av type Bidragsevne har ugyldig verdi");
+  }
+
+  // Bidragsevne - belop
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne belop mangler")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneBelopMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevneBelop();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("belop i objekt av type Bidragsevne mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne belop er null")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneBelopErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBidragsevneBelop();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("belop i objekt av type Bidragsevne mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne belop har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBidragsevneBelopHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevneBelop();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("belop i objekt av type Bidragsevne mangler, er null eller har ugyldig verdi");
+  }
+
+  // Bidragsevne - 25ProsentInntekt
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne 25ProsentInntekt mangler")
+  void skalKasteUgyldigInputExceptionNaarBidragsevne25ProsentInntektMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBidragsevne25ProsentInntekt();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("25ProsentInntekt i objekt av type Bidragsevne mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne 25ProsentInntekt er null")
+  void skalKasteUgyldigInputExceptionNaarBidragsevne25ProsentInntektErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBidragsevne25ProsentInntekt();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("25ProsentInntekt i objekt av type Bidragsevne mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Bidragsevne 25ProsentInntekt har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBidragsevne25ProsentInntektHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevne25ProsentInntekt();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("25ProsentInntekt i objekt av type Bidragsevne mangler, er null eller har ugyldig verdi");
+  }
+
+  // Barnebidrag - datoFom
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag datoFom mangler")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragDatoFomMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBarnebidragDatoFom();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoFom i objekt av type Barnebidrag mangler");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag datoFom er null")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragDatoFomErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBarnebidragDatoFom();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoFom i objekt av type Barnebidrag er null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag datoFom har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragDatoFomHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragDatoFom();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoFom i objekt av type Barnebidrag har ugyldig verdi");
+  }
+
+  // Barnebidrag - datoTil
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag datoTil mangler")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragDatoTilMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBarnebidragDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoTil i objekt av type Barnebidrag mangler");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag datoTil er null")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragDatoTilErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBarnebidragDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoTil i objekt av type Barnebidrag er null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag datoTil har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragDatoTilHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("datoTil i objekt av type Barnebidrag har ugyldig verdi");
+  }
+
+  // Barnebidrag - sakNr
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag sakNr mangler")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragSakNrMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBarnebidragSakNr();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("sakNr i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag sakNr er null")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragSakNrErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBarnebidragSakNr();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("sakNr i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag sakNr har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragSakNrHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragSakNr();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("sakNr i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  // Barnebidrag - soknadsbarnId
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag soknadsbarnId mangler")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragSoknadsbarnIdMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBarnebidragSoknadsbarnId();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("soknadsbarnId i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  // Barnebidrag - belop
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag belop mangler")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragBelopMangler() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUtenBarnebidragBelop();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("belop i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag belop er null")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragBelopErNull() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBarnebidragBelop();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("belop i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når Barnebidrag belop har ugyldig verdi")
+  void skalKasteUgyldigInputExceptionNaarBarnebidragBelopHarUgyldigVerdi() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragBelop();
+    assertThatExceptionOfType(UgyldigInputException.class)
+        .isThrownBy(
+            () -> forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingGrunnlagTilCore(grunnlag))
+        .withMessage("belop i objekt av type Barnebidrag mangler, er null eller har ugyldig verdi");
   }
 }
