@@ -2,7 +2,7 @@ package no.nav.bidrag.beregn.barnebidrag.rest.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 
@@ -18,7 +18,7 @@ public class SoknadsbarnUtil {
   }
 
   // Lager en map for søknadsbarn (id og fødselsdato)
-  protected static Map<Integer, String> mapSoknadsbarn(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+  protected static Map<Integer, String> mapSoknadsbarn(BeregnGrunnlag beregnBarnebidragGrunnlag) {
     var soknadsbarnMap = new HashMap<Integer, String>();
     beregnBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlag.getType().equals(SOKNADSBARN_INFO_TYPE))
@@ -41,7 +41,7 @@ public class SoknadsbarnUtil {
   }
 
   // Validerer at alle forekomster av soknadsbarnId er numeriske og har tilknyttet fødselsdato
-  protected static void validerSoknadsbarnId(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+  protected static void validerSoknadsbarnId(BeregnGrunnlag beregnBarnebidragGrunnlag) {
     var soknadsbarnMap = mapSoknadsbarn(beregnBarnebidragGrunnlag);
     beregnBarnebidragGrunnlag.getGrunnlagListe().forEach(grunnlag -> {
       if (grunnlag.getInnhold().has("soknadsbarnId")) {

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnSamvaersfradragGrunnlagCore;
 import no.nav.bidrag.beregn.samvaersfradrag.dto.SamvaersklassePeriodeCore;
@@ -12,7 +12,7 @@ import no.nav.bidrag.beregn.samvaersfradrag.dto.SoknadsbarnCore;
 
 public class SamvaersfradragCoreMapper extends CoreMapper {
 
-  public BeregnSamvaersfradragGrunnlagCore mapSamvaersfradragGrunnlagTilCore(BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag,
+  public BeregnSamvaersfradragGrunnlagCore mapSamvaersfradragGrunnlagTilCore(BeregnGrunnlag beregnBarnebidragGrunnlag,
       SjablonListe sjablonListe, Integer soknadsbarnIdTilBehandling, Map<Integer, String> soknadsbarnMap) {
 
     var samvaersklassePeriodeCoreListe = new ArrayList<SamvaersklassePeriodeCore>();

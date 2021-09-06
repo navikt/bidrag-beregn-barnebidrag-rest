@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 @DisplayName("DtoTest")
 class DtoTest {
 
-  // Test av validering av faste dataelementer i dto
+  // Test av validering av faste dataelementer i dto - barnebidrag
   @Test
   @DisplayName("Skal kaste UgyldigInputException når beregnDatoFra er null")
   void skalKasteUgyldigInputExceptionNaarBeregnDatoFraErNull() {
@@ -47,6 +47,39 @@ class DtoTest {
   @DisplayName("Skal kaste UgyldigInputException når type er null")
   void skalKasteUgyldigInputExceptionNaarTypeErNull() {
     var grunnlag = TestUtil.byggBarnebidragGrunnlagNullType();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::valider)
+        .withMessage("type kan ikke være null");
+  }
+
+  // Test av validering av faste dataelementer i dto - forholdsmessig fordeling
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når beregnDatoFra er null - FF")
+  void skalKasteUgyldigInputExceptionNaarBeregnDatoFraErNullFF() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBeregnDatoFra();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::valider)
+        .withMessage("beregnDatoFra kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når beregnDatoTil er null - FF")
+  void skalKasteUgyldigInputExceptionNaarBeregnDatoTilErNullFF() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullBeregnDatoTil();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::valider)
+        .withMessage("beregnDatoTil kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når grunnlagListe er null - FF")
+  void skalKasteUgyldigInputExceptionNaarGrunnlagListeErNullFF() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullGrunnlagListe();
+    assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::valider)
+        .withMessage("grunnlagListe kan ikke være null");
+  }
+
+  @Test
+  @DisplayName("Skal kaste UgyldigInputException når type er null - FF")
+  void skalKasteUgyldigInputExceptionNaarTypeErNullFF() {
+    var grunnlag = TestUtil.byggForholdsmessigFordelingGrunnlagNullType();
     assertThatExceptionOfType(UgyldigInputException.class).isThrownBy(grunnlag::valider)
         .withMessage("type kan ikke være null");
   }

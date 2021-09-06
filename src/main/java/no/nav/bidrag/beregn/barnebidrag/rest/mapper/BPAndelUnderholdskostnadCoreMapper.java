@@ -4,7 +4,7 @@ import static no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragSer
 
 import java.util.ArrayList;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnBPsAndelUnderholdskostnadGrunnlagCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektPeriodeCore;
@@ -13,7 +13,7 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnetUnderholdskostnadResul
 public class BPAndelUnderholdskostnadCoreMapper extends CoreMapper {
 
   public BeregnBPsAndelUnderholdskostnadGrunnlagCore mapBPAndelUnderholdskostnadGrunnlagTilCore(
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag, SjablonListe sjablonListe, Integer soknadsbarnIdTilBehandling,
+      BeregnGrunnlag beregnBarnebidragGrunnlag, SjablonListe sjablonListe, Integer soknadsbarnIdTilBehandling,
       BeregnetUnderholdskostnadResultatCore underholdskostnadResultatFraCore) {
 
     var inntektBPPeriodeCoreListe = new ArrayList<InntektPeriodeCore>();
@@ -23,7 +23,7 @@ public class BPAndelUnderholdskostnadCoreMapper extends CoreMapper {
     // Løper gjennom alle grunnlagene og identifiserer de som skal mappes til BPs andel underholdskostnad core.
     for (Grunnlag grunnlag : beregnBarnebidragGrunnlag.getGrunnlagListe()) {
       if (INNTEKT_TYPE.equals(grunnlag.getType())) {
-        var rolle = hentRolle(grunnlag.getInnhold(), grunnlag.getType());
+        var rolle = mapText(grunnlag.getInnhold(), "rolle", grunnlag.getType());
         switch (rolle) {
           case BIDRAGSPLIKTIG -> inntektBPPeriodeCoreListe.add(mapInntektBPAndelUnderholdskostnad(grunnlag));
           case BIDRAGSMOTTAKER -> {

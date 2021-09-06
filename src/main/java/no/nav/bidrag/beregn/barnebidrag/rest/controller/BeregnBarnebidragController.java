@@ -1,8 +1,8 @@
 package no.nav.bidrag.beregn.barnebidrag.rest.controller;
 
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingResultat;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlagFF;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetForholdsmessigFordelingResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragService;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnForholdsmessigFordelingService;
@@ -26,17 +26,15 @@ public class BeregnBarnebidragController {
   }
 
   @PostMapping(path = "/barnebidrag")
-  public ResponseEntity<BeregnetTotalBarnebidragResultat> beregnTotalBarnebidrag(
-      @RequestBody BeregnTotalBarnebidragGrunnlag beregnTotalBarnebidragGrunnlag) {
-    var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(beregnTotalBarnebidragGrunnlag);
+  public ResponseEntity<BeregnetTotalBarnebidragResultat> beregnTotalBarnebidrag(@RequestBody BeregnGrunnlag beregnGrunnlag) {
+    var beregnTotalBarnebidragResultat = beregnBarnebidragService.beregn(beregnGrunnlag);
     return new ResponseEntity<>(beregnTotalBarnebidragResultat.getResponseEntity().getBody(),
         beregnTotalBarnebidragResultat.getResponseEntity().getStatusCode());
   }
 
   @PostMapping(path = "/forholdsmessigfordeling")
-  public ResponseEntity<BeregnForholdsmessigFordelingResultat> beregnForholdsmessigFordeling(
-      @RequestBody BeregnForholdsmessigFordelingGrunnlag beregnForholdsmessigFordelingGrunnlag) {
-    var beregnForholdsmessigFordelingResultat = beregnForholdsmessigFordelingService.beregn(beregnForholdsmessigFordelingGrunnlag.tilCore());
+  public ResponseEntity<BeregnetForholdsmessigFordelingResultat> beregnForholdsmessigFordeling(@RequestBody BeregnGrunnlagFF beregnGrunnlag) {
+    var beregnForholdsmessigFordelingResultat = beregnForholdsmessigFordelingService.beregn(beregnGrunnlag);
     return new ResponseEntity<>(beregnForholdsmessigFordelingResultat.getResponseEntity().getBody(),
         beregnForholdsmessigFordelingResultat.getResponseEntity().getStatusCode());
   }

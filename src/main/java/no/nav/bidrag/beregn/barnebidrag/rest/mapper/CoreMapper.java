@@ -35,8 +35,10 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksTilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Samvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Sjablontall;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.TrinnvisSkattesats;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetBidragSakPeriode;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.GrunnlagFF;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.SoknadsbarnUtil;
 import no.nav.bidrag.beregn.bidragsevne.dto.BarnIHusstandPeriodeCore;
@@ -65,6 +67,7 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.NettoBarnetilsynPeriodeCore;
 
 public class CoreMapper {
 
+  // Barnebidrag
   protected static final String SOKNADSBARN_INFO = "SoknadsbarnInfo";
   protected static final String INNTEKT_TYPE = "Inntekt";
   protected static final String BARN_I_HUSSTAND_TYPE = "BarnIHusstand";
@@ -80,6 +83,11 @@ public class CoreMapper {
   protected static final String DELT_BOSTED_TYPE = "DeltBosted";
   protected static final String ANDRE_LOPENDE_BIDRAG_TYPE = "AndreLopendeBidrag";
 
+  // Forholdsmessig fordeling
+  protected static final String BIDRAGSEVNE_TYPE = "Bidragsevne";
+  protected static final String BARNEBIDRAG_TYPE = "Barnebidrag";
+
+  // Roller
   protected static final String BIDRAGSPLIKTIG = "BP";
   protected static final String BIDRAGSMOTTAKER = "BM";
   protected static final String SOKNADSBARN = "SB";
@@ -94,228 +102,151 @@ public class CoreMapper {
   }
 
   protected no.nav.bidrag.beregn.bidragsevne.dto.InntektPeriodeCore mapInntektBidragsevne(Grunnlag grunnlag) {
-    String inntektType;
-    if (grunnlag.getInnhold().has("inntektType")) {
-      inntektType = grunnlag.getInnhold().get("inntektType").asText();
-      evaluerStringType(inntektType, "inntektType", "Inntekt");
-    } else {
-      throw new UgyldigInputException("inntektType i objekt av type Inntekt mangler");
-    }
-
-    String belop;
-    if (grunnlag.getInnhold().has("belop") && grunnlag.getInnhold().get("belop").isNumber()) {
-      belop = grunnlag.getInnhold().get("belop").asText();
-    } else {
-      throw new UgyldigInputException("belop i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
-    }
-
+    var inntektType = mapText(grunnlag.getInnhold(), "inntektType", grunnlag.getType());
+    var belop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "belop", grunnlag.getType()));
     return new no.nav.bidrag.beregn.bidragsevne.dto.InntektPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        inntektType, new BigDecimal(belop));
+        inntektType, belop);
   }
 
   protected no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektPeriodeCore mapInntektBPAndelUnderholdskostnad(Grunnlag grunnlag) {
-    String inntektType;
-    if (grunnlag.getInnhold().has("inntektType")) {
-      inntektType = grunnlag.getInnhold().get("inntektType").asText();
-      evaluerStringType(inntektType, "inntektType", "Inntekt");
-    } else {
-      throw new UgyldigInputException("inntektType i objekt av type Inntekt mangler");
-    }
-
-    String belop;
-    if (grunnlag.getInnhold().has("belop") && grunnlag.getInnhold().get("belop").isNumber()) {
-      belop = grunnlag.getInnhold().get("belop").asText();
-    } else {
-      throw new UgyldigInputException("belop i objekt av type Inntekt mangler, er null eller har ugyldig verdi");
-    }
-    var deltFordel = grunnlag.getInnhold().has("deltFordel") && grunnlag.getInnhold().get("deltFordel").asBoolean();
-    var skatteklasse2 = grunnlag.getInnhold().has("skatteklasse2") && grunnlag.getInnhold().get("skatteklasse2").asBoolean();
-
+    var inntektType = mapText(grunnlag.getInnhold(), "inntektType", grunnlag.getType());
+    var belop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "belop", grunnlag.getType()));
+    var deltFordel = mapBoolean(grunnlag.getInnhold(), "deltFordel", grunnlag.getType());
+    var skatteklasse2 = mapBoolean(grunnlag.getInnhold(), "skatteklasse2", grunnlag.getType());
     return new no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.InntektPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(),
-        grunnlag.getType()), inntektType, new BigDecimal(belop), deltFordel, skatteklasse2);
+        grunnlag.getType()), inntektType, belop, deltFordel, skatteklasse2);
   }
 
   protected BostatusPeriodeCore mapBostatus(Grunnlag grunnlag) {
-    String bostatusKode;
-    if (grunnlag.getInnhold().has("bostatusKode")) {
-      bostatusKode = grunnlag.getInnhold().get("bostatusKode").asText();
-      evaluerStringType(bostatusKode, "bostatusKode", "Bostatus");
-    } else {
-      throw new UgyldigInputException("bostatusKode i objekt av type Bostatus mangler");
-    }
-
+    var bostatusKode = mapText(grunnlag.getInnhold(), "bostatusKode", grunnlag.getType());
     return new BostatusPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), bostatusKode);
   }
 
   protected BarnIHusstandPeriodeCore mapBarnIHusstand(Grunnlag grunnlag) {
-    String antallBarn;
-    if (grunnlag.getInnhold().has("antall") && grunnlag.getInnhold().get("antall").isNumber()) {
-      antallBarn = grunnlag.getInnhold().get("antall").asText();
-    } else {
-      throw new UgyldigInputException("antall i objekt av type BarnIHusstand mangler, er null eller har ugyldig verdi");
-    }
-
-    return new BarnIHusstandPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        Double.parseDouble(antallBarn));
+    var antallBarn = Double.parseDouble(mapNumber(grunnlag.getInnhold(), "antall", grunnlag.getType()));
+    return new BarnIHusstandPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), antallBarn);
   }
 
   protected SaerfradragPeriodeCore mapSaerfradrag(Grunnlag grunnlag) {
-    String saerfradragKode;
-    if (grunnlag.getInnhold().has("saerfradragKode")) {
-      saerfradragKode = grunnlag.getInnhold().get("saerfradragKode").asText();
-      evaluerStringType(saerfradragKode, "saerfradragKode", "Saerfradrag");
-    } else {
-      throw new UgyldigInputException("saerfradragKode i objekt av type Saerfradrag mangler");
-    }
-
+    var saerfradragKode = mapText(grunnlag.getInnhold(), "saerfradragKode", grunnlag.getType());
     return new SaerfradragPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), saerfradragKode);
   }
 
   protected SkatteklassePeriodeCore mapSkatteklasse(Grunnlag grunnlag) {
-    String skatteklasseId;
-    if (grunnlag.getInnhold().has("skatteklasseId") && grunnlag.getInnhold().get("skatteklasseId").isNumber()) {
-      skatteklasseId = grunnlag.getInnhold().get("skatteklasseId").asText();
-    } else {
-      throw new UgyldigInputException("skatteklasseId i objekt av type Skatteklasse mangler, er null eller har ugyldig verdi");
-    }
-
-    return new SkatteklassePeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        Integer.parseInt(skatteklasseId));
+    var skatteklasseId = Integer.parseInt(mapNumber(grunnlag.getInnhold(), "skatteklasseId", grunnlag.getType()));
+    return new SkatteklassePeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), skatteklasseId);
   }
 
   protected FaktiskUtgiftPeriodeCore mapFaktiskUtgift(Grunnlag grunnlag, Integer soknadsbarnPersonId, Map<Integer, String> soknadsbarnMap) {
-    String belop;
-    if (grunnlag.getInnhold().has("belop") && grunnlag.getInnhold().get("belop").isNumber()) {
-      belop = grunnlag.getInnhold().get("belop").asText();
-    } else {
-      throw new UgyldigInputException("belop i objekt av type FaktiskUtgift mangler, er null eller har ugyldig verdi");
-    }
-
-    var soknadsbarnFodselsdato = hentFodselsdato(soknadsbarnPersonId, soknadsbarnMap);
-
-    return new FaktiskUtgiftPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        LocalDate.parse(soknadsbarnFodselsdato), soknadsbarnPersonId, new BigDecimal(belop));
+    var belop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "belop", grunnlag.getType()));
+    var soknadsbarnFodselsdato = LocalDate.parse(hentFodselsdato(soknadsbarnPersonId, soknadsbarnMap));
+    return new FaktiskUtgiftPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), soknadsbarnFodselsdato,
+        soknadsbarnPersonId, belop);
   }
 
   protected BarnetilsynMedStonadPeriodeCore mapBarnetilsynMedStonad(Grunnlag grunnlag) {
-    String stonadType;
-    if (grunnlag.getInnhold().has("stonadType")) {
-      stonadType = grunnlag.getInnhold().get("stonadType").asText();
-      evaluerStringType(stonadType, "stonadType", "BarnetilsynMedStonad");
-    } else {
-      throw new UgyldigInputException("stonadType i objekt av type BarnetilsynMedStonad mangler");
-    }
-
-    String tilsynType;
-    if (grunnlag.getInnhold().has("tilsynType")) {
-      tilsynType = grunnlag.getInnhold().get("tilsynType").asText();
-      evaluerStringType(tilsynType, "tilsynType", "BarnetilsynMedStonad");
-    } else {
-      throw new UgyldigInputException("tilsynType i objekt av type BarnetilsynMedStonad mangler");
-    }
-
+    var stonadType = mapText(grunnlag.getInnhold(), "stonadType", grunnlag.getType());
+    var tilsynType = mapText(grunnlag.getInnhold(), "tilsynType", grunnlag.getType());
     return new BarnetilsynMedStonadPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), tilsynType,
         stonadType);
   }
 
   protected ForpleiningUtgiftPeriodeCore mapForpleiningUtgift(Grunnlag grunnlag) {
-    String belop;
-    if (grunnlag.getInnhold().has("belop") && grunnlag.getInnhold().get("belop").isNumber()) {
-      belop = grunnlag.getInnhold().get("belop").asText();
-    } else {
-      throw new UgyldigInputException("belop i objekt av type ForpleiningUtgift mangler, er null eller har ugyldig verdi");
-    }
-
-    return new ForpleiningUtgiftPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        new BigDecimal(belop));
+    var belop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "belop", grunnlag.getType()));
+    return new ForpleiningUtgiftPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), belop);
   }
 
   protected SamvaersklassePeriodeCore mapSamvaersklasse(Grunnlag grunnlag) {
-    String samvaersklasseId;
-    if (grunnlag.getInnhold().has("samvaersklasseId")) {
-      samvaersklasseId = grunnlag.getInnhold().get("samvaersklasseId").asText();
-      evaluerStringType(samvaersklasseId, "samvaersklasseId", "Samvaersklasse");
-    } else {
-      throw new UgyldigInputException("samvaersklasseId i objekt av type Samvaersklasse mangler");
-    }
-
+    var samvaersklasseId = mapText(grunnlag.getInnhold(), "samvaersklasseId", grunnlag.getType());
     return new SamvaersklassePeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), samvaersklasseId);
   }
 
   protected BarnetilleggPeriodeCore mapBarnetillegg(Grunnlag grunnlag, Integer soknadsbarnPersonId) {
-    String bruttoBelop;
-    if (grunnlag.getInnhold().has("bruttoBelop") && grunnlag.getInnhold().get("bruttoBelop").isNumber()) {
-      bruttoBelop = grunnlag.getInnhold().get("bruttoBelop").asText();
-    } else {
-      throw new UgyldigInputException("bruttoBelop i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
-    }
-
-    String skattProsent;
-    if (grunnlag.getInnhold().has("skattProsent") && grunnlag.getInnhold().get("skattProsent").isNumber()) {
-      skattProsent = grunnlag.getInnhold().get("skattProsent").asText();
-    } else {
-      throw new UgyldigInputException("skattProsent i objekt av type Barnetillegg mangler, er null eller har ugyldig verdi");
-    }
-
+    var bruttoBelop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "bruttoBelop", grunnlag.getType()));
+    var skattProsent = new BigDecimal(mapNumber(grunnlag.getInnhold(), "skattProsent", grunnlag.getType()));
     return new BarnetilleggPeriodeCore(grunnlag.getReferanse(), soknadsbarnPersonId, mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        new BigDecimal(bruttoBelop), new BigDecimal(skattProsent));
+        bruttoBelop, skattProsent);
   }
 
   protected BarnetilleggForsvaretPeriodeCore mapBarnetilleggForsvaret(Grunnlag grunnlag) {
-    var barnetilleggForsvaret = grunnlag.getInnhold().has("barnetilleggForsvaret") && grunnlag.getInnhold().get("barnetilleggForsvaret").asBoolean();
-
+    var barnetilleggForsvaret = mapBoolean(grunnlag.getInnhold(), "barnetilleggForsvaret", grunnlag.getType());
     return new BarnetilleggForsvaretPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
         barnetilleggForsvaret);
   }
 
   protected DeltBostedPeriodeCore mapDeltBosted(Grunnlag grunnlag, Integer soknadsbarnPersonId) {
-    var deltBosted = grunnlag.getInnhold().has("deltBosted") && grunnlag.getInnhold().get("deltBosted").asBoolean();
-
-    return new DeltBostedPeriodeCore(grunnlag.getReferanse(), soknadsbarnPersonId, mapPeriode(grunnlag.getInnhold(), grunnlag.getType()),
-        deltBosted);
+    var deltBosted = mapBoolean(grunnlag.getInnhold(), "deltBosted", grunnlag.getType());
+    return new DeltBostedPeriodeCore(grunnlag.getReferanse(), soknadsbarnPersonId, mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), deltBosted);
   }
 
   protected AndreLopendeBidragPeriodeCore mapAndreLopendeBidrag(Grunnlag grunnlag, Integer barnPersonId) {
-    String bidragBelop;
-    if (grunnlag.getInnhold().has("bidragBelop") && grunnlag.getInnhold().get("bidragBelop").isNumber()) {
-      bidragBelop = grunnlag.getInnhold().get("bidragBelop").asText();
-    } else {
-      throw new UgyldigInputException("bidragBelop i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
-    }
-
-    String samvaersfradragBelop;
-    if (grunnlag.getInnhold().has("samvaersfradragBelop") && grunnlag.getInnhold().get("samvaersfradragBelop").isNumber()) {
-      samvaersfradragBelop = grunnlag.getInnhold().get("samvaersfradragBelop").asText();
-    } else {
-      throw new UgyldigInputException("samvaersfradragBelop i objekt av type AndreLopendeBidrag mangler, er null eller har ugyldig verdi");
-    }
-
+    var bidragBelop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "bidragBelop", grunnlag.getType()));
+    var samvaersfradragBelop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "samvaersfradragBelop", grunnlag.getType()));
     return new AndreLopendeBidragPeriodeCore(grunnlag.getReferanse(), mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), barnPersonId,
-        new BigDecimal(bidragBelop), new BigDecimal(samvaersfradragBelop));
+        bidragBelop, samvaersfradragBelop);
+  }
+
+  protected no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BidragsevnePeriodeCore mapBidragsevne(GrunnlagFF grunnlag) {
+    var belop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "belop", grunnlag.getType()));
+    var tjuefemProsentInntekt = new BigDecimal(mapNumber(grunnlag.getInnhold(), "25ProsentInntekt", grunnlag.getType()));
+    return new no.nav.bidrag.beregn.forholdsmessigfordeling.dto.BidragsevnePeriodeCore(mapPeriode(grunnlag.getInnhold(), grunnlag.getType()), belop,
+        tjuefemProsentInntekt);
+  }
+
+  protected BeregnetBidragSakPeriode mapBarnebidrag(GrunnlagFF grunnlag) {
+    var sakNr = Integer.parseInt(mapNumber(grunnlag.getInnhold(), "sakNr", grunnlag.getType()));
+    var datoFom = LocalDate.parse(mapDato(grunnlag.getInnhold(), "datoFom", grunnlag.getType()));
+    var datoTil = LocalDate.parse(mapDato(grunnlag.getInnhold(), "datoTil", grunnlag.getType()));
+    var soknadsbarnId = Integer.parseInt(mapNumber(grunnlag.getInnhold(), "soknadsbarnId", grunnlag.getType()));
+    var belop = new BigDecimal(mapNumber(grunnlag.getInnhold(), "belop", grunnlag.getType()));
+    return new BeregnetBidragSakPeriode(sakNr, datoFom, datoTil, soknadsbarnId, belop);
+  }
+
+  protected String mapText(JsonNode grunnlagInnhold, String dataElement, String grunnlagType) {
+    String verdi;
+    if (grunnlagInnhold.has(dataElement)) {
+      verdi = grunnlagInnhold.get(dataElement).asText();
+      evaluerStringType(verdi, dataElement, grunnlagType);
+    } else {
+      throw new UgyldigInputException(dataElement + " i objekt av type " + grunnlagType + " mangler");
+    }
+    return verdi;
+  }
+
+  protected String mapNumber(JsonNode grunnlagInnhold, String dataElement, String grunnlagType) {
+    String verdi;
+    if (grunnlagInnhold.has(dataElement) && grunnlagInnhold.get(dataElement).isNumber()) {
+      verdi = grunnlagInnhold.get(dataElement).asText();
+    } else {
+      throw new UgyldigInputException(dataElement + " i objekt av type " + grunnlagType + " mangler, er null eller har ugyldig verdi");
+    }
+    return verdi;
+  }
+
+  protected Boolean mapBoolean(JsonNode grunnlagInnhold, String dataElement, String grunnlagType) {
+    boolean verdi = false;
+    if (grunnlagInnhold.has(dataElement)) {
+      if (grunnlagInnhold.get(dataElement).isBoolean()) {
+        verdi = grunnlagInnhold.get(dataElement).asBoolean();
+      } else {
+        throw new UgyldigInputException(dataElement + " i objekt av type " + grunnlagType + " er null eller har ugyldig verdi");
+      }
+    }
+    return verdi;
+  }
+
+  protected String mapDato(JsonNode grunnlagInnhold, String dataElement, String grunnlagType) {
+    var verdi = mapText(grunnlagInnhold, dataElement, grunnlagType);
+    if (!gyldigDato(verdi)) {
+      throw new UgyldigInputException(dataElement + " i objekt av type " + grunnlagType + " har ugyldig verdi");
+    }
+    return verdi;
   }
 
   protected PeriodeCore mapPeriode(JsonNode grunnlagInnhold, String grunnlagType) {
-    String datoFom;
-    if (grunnlagInnhold.has("datoFom")) {
-      datoFom = grunnlagInnhold.get("datoFom").asText();
-      if (!gyldigDato(datoFom)) {
-        throw new UgyldigInputException("datoFom i objekt av type " + grunnlagType + " mangler, er null eller har ugyldig verdi");
-      }
-    } else {
-      throw new UgyldigInputException("datoFom i objekt av type " + grunnlagType + " mangler, er null eller har ugyldig verdi");
-    }
-
-    String datoTil;
-    if (grunnlagInnhold.has("datoTil")) {
-      datoTil = grunnlagInnhold.get("datoTil").asText();
-      if (!gyldigDato(datoTil)) {
-        throw new UgyldigInputException("datoTil i objekt av type " + grunnlagType + " mangler, er null eller har ugyldig verdi");
-      }
-    } else {
-      throw new UgyldigInputException("datoTil i objekt av type " + grunnlagType + " mangler, er null eller har ugyldig verdi");
-    }
-
-    return new PeriodeCore(LocalDate.parse(datoFom), LocalDate.parse(datoTil));
+    var datoFom = LocalDate.parse(mapDato(grunnlagInnhold, "datoFom", grunnlagType));
+    var datoTil = LocalDate.parse(mapDato(grunnlagInnhold, "datoTil", grunnlagType));
+    return new PeriodeCore(datoFom, datoTil);
   }
 
   protected String hentSoknadsbarnId(JsonNode grunnlagInnhold, String grunnlagType) {
@@ -325,20 +256,7 @@ public class CoreMapper {
     } else {
       throw new UgyldigInputException("soknadsbarnId i objekt av type " + grunnlagType + " mangler");
     }
-
     return soknadsbarnId;
-  }
-
-  protected String hentRolle(JsonNode grunnlagInnhold, String grunnlagType) {
-    String rolle;
-    if (grunnlagInnhold.has("rolle")) {
-      rolle = grunnlagInnhold.get("rolle").asText();
-      evaluerStringType(rolle, "rolle", grunnlagType);
-    } else {
-      throw new UgyldigInputException("rolle i objekt av type " + grunnlagType + " mangler");
-    }
-
-    return rolle;
   }
 
   protected String hentFodselsdato(Integer soknadsbarnPersonId, Map<Integer, String> soknadsbarnMap) {
@@ -346,9 +264,8 @@ public class CoreMapper {
         .orElseThrow(() ->
             new UgyldigInputException("Søknadsbarn med id " + soknadsbarnPersonId + " har ingen korresponderende fødselsdato i soknadsbarnListe"));
     if (!gyldigDato(soknadsbarnFodselsdato)) {
-      throw new UgyldigInputException("fodselsdato i objekt av type soknadsbarnInfo mangler, er null eller har ugyldig verdi");
+      throw new UgyldigInputException("fodselsdato i objekt av type soknadsbarnInfo er null eller har ugyldig verdi");
     }
-
     return soknadsbarnFodselsdato;
   }
 
@@ -400,7 +317,7 @@ public class CoreMapper {
   protected List<BidragsevnePeriodeCore> mapDelberegningBidragsevne(BeregnetBidragsevneResultatCore bidragsevneResultatFraCore) {
     return bidragsevneResultatFraCore.getResultatPeriodeListe().stream()
         .map(resultat -> new BidragsevnePeriodeCore(
-            byggReferanseForDelberegning("Delberegning_BP_Bidragsevne", resultat.getPeriode().getDatoFom()),
+            byggReferanseForDelberegning(resultat.getPeriode().getDatoFom()),
             new PeriodeCore(resultat.getPeriode().getDatoFom(), resultat.getPeriode().getDatoTil()),
             resultat.getResultat().getBelop(),
             resultat.getResultat().getInntekt25Prosent()))
@@ -437,7 +354,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen sjablontall
   // Filtrerer bort de sjablonene som ikke brukes i den aktuelle delberegningen og de som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonSjablontall(List<Sjablontall> sjablonSjablontallListe, String delberegning,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag, Map<String, SjablonTallNavn> sjablontallMap) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag, Map<String, SjablonTallNavn> sjablontallMap) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -456,7 +373,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen forbruksutgifter
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonForbruksutgifter(List<Forbruksutgifter> sjablonForbruksutgifterListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -474,7 +391,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen maks tilsyn
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonMaksTilsyn(List<MaksTilsyn> sjablonMaksTilsynListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -492,7 +409,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen maks fradrag
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonMaksFradrag(List<MaksFradrag> sjablonMaksFradragListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -510,7 +427,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen samværsfradrag
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonSamvaersfradrag(List<Samvaersfradrag> sjablonSamvaersfradragListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -531,7 +448,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen bidragsevne
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonBidragsevne(List<Bidragsevne> sjablonBidragsevneListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -550,7 +467,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen trinnvis skattesats
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonTrinnvisSkattesats(List<TrinnvisSkattesats> sjablonTrinnvisSkattesatsListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -569,7 +486,7 @@ public class CoreMapper {
   // Mapper sjabloner av typen barnetilsyn
   // Filtrerer bort de sjablonene som ikke er innenfor intervallet beregnDatoFra-beregnDatoTil
   protected List<SjablonPeriodeCore> mapSjablonBarnetilsyn(List<Barnetilsyn> sjablonBarnetilsynListe,
-      BeregnTotalBarnebidragGrunnlag beregnBarnebidragGrunnlag) {
+      BeregnGrunnlag beregnBarnebidragGrunnlag) {
 
     var beregnDatoFra = beregnBarnebidragGrunnlag.getBeregnDatoFra();
     var beregnDatoTil = beregnBarnebidragGrunnlag.getBeregnDatoTil();
@@ -602,7 +519,7 @@ public class CoreMapper {
     return delberegning + "_SB" + soknadsbarn + "_" + dato.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
   }
 
-  private String byggReferanseForDelberegning(String delberegning, LocalDate dato) {
-    return delberegning + "_" + dato.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+  private String byggReferanseForDelberegning(LocalDate dato) {
+    return "Delberegning_BP_Bidragsevne" + "_" + dato.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
   }
 }

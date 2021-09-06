@@ -20,13 +20,10 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.MaksTilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Samvaersfradrag;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Sjablontall;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.TrinnvisSkattesats;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnForholdsmessigFordelingGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnTotalBarnebidragGrunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetBidragPerBarn;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetBidragSakPeriode;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BidragsevnePeriode;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlagFF;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Grunnlag;
-import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.Periode;
+import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.GrunnlagFF;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnetBidragsevneResultatCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.dto.BeregnetBPsAndelUnderholdskostnadResultatCore;
 import no.nav.bidrag.beregn.felles.dto.AvvikCore;
@@ -42,505 +39,505 @@ import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnetUnderholdskostnadResul
 public class TestUtil {
 
   // Faste dataelementer
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBeregnDatoFra() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBeregnDatoFra() {
     return byggBarnebidragGrunnlag("beregnDatoFra", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBeregnDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBeregnDatoTil() {
     return byggBarnebidragGrunnlag("beregnDatoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullGrunnlagListe() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullGrunnlagListe() {
     return byggBarnebidragGrunnlag("grunnlagListe", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullReferanse() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullReferanse() {
     return byggBarnebidragGrunnlag("referanse", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullType() {
     return byggBarnebidragGrunnlag("type", false, true, false);
   }
 
 
   // SoknadsbarnInfo
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSoknadsbarnFodselsdato() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSoknadsbarnFodselsdato() {
     return byggBarnebidragGrunnlag("SoknadsbarnInfo_fodselsdato", true, false, false, "");
   }
 
   // Bidragsevne - Inntekt BP
   // rolle
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBPRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBPRolle() {
     return byggBarnebidragGrunnlag("InntektBP_rolle", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBPRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBPRolle() {
     return byggBarnebidragGrunnlag("InntektBP_rolle", false, true, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBPDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBPDatoFom() {
     return byggBarnebidragGrunnlag("InntektBP_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBPDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBPDatoFom() {
     return byggBarnebidragGrunnlag("InntektBP_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBPDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBPDatoFom() {
     return byggBarnebidragGrunnlag("InntektBP_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBPDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBPDatoTil() {
     return byggBarnebidragGrunnlag("InntektBP_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBPDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBPDatoTil() {
     return byggBarnebidragGrunnlag("InntektBP_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBPDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBPDatoTil() {
     return byggBarnebidragGrunnlag("InntektBP_datoTil", false, false, true);
   }
 
   // inntektType
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBPInntektType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBPInntektType() {
     return byggBarnebidragGrunnlag("InntektBP_inntektType", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBPInntektType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBPInntektType() {
     return byggBarnebidragGrunnlag("InntektBP_inntektType", false, true, false);
   }
 
   // belop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBPBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBPBelop() {
     return byggBarnebidragGrunnlag("InntektBP_belop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBPBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBPBelop() {
     return byggBarnebidragGrunnlag("InntektBP_belop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBPBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBPBelop() {
     return byggBarnebidragGrunnlag("InntektBP_belop", false, false, true);
   }
 
   // Bidragsevne - BarnIHusstand
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnIHusstandDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnIHusstandDatoFom() {
     return byggBarnebidragGrunnlag("BarnIHusstand_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnIHusstandDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnIHusstandDatoFom() {
     return byggBarnebidragGrunnlag("BarnIHusstand_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandDatoFom() {
     return byggBarnebidragGrunnlag("BarnIHusstand_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnIHusstandDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnIHusstandDatoTil() {
     return byggBarnebidragGrunnlag("BarnIHusstand_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnIHusstandDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnIHusstandDatoTil() {
     return byggBarnebidragGrunnlag("BarnIHusstand_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandDatoTil() {
     return byggBarnebidragGrunnlag("BarnIHusstand_datoTil", false, false, true);
   }
 
   // antall
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnIHusstandAntall() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnIHusstandAntall() {
     return byggBarnebidragGrunnlag("BarnIHusstand_antall", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnIHusstandAntall() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnIHusstandAntall() {
     return byggBarnebidragGrunnlag("BarnIHusstand_antall", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandAntall() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnIHusstandAntall() {
     return byggBarnebidragGrunnlag("BarnIHusstand_antall", false, false, true);
   }
 
   // Bidragsevne - Bostatus
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBostatusDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBostatusDatoFom() {
     return byggBarnebidragGrunnlag("Bostatus_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBostatusDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBostatusDatoFom() {
     return byggBarnebidragGrunnlag("Bostatus_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBostatusDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBostatusDatoFom() {
     return byggBarnebidragGrunnlag("Bostatus_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBostatusDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBostatusDatoTil() {
     return byggBarnebidragGrunnlag("Bostatus_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBostatusDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBostatusDatoTil() {
     return byggBarnebidragGrunnlag("Bostatus_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBostatusDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBostatusDatoTil() {
     return byggBarnebidragGrunnlag("Bostatus_datoTil", false, false, true);
   }
 
   // bostatusKode
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBostatusBostatusKode() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBostatusBostatusKode() {
     return byggBarnebidragGrunnlag("Bostatus_bostatusKode", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBostatusBostatusKode() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBostatusBostatusKode() {
     return byggBarnebidragGrunnlag("Bostatus_bostatusKode", false, true, false);
   }
 
   // Bidragsevne - Saerfradrag
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSaerfradragDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSaerfradragDatoFom() {
     return byggBarnebidragGrunnlag("Saerfradrag_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSaerfradragDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSaerfradragDatoFom() {
     return byggBarnebidragGrunnlag("Saerfradrag_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSaerfradragDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSaerfradragDatoFom() {
     return byggBarnebidragGrunnlag("Saerfradrag_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSaerfradragDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSaerfradragDatoTil() {
     return byggBarnebidragGrunnlag("Saerfradrag_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSaerfradragDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSaerfradragDatoTil() {
     return byggBarnebidragGrunnlag("Saerfradrag_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSaerfradragDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSaerfradragDatoTil() {
     return byggBarnebidragGrunnlag("Saerfradrag_datoTil", false, false, true);
   }
 
   // saerfradragKode
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSaerfradragSaerfradragKode() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSaerfradragSaerfradragKode() {
     return byggBarnebidragGrunnlag("Saerfradrag_saerfradragKode", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSaerfradragSaerfradragKode() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSaerfradragSaerfradragKode() {
     return byggBarnebidragGrunnlag("Saerfradrag_saerfradragKode", false, true, false);
   }
 
   // Bidragsevne - Skatteklasse
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSkatteklasseDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSkatteklasseDatoFom() {
     return byggBarnebidragGrunnlag("Skatteklasse_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSkatteklasseDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSkatteklasseDatoFom() {
     return byggBarnebidragGrunnlag("Skatteklasse_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseDatoFom() {
     return byggBarnebidragGrunnlag("Skatteklasse_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSkatteklasseDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSkatteklasseDatoTil() {
     return byggBarnebidragGrunnlag("Skatteklasse_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSkatteklasseDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSkatteklasseDatoTil() {
     return byggBarnebidragGrunnlag("Skatteklasse_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseDatoTil() {
     return byggBarnebidragGrunnlag("Skatteklasse_datoTil", false, false, true);
   }
 
   // skatteklasseId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSkatteklasseSkatteklasseId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSkatteklasseSkatteklasseId() {
     return byggBarnebidragGrunnlag("Skatteklasse_skatteklasseId", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSkatteklasseSkatteklasseId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSkatteklasseSkatteklasseId() {
     return byggBarnebidragGrunnlag("Skatteklasse_skatteklasseId", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseSkatteklasseId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSkatteklasseSkatteklasseId() {
     return byggBarnebidragGrunnlag("Skatteklasse_skatteklasseId", false, false, true);
   }
 
   // Netto barnetilsyn - FaktiskUtgift
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftSoknadsbarnId() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_soknadsbarnId", true, false, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftDatoFom() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullFaktiskUtgiftDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullFaktiskUtgiftDatoFom() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiFaktiskUtgiftDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiFaktiskUtgiftDatoFom() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftDatoTil() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullFaktiskUtgiftDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullFaktiskUtgiftDatoTil() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiFaktiskUtgiftDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiFaktiskUtgiftDatoTil() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_datoTil", false, false, true);
   }
 
   // belop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenFaktiskUtgiftBelop() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_belop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullFaktiskUtgiftBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullFaktiskUtgiftBelop() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_belop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiFaktiskUtgiftBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiFaktiskUtgiftBelop() {
     return byggBarnebidragGrunnlag("FaktiskUtgift_belop", false, false, true);
   }
 
   // Underholdskostnad - BarnetilsynMedStonad
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadSoknadsbarnId() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_soknadsbarnId", true, false, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilsynMedStonadDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilsynMedStonadDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilsynMedStonadDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilsynMedStonadDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_datoTil", false, false, true);
   }
 
   // stonadType
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadStonadType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadStonadType() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_stonadType", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadStonadType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadStonadType() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_stonadType", false, true, false);
   }
 
   // tilsynType
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadTilsynType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilsynMedStonadTilsynType() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_tilsynType", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadTilsynType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilsynMedStonadTilsynType() {
     return byggBarnebidragGrunnlag("BarnetilsynMedStonad_tilsynType", false, true, false);
   }
 
   // Underholdskostnad - ForpleiningUtgift
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftSoknadsbarnId() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_soknadsbarnId", true, false, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftDatoFom() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullForpleiningUtgiftDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullForpleiningUtgiftDatoFom() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiForpleiningUtgiftDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiForpleiningUtgiftDatoFom() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftDatoTil() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullForpleiningUtgiftDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullForpleiningUtgiftDatoTil() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiForpleiningUtgiftDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiForpleiningUtgiftDatoTil() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_datoTil", false, false, true);
   }
 
   // belop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenForpleiningUtgiftBelop() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_belop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullForpleiningUtgiftBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullForpleiningUtgiftBelop() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_belop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiForpleiningUtgiftBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiForpleiningUtgiftBelop() {
     return byggBarnebidragGrunnlag("ForpleiningUtgift_belop", false, false, true);
   }
 
   // BP andel underholdskostnad - Inntekt SB
   // rolle
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektSBRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektSBRolle() {
     return byggBarnebidragGrunnlag("InntektSB_rolle", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektSBRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektSBRolle() {
     return byggBarnebidragGrunnlag("InntektSB_rolle", false, true, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektSBDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektSBDatoFom() {
     return byggBarnebidragGrunnlag("InntektSB_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektSBDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektSBDatoFom() {
     return byggBarnebidragGrunnlag("InntektSB_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektSBDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektSBDatoFom() {
     return byggBarnebidragGrunnlag("InntektSB_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektSBDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektSBDatoTil() {
     return byggBarnebidragGrunnlag("InntektSB_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektSBDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektSBDatoTil() {
     return byggBarnebidragGrunnlag("InntektSB_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektSBDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektSBDatoTil() {
     return byggBarnebidragGrunnlag("InntektSB_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektSBSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektSBSoknadsbarnId() {
     return byggBarnebidragGrunnlag("InntektSB_soknadsbarnId", true, false, false);
   }
 
   // inntektType
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektSBInntektType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektSBInntektType() {
     return byggBarnebidragGrunnlag("InntektSB_inntektType", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektSBInntektType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektSBInntektType() {
     return byggBarnebidragGrunnlag("InntektSB_inntektType", false, true, false);
   }
 
   // belop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektSBBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektSBBelop() {
     return byggBarnebidragGrunnlag("InntektSB_belop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektSBBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektSBBelop() {
     return byggBarnebidragGrunnlag("InntektSB_belop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektSBBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektSBBelop() {
     return byggBarnebidragGrunnlag("InntektSB_belop", false, false, true);
   }
 
   // BP andel underholdskostnad - Inntekt BM
   // rolle
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBMRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBMRolle() {
     return byggBarnebidragGrunnlag("InntektBM_rolle", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBMRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBMRolle() {
     return byggBarnebidragGrunnlag("InntektBM_rolle", false, true, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBMDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBMDatoFom() {
     return byggBarnebidragGrunnlag("InntektBM_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBMDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBMDatoFom() {
     return byggBarnebidragGrunnlag("InntektBM_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBMDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBMDatoFom() {
     return byggBarnebidragGrunnlag("InntektBM_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBMDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBMDatoTil() {
     return byggBarnebidragGrunnlag("InntektBM_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBMDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBMDatoTil() {
     return byggBarnebidragGrunnlag("InntektBM_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBMDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBMDatoTil() {
     return byggBarnebidragGrunnlag("InntektBM_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBMSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBMSoknadsbarnId() {
     return byggBarnebidragGrunnlag("InntektBM_soknadsbarnId", true, false, false);
   }
 
   // inntektType
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBMInntektType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBMInntektType() {
     return byggBarnebidragGrunnlag("InntektBM_inntektType", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBMInntektType() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBMInntektType() {
     return byggBarnebidragGrunnlag("InntektBM_inntektType", false, true, false);
   }
 
   // belop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenInntektBMBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenInntektBMBelop() {
     return byggBarnebidragGrunnlag("InntektBM_belop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullInntektBMBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullInntektBMBelop() {
     return byggBarnebidragGrunnlag("InntektBM_belop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBMBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiInntektBMBelop() {
     return byggBarnebidragGrunnlag("InntektBM_belop", false, false, true);
   }
 
@@ -550,339 +547,339 @@ public class TestUtil {
 
   // Samvaersfradrag - Samvaersklasse
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseDatoFom() {
     return byggBarnebidragGrunnlag("Samvaersklasse_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSamvaersklasseDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSamvaersklasseDatoFom() {
     return byggBarnebidragGrunnlag("Samvaersklasse_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSamvaersklasseDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSamvaersklasseDatoFom() {
     return byggBarnebidragGrunnlag("Samvaersklasse_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseDatoTil() {
     return byggBarnebidragGrunnlag("Samvaersklasse_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSamvaersklasseDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSamvaersklasseDatoTil() {
     return byggBarnebidragGrunnlag("Samvaersklasse_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSamvaersklasseDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiSamvaersklasseDatoTil() {
     return byggBarnebidragGrunnlag("Samvaersklasse_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseSoknadsbarnId() {
     return byggBarnebidragGrunnlag("Samvaersklasse_soknadsbarnId", true, false, false);
   }
 
   // samvaersklasseId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseSamvaersklasseId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenSamvaersklasseSamvaersklasseId() {
     return byggBarnebidragGrunnlag("Samvaersklasse_samvaersklasseId", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullSamvaersklasseSamvaersklasseId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullSamvaersklasseSamvaersklasseId() {
     return byggBarnebidragGrunnlag("Samvaersklasse_samvaersklasseId", false, true, false);
   }
 
 
   // Barnebidrag - BarnetilleggBM
   // rolle
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMRolle() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_rolle", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMRolle() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_rolle", false, true, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMSoknadsbarnId() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_soknadsbarnId", true, false, false);
   }
 
   // bruttoBelop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMBruttoBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMBruttoBelop() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_bruttoBelop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMBruttoBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMBruttoBelop() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_bruttoBelop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMBruttoBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMBruttoBelop() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_bruttoBelop", false, false, true);
   }
 
   // skattProsent
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMSkattProsent() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBMSkattProsent() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_skattProsent", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMSkattProsent() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBMSkattProsent() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_skattProsent", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMSkattProsent() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBMSkattProsent() {
     return byggBarnebidragGrunnlag("BarnetilleggBM_skattProsent", false, false, true);
   }
 
   // Barnebidrag - BarnetilleggBP
   // rolle
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPRolle() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_rolle", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPRolle() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPRolle() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_rolle", false, true, false);
   }
 
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPSoknadsbarnId() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_soknadsbarnId", true, false, false);
   }
 
   // bruttoBelop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPBruttoBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPBruttoBelop() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_bruttoBelop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPBruttoBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPBruttoBelop() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_bruttoBelop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPBruttoBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPBruttoBelop() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_bruttoBelop", false, false, true);
   }
 
   // skattProsent
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPSkattProsent() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggBPSkattProsent() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_skattProsent", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPSkattProsent() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggBPSkattProsent() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_skattProsent", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPSkattProsent() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggBPSkattProsent() {
     return byggBarnebidragGrunnlag("BarnetilleggBP_skattProsent", false, false, true);
   }
 
   // Barnebidrag - BarnetilleggForsvaret
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggForsvaretDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggForsvaretDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretDatoFom() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggForsvaretDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggForsvaretDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretDatoTil() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenDeltBostedSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenDeltBostedSoknadsbarnId() {
     return byggBarnebidragGrunnlag("DeltBosted_soknadsbarnId", true, false, false);
   }
 
   // barnetilleggForsvaret
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretBarnetilleggForsvaret() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenBarnetilleggForsvaretBarnetilleggForsvaret() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_barnetilleggForsvaret", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullBarnetilleggForsvaretBarnetilleggForsvaret() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullBarnetilleggForsvaretBarnetilleggForsvaret() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_barnetilleggForsvaret", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretBarnetilleggForsvaret() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiBarnetilleggForsvaretBarnetilleggForsvaret() {
     return byggBarnebidragGrunnlag("BarnetilleggForsvaret_barnetilleggForsvaret", false, false, true);
   }
 
   // Barnebidrag - DeltBosted
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenDeltBostedDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenDeltBostedDatoFom() {
     return byggBarnebidragGrunnlag("DeltBosted_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullDeltBostedDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullDeltBostedDatoFom() {
     return byggBarnebidragGrunnlag("DeltBosted_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDatoFom() {
     return byggBarnebidragGrunnlag("DeltBosted_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenDeltBostedDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenDeltBostedDatoTil() {
     return byggBarnebidragGrunnlag("DeltBosted_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullDeltBostedDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullDeltBostedDatoTil() {
     return byggBarnebidragGrunnlag("DeltBosted_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDatoTil() {
     return byggBarnebidragGrunnlag("DeltBosted_datoTil", false, false, true);
   }
 
   // deltBosted
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenDeltBostedDeltBosted() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenDeltBostedDeltBosted() {
     return byggBarnebidragGrunnlag("DeltBosted_deltBosted", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullDeltBostedDeltBosted() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullDeltBostedDeltBosted() {
     return byggBarnebidragGrunnlag("DeltBosted_deltBosted", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDeltBosted() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiDeltBostedDeltBosted() {
     return byggBarnebidragGrunnlag("DeltBosted_deltBosted", false, false, true);
   }
 
   // Barnebidrag - AndreLopendeBidrag
   // datoFom
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoFom() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_datoFom", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragDatoFom() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_datoFom", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragDatoFom() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragDatoFom() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_datoFom", false, false, true);
   }
 
   // datoTil
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragDatoTil() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_datoTil", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragDatoTil() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_datoTil", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragDatoTil() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragDatoTil() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_datoTil", false, false, true);
   }
 
   // soknadsbarnId
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragSoknadsbarnId() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragSoknadsbarnId() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_soknadsbarnId", true, false, false);
   }
 
   // bidragBelop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragBidragBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragBidragBelop() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_bidragBelop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragBidragBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragBidragBelop() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_bidragBelop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragBidragBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragBidragBelop() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_bidragBelop", false, false, true);
   }
 
   // samvaersfradragBelop
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragSamvaersfradragBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUtenAndreLopendeBidragSamvaersfradragBelop() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_samvaersfradragBelop", true, false, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragSamvaersfradragBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagNullAndreLopendeBidragSamvaersfradragBelop() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_samvaersfradragBelop", false, true, false);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragSamvaersfradragBelop() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlagUgyldigVerdiAndreLopendeBidragSamvaersfradragBelop() {
     return byggBarnebidragGrunnlag("AndreLopendeBidrag_samvaersfradragBelop", false, false, true);
   }
 
   //==================================================================================================================================================
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlag() {
+  public static BeregnGrunnlag byggBarnebidragGrunnlag() {
     return byggBarnebidragGrunnlag("", false, false, false, "");
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlag(String soknadsbarnIdKnytningInntekt) {
+  public static BeregnGrunnlag byggBarnebidragGrunnlag(String soknadsbarnIdKnytningInntekt) {
     return byggBarnebidragGrunnlag("", false, false, false, soknadsbarnIdKnytningInntekt);
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlag(String feltNavn, boolean manglerVerdi, boolean nullVerdi,
+  public static BeregnGrunnlag byggBarnebidragGrunnlag(String feltNavn, boolean manglerVerdi, boolean nullVerdi,
       boolean ugyldigVerdi) {
     return byggBarnebidragGrunnlag(feltNavn, manglerVerdi, nullVerdi, ugyldigVerdi, "");
   }
 
-  public static BeregnTotalBarnebidragGrunnlag byggBarnebidragGrunnlag(String feltNavn, boolean manglerVerdi, boolean nullVerdi, boolean ugyldigVerdi,
+  public static BeregnGrunnlag byggBarnebidragGrunnlag(String feltNavn, boolean manglerVerdi, boolean nullVerdi, boolean ugyldigVerdi,
       String soknadsbarnIdKnytningInntekt) {
     var beregnDatoFra = ("beregnDatoFra".equals(feltNavn) && nullVerdi ? null : LocalDate.parse("2017-01-01"));
     var beregnDatoTil = ("beregnDatoTil".equals(feltNavn) && nullVerdi ? null : LocalDate.parse("2020-01-01"));
@@ -932,7 +929,7 @@ public class TestUtil {
           byggAndreLopendeBidragInnhold(feltNavn, manglerVerdi, nullVerdi, ugyldigVerdi)));
     }
 
-    return new BeregnTotalBarnebidragGrunnlag(beregnDatoFra, beregnDatoTil, grunnlagListe);
+    return new BeregnGrunnlag(beregnDatoFra, beregnDatoTil, grunnlagListe);
   }
 
   // Bygger opp SoknadsbarnInfo innhold
@@ -1774,128 +1771,248 @@ public class TestUtil {
 
 
   // Forholdsmessig fordeling
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlag() {
-    return byggForholdsmessigFordelingGrunnlag("");
+
+  // Faste dataelementer
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBeregnDatoFra() {
+    return byggForholdsmessigFordelingGrunnlag("beregnDatoFra", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnDatoFra() {
-    return byggForholdsmessigFordelingGrunnlag("beregnDatoFra");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBeregnDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("beregnDatoTil", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnDatoTil() {
-    return byggForholdsmessigFordelingGrunnlag("beregnDatoTil");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullGrunnlagListe() {
+    return byggForholdsmessigFordelingGrunnlag("grunnlagListe", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevnePeriodeListe() {
-    return byggForholdsmessigFordelingGrunnlag("bidragsevnePeriodeListe");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullType() {
+    return byggForholdsmessigFordelingGrunnlag("type", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFraTil() {
-    return byggForholdsmessigFordelingGrunnlag("bidragsevneDatoFraTil");
+  // Bidragsevne
+  // datoFom
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFom() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_datoFom", true, false, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoFra() {
-    return byggForholdsmessigFordelingGrunnlag("bidragsevneDatoFra");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBidragsevneDatoFom() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_datoFom", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoTil() {
-    return byggForholdsmessigFordelingGrunnlag("bidragsevneDatoTil");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevneDatoFom() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_datoFom", false, false, true);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevneBelop() {
-    return byggForholdsmessigFordelingGrunnlag("bidragsevneBelop");
+  // datoTil
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBidragsevneDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_datoTil", true, false, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragsevne25ProsentInntekt() {
-    return byggForholdsmessigFordelingGrunnlag("bidragsevne25ProsentInntekt");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBidragsevneDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_datoTil", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragSakPeriodeListe() {
-    return byggForholdsmessigFordelingGrunnlag("beregnetBidragSakPeriodeListe");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevneDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_datoTil", false, false, true);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragSaksnr() {
-    return byggForholdsmessigFordelingGrunnlag("beregnetBidragSaksnr");
+  // belop
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBidragsevneBelop() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_belop", true, false, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoFraTil() {
-    return byggForholdsmessigFordelingGrunnlag("beregnetBidragDatoFraTil");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBidragsevneBelop() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_belop", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoFra() {
-    return byggForholdsmessigFordelingGrunnlag("beregnetBidragDatoFra");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevneBelop() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_belop", false, false, true);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragDatoTil() {
-    return byggForholdsmessigFordelingGrunnlag("beregnetBidragDatoTil");
+  // 25ProsentInntekt
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBidragsevne25ProsentInntekt() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_25ProsentInntekt", true, false, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBeregnetBidragPerBarnListe() {
-    return byggForholdsmessigFordelingGrunnlag("beregnetBidragPerBarnListe");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBidragsevne25ProsentInntekt() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_25ProsentInntekt", false, true, false);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBarnPersonId() {
-    return byggForholdsmessigFordelingGrunnlag("barnPersonId");
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBidragsevne25ProsentInntekt() {
+    return byggForholdsmessigFordelingGrunnlag("Bidragsevne_25ProsentInntekt", false, false, true);
   }
 
-  public static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlagUtenBidragBelop() {
-    return byggForholdsmessigFordelingGrunnlag("bidragBelop");
+  // Barnebidrag
+  // datoFom
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBarnebidragDatoFom() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_datoFom", true, false, false);
   }
 
-  // Bygger opp BeregnForholdsmessigFordelingGrunnlag
-  private static BeregnForholdsmessigFordelingGrunnlag byggForholdsmessigFordelingGrunnlag(String nullVerdi) {
-    var beregnDatoFra = (nullVerdi.equals("beregnDatoFra") ? null : LocalDate.parse("2017-01-01"));
-    var beregnDatoTil = (nullVerdi.equals("beregnDatoTil") ? null : LocalDate.parse("2020-01-01"));
-    var bidragsevneDatoFra = (nullVerdi.equals("bidragsevneDatoFra") ? null : LocalDate.parse("2017-01-01"));
-    var bidragsevneDatoTil = (nullVerdi.equals("bidragsevneDatoTil") ? null : LocalDate.parse("2020-01-01"));
-    var bidragsevneBelop = (nullVerdi.equals("bidragsevneBelop") ? null : BigDecimal.valueOf(100));
-    var bidragsevne25ProsentInntekt = (nullVerdi.equals("bidragsevne25ProsentInntekt") ? null : BigDecimal.valueOf(100));
-    var beregnetBidragSaksnr = (nullVerdi.equals("beregnetBidragSaksnr") ? null : 1);
-    var beregnetBidragDatoFra = (nullVerdi.equals("beregnetBidragDatoFra") ? null : LocalDate.parse("2017-01-01"));
-    var beregnetBidragDatoTil = (nullVerdi.equals("beregnetBidragDatoTil") ? null : LocalDate.parse("2020-01-01"));
-    var barnPersonId = (nullVerdi.equals("barnPersonId") ? null : 1);
-    var bidragBelop = (nullVerdi.equals("bidragBelop") ? null : BigDecimal.valueOf(100));
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBarnebidragDatoFom() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_datoFom", false, true, false);
+  }
 
-    List<BidragsevnePeriode> bidragsevnePeriodeListe;
-    if (nullVerdi.equals("bidragsevnePeriodeListe")) {
-      bidragsevnePeriodeListe = null;
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragDatoFom() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_datoFom", false, false, true);
+  }
+
+  // datoTil
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBarnebidragDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_datoTil", true, false, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBarnebidragDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_datoTil", false, true, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragDatoTil() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_datoTil", false, false, true);
+  }
+
+  // sakNr
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBarnebidragSakNr() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_sakNr", true, false, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBarnebidragSakNr() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_sakNr", false, true, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragSakNr() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_sakNr", false, false, true);
+  }
+
+  // soknadsbarnId
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBarnebidragSoknadsbarnId() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_soknadsbarnId", true, false, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBarnebidragSoknadsbarnId() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_soknadsbarnId", false, true, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragSoknadsbarnId() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_soknadsbarnId", false, false, true);
+  }
+
+  // belop
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUtenBarnebidragBelop() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_belop", true, false, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagNullBarnebidragBelop() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_belop", false, true, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlagUgyldigVerdiBarnebidragBelop() {
+    return byggForholdsmessigFordelingGrunnlag("Barnebidrag_belop", false, false, true);
+  }
+
+  //==================================================================================================================================================
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlag() {
+    return byggForholdsmessigFordelingGrunnlag("", false, false, false);
+  }
+
+  public static BeregnGrunnlagFF byggForholdsmessigFordelingGrunnlag(String feltNavn, boolean manglerVerdi, boolean nullVerdi, boolean ugyldigVerdi) {
+    var beregnDatoFra = ("beregnDatoFra".equals(feltNavn) && nullVerdi ? null : LocalDate.parse("2017-01-01"));
+    var beregnDatoTil = ("beregnDatoTil".equals(feltNavn) && nullVerdi ? null : LocalDate.parse("2020-01-01"));
+    var type = ("type".equals(feltNavn) && nullVerdi ? null : "Bidragsevne");
+    var grunnlagListe = new ArrayList<GrunnlagFF>();
+    if ("grunnlagListe".equals(feltNavn) && nullVerdi) {
+      grunnlagListe = null;
     } else {
-      BidragsevnePeriode bidragsevnePeriode;
-      if (nullVerdi.equals("bidragsevneDatoFraTil")) {
-        bidragsevnePeriode = new BidragsevnePeriode(null, bidragsevneBelop, bidragsevne25ProsentInntekt);
-      } else {
-        bidragsevnePeriode = new BidragsevnePeriode(new Periode(bidragsevneDatoFra, bidragsevneDatoTil), bidragsevneBelop,
-            bidragsevne25ProsentInntekt);
-      }
-      bidragsevnePeriodeListe = new ArrayList<>();
-      bidragsevnePeriodeListe.add(bidragsevnePeriode);
+      grunnlagListe.add(new GrunnlagFF(type, byggBidragsevneInnhold(feltNavn, manglerVerdi, nullVerdi, ugyldigVerdi)));
+      grunnlagListe.add(new GrunnlagFF("Barnebidrag", byggBarnebidragInnhold(feltNavn, manglerVerdi, nullVerdi, ugyldigVerdi)));
     }
 
-    List<BeregnetBidragSakPeriode> beregnetBidragSakPeriodeListe;
-    if (nullVerdi.equals("beregnetBidragSakPeriodeListe")) {
-      beregnetBidragSakPeriodeListe = null;
-    } else {
-      List<BeregnetBidragPerBarn> beregnetBidragPerBarnListe;
-      if (nullVerdi.equals("beregnetBidragPerBarnListe")) {
-        beregnetBidragPerBarnListe = null;
-      } else {
-        var beregnetBidragPerBarn = new BeregnetBidragPerBarn(barnPersonId, bidragBelop);
-        beregnetBidragPerBarnListe = new ArrayList<>();
-        beregnetBidragPerBarnListe.add(beregnetBidragPerBarn);
-      }
+    return new BeregnGrunnlagFF(beregnDatoFra, beregnDatoTil, grunnlagListe);
+  }
 
-      BeregnetBidragSakPeriode beregnetBidragSakPeriode;
-      if (nullVerdi.equals("beregnetBidragDatoFraTil")) {
-        beregnetBidragSakPeriode = new BeregnetBidragSakPeriode(beregnetBidragSaksnr, null, beregnetBidragPerBarnListe);
-      } else {
-        beregnetBidragSakPeriode = new BeregnetBidragSakPeriode(beregnetBidragSaksnr, new Periode(beregnetBidragDatoFra, beregnetBidragDatoTil),
-            beregnetBidragPerBarnListe);
+  // Bygger opp Bidragsevne innhold
+  private static JsonNode byggBidragsevneInnhold(String feltNavn, boolean manglerVerdi, boolean nullVerdi, boolean ugyldigVerdi) {
+    var jsonMap = new HashMap<>();
+
+    if ("Bidragsevne_datoFom".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("datoFom", nullVerdi ? null : (ugyldigVerdi ? "xx" : "2017-01-01"));
       }
-      beregnetBidragSakPeriodeListe = new ArrayList<>();
-      beregnetBidragSakPeriodeListe.add(beregnetBidragSakPeriode);
+    } else {
+      jsonMap.put("datoFom", "2017-01-01");
     }
 
-    return new BeregnForholdsmessigFordelingGrunnlag(beregnDatoFra, beregnDatoTil, bidragsevnePeriodeListe, beregnetBidragSakPeriodeListe);
+    if ("Bidragsevne_datoTil".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("datoTil", nullVerdi ? null : (ugyldigVerdi ? "xx" : "2020-01-01"));
+      }
+    } else {
+      jsonMap.put("datoTil", "2020-01-01");
+    }
+
+    if ("Bidragsevne_belop".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("belop", nullVerdi ? null : (ugyldigVerdi ? "xx" : 100));
+      }
+    } else {
+      jsonMap.put("belop", 100);
+    }
+
+    if ("Bidragsevne_25ProsentInntekt".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("25ProsentInntekt", nullVerdi ? null : (ugyldigVerdi ? "xx" : 100));
+      }
+    } else {
+      jsonMap.put("25ProsentInntekt", 100);
+    }
+
+    return new ObjectMapper().valueToTree(jsonMap);
+  }
+
+  // Bygger opp Barnebidrag innhold
+  private static JsonNode byggBarnebidragInnhold(String feltNavn, boolean manglerVerdi, boolean nullVerdi, boolean ugyldigVerdi) {
+    var jsonMap = new HashMap<>();
+
+    if ("Barnebidrag_datoFom".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("datoFom", nullVerdi ? null : (ugyldigVerdi ? "xx" : "2017-01-01"));
+      }
+    } else {
+      jsonMap.put("datoFom", "2017-01-01");
+    }
+
+    if ("Barnebidrag_datoTil".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("datoTil", nullVerdi ? null : (ugyldigVerdi ? "xx" : "2020-01-01"));
+      }
+    } else {
+      jsonMap.put("datoTil", "2020-01-01");
+    }
+
+    if ("Barnebidrag_sakNr".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("sakNr", nullVerdi ? null : (ugyldigVerdi ? "xx" : 1));
+      }
+    } else {
+      jsonMap.put("sakNr", 1);
+    }
+
+    if ("Barnebidrag_soknadsbarnId".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("soknadsbarnId", nullVerdi ? null : (ugyldigVerdi ? "xx" : 1));
+      }
+    } else {
+      jsonMap.put("soknadsbarnId", 1);
+    }
+
+    if ("Barnebidrag_belop".equals(feltNavn)) {
+      if (!manglerVerdi) {
+        jsonMap.put("belop", nullVerdi ? null : (ugyldigVerdi ? "xx" : 100));
+      }
+    } else {
+      jsonMap.put("belop", 100);
+    }
+
+    return new ObjectMapper().valueToTree(jsonMap);
   }
 
   // Bygger opp BeregnForholdsmessigFordelingResultatCore

@@ -5,6 +5,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BPAndelUnderholdskostnadCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BarnebidragCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BidragsevneCoreMapper;
+import no.nav.bidrag.beregn.barnebidrag.rest.mapper.ForholdsmessigFordelingCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.NettoBarnetilsynCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.SamvaersfradragCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.UnderholdskostnadCoreMapper;
@@ -92,6 +93,11 @@ public class BeregnBarnebidragConfig {
   @Bean
   public BarnebidragCoreMapper barnebidragCoreMapper() {
     return new BarnebidragCoreMapper();
+  }
+
+  @Bean
+  public ForholdsmessigFordelingCoreMapper forholdsmessigFordelingCoreMapper() {
+    return new ForholdsmessigFordelingCoreMapper();
   }
 
   @Bean
