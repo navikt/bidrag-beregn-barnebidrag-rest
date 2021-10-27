@@ -576,7 +576,7 @@ public class BeregnBarnebidragControllerIntegrationTest {
             assertThat(resultatGrunnlag.getInnhold().get("belop").asText()).isEqualTo("2478");
           } else if (resultatGrunnlag.getReferanse().startsWith("Delberegning_BM_Underholdskostnad_SB1_20200801")) {
             assertThat(resultatGrunnlag.getInnhold().get("belop").asText()).isEqualTo("5999");
-          } else if (resultatGrunnlag.getReferanse().startsWith("Delberegning_BM_Underholdskostnad_SB1_20200801")) {
+          } else if (resultatGrunnlag.getReferanse().startsWith("Delberegning_BM_Underholdskostnad_SB1_20201001")) {
             assertThat(resultatGrunnlag.getInnhold().get("belop").asText()).isEqualTo("8477");
           } else if (resultatGrunnlag.getReferanse().startsWith("Delberegning_BP_AndelUnderholdskostnad_20200801")) {
             assertThat(resultatGrunnlag.getInnhold().get("belop").asText()).isEqualTo("3749");
