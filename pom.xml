@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.5</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <version>2.5.6</version>
+    <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-beregn-barnebidrag-rest</artifactId>
-  <version>0.0.88-SNAPSHOT</version>
+  <version>0.0.91-SNAPSHOT</version>
 
   <name>bidrag-beregn-barnebidrag-rest</name>
   <description>Beregning av barnebidrag</description>
@@ -23,17 +23,17 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- dependencies -->
-    <bidrag-commons.version>0.5.6</bidrag-commons.version>
-    <bidrag-commons-test.version>0.2.1</bidrag-commons-test.version>
+    <bidrag-commons.version>0.5.16</bidrag-commons.version>
+    <bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
     <bidrag-beregn-felles.version>0.18.0</bidrag-beregn-felles.version>
     <bidrag-beregn-barnebidrag-core.version>0.18.0</bidrag-beregn-barnebidrag-core.version>
-    <springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
+    <springdoc-openapi-ui.version>1.5.12</springdoc-openapi-ui.version>
     <wiremock-standalone.version>2.27.2</wiremock-standalone.version>
     <springframework-cloud.version>2.2.3.RELEASE</springframework-cloud.version>
 
     <!-- language -->
-    <java.version>16</java.version>
-    <kotlin.version>1.5.21</kotlin.version>
+    <java.version>17</java.version>
+    <kotlin.version>1.5.31</kotlin.version>
   </properties>
 
   <dependencies>
