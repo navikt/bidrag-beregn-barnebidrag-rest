@@ -11,9 +11,8 @@ import java.time.LocalDate;
 import java.util.Collection;
 import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
+import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
-import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagCore;
@@ -35,18 +34,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-@SpringBootTest(classes = BidragBeregnBarnebidragLocal.class)
+@SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @DisplayName("BeregnBarnebidragServiceTest")
 class BeregnBarnebidragServiceTest {
 
   @Autowired
   private BeregnBarnebidragService beregnBarnebidragService;
-
   @MockBean
-  private SjablonConsumer sjablonConsumerMock;
+  private SjablonService sjablonService;
   @MockBean
   private BidragsevneCore bidragsevneCoreMock;
   @MockBean
@@ -62,16 +61,16 @@ class BeregnBarnebidragServiceTest {
 
 
   void settOppSjablonMocks() {
-    when(sjablonConsumerMock.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
-    when(sjablonConsumerMock.hentSjablonForbruksutgifter())
+    when(sjablonService.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonService.hentSjablonForbruksutgifter())
         .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonConsumerMock.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonConsumerMock.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
-    when(sjablonConsumerMock.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(sjablonConsumerMock.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
-    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+    when(sjablonService.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonService.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+    when(sjablonService.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
+    when(sjablonService.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonService.hentSjablonTrinnvisSkattesats())
         .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
-    when(sjablonConsumerMock.hentSjablonBarnetilsyn())
+    when(sjablonService.hentSjablonBarnetilsyn())
         .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBarnetilsynListe()));
   }
 

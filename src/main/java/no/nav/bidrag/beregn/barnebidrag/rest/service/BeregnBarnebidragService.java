@@ -20,7 +20,6 @@ import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnetBarnebidragResultatCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevnePeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.SamvaersfradragPeriodeCore;
-import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
@@ -75,7 +74,7 @@ public class BeregnBarnebidragService {
   private final BPAndelUnderholdskostnadCoreMapper bpAndelUnderholdskostnadCoreMapper;
   private final SamvaersfradragCoreMapper samvaersfradragCoreMapper;
   private final BarnebidragCoreMapper barnebidragCoreMapper;
-  private final SjablonConsumer sjablonConsumer;
+  private final SjablonService sjablonService;
   private final BidragsevneCore bidragsevneCore;
   private final NettoBarnetilsynCore nettoBarnetilsynCore;
   private final UnderholdskostnadCore underholdskostnadCore;
@@ -85,7 +84,7 @@ public class BeregnBarnebidragService {
 
   public BeregnBarnebidragService(BidragsevneCoreMapper bidragsevneCoreMapper, NettoBarnetilsynCoreMapper nettoBarnetilsynCoreMapper,
       UnderholdskostnadCoreMapper underholdskostnadCoreMapper, BPAndelUnderholdskostnadCoreMapper bpAndelUnderholdskostnadCoreMapper,
-      SamvaersfradragCoreMapper samvaersfradragCoreMapper, BarnebidragCoreMapper barnebidragCoreMapper, SjablonConsumer sjablonConsumer,
+      SamvaersfradragCoreMapper samvaersfradragCoreMapper, BarnebidragCoreMapper barnebidragCoreMapper, SjablonService sjablonService,
       BidragsevneCore bidragsevneCore, NettoBarnetilsynCore nettoBarnetilsynCore, UnderholdskostnadCore underholdskostnadCore,
       BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore, SamvaersfradragCore samvaersfradragCore,
       BarnebidragCore barnebidragCore) {
@@ -95,7 +94,7 @@ public class BeregnBarnebidragService {
     this.bpAndelUnderholdskostnadCoreMapper = bpAndelUnderholdskostnadCoreMapper;
     this.samvaersfradragCoreMapper = samvaersfradragCoreMapper;
     this.barnebidragCoreMapper = barnebidragCoreMapper;
-    this.sjablonConsumer = sjablonConsumer;
+    this.sjablonService = sjablonService;
     this.bidragsevneCore = bidragsevneCore;
     this.nettoBarnetilsynCore = nettoBarnetilsynCore;
     this.underholdskostnadCore = underholdskostnadCore;
@@ -408,42 +407,42 @@ public class BeregnBarnebidragService {
   private SjablonListe hentSjabloner() {
 
     // Henter sjabloner for sjablontall
-    var sjablonSjablontallListe = Optional.ofNullable(sjablonConsumer.hentSjablonSjablontall().getResponseEntity().getBody())
+    var sjablonSjablontallListe = Optional.ofNullable(sjablonService.hentSjablonSjablontall().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallListe.size());
 
     // Henter sjabloner for forbruksutgifter
-    var sjablonForbruksutgifterListe = Optional.ofNullable(sjablonConsumer.hentSjablonForbruksutgifter().getResponseEntity().getBody())
+    var sjablonForbruksutgifterListe = Optional.ofNullable(sjablonService.hentSjablonForbruksutgifter().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterListe.size());
 
     // Henter sjabloner for maks tilsyn
-    var sjablonMaksTilsynListe = Optional.ofNullable(sjablonConsumer.hentSjablonMaksTilsyn().getResponseEntity().getBody())
+    var sjablonMaksTilsynListe = Optional.ofNullable(sjablonService.hentSjablonMaksTilsyn().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynListe.size());
 
     // Henter sjabloner for maks bidrag
-    var sjablonMaksFradragListe = Optional.ofNullable(sjablonConsumer.hentSjablonMaksFradrag().getResponseEntity().getBody())
+    var sjablonMaksFradragListe = Optional.ofNullable(sjablonService.hentSjablonMaksFradrag().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragListe.size());
 
     // Henter sjabloner for samværsfradrag
-    var sjablonSamvaersfradragListe = Optional.ofNullable(sjablonConsumer.hentSjablonSamvaersfradrag().getResponseEntity().getBody())
+    var sjablonSamvaersfradragListe = Optional.ofNullable(sjablonService.hentSjablonSamvaersfradrag().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Samværsfradrag: {}", sjablonSamvaersfradragListe.size());
 
     // Henter sjabloner for bidragsevne
-    var sjablonBidragsevneListe = Optional.ofNullable(sjablonConsumer.hentSjablonBidragsevne().getResponseEntity().getBody())
+    var sjablonBidragsevneListe = Optional.ofNullable(sjablonService.hentSjablonBidragsevne().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonBidragsevneListe.size());
 
     // Henter sjabloner for trinnvis skattesats
-    var sjablonTrinnvisSkattesatsListe = Optional.ofNullable(sjablonConsumer.hentSjablonTrinnvisSkattesats().getResponseEntity().getBody())
+    var sjablonTrinnvisSkattesatsListe = Optional.ofNullable(sjablonService.hentSjablonTrinnvisSkattesats().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Trinnvis skattesats: {}", sjablonTrinnvisSkattesatsListe.size());
 
     // Henter sjabloner for barnetilsyn
-    var sjablonBarnetilsynListe = Optional.ofNullable(sjablonConsumer.hentSjablonBarnetilsyn().getResponseEntity().getBody())
+    var sjablonBarnetilsynListe = Optional.ofNullable(sjablonService.hentSjablonBarnetilsyn().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Barnetilsyn: {}", sjablonBarnetilsynListe.size());
 

@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import java.util.HashMap;
 import java.util.Map;
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
+import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = BidragBeregnBarnebidragLocal.class)
+@SpringBootTest(classes = BidragBeregnBarnebidragTest.class)
 @DisplayName("CoreMapperTest")
 class CoreMapperTest {
 
