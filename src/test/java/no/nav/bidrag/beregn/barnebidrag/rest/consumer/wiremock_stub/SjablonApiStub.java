@@ -24,7 +24,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonSjablontallStub() {
-    var url = "/bidrag-sjablon/sjablontall/all";
+    var url = "/sjablon/sjablontall?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -206,7 +206,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonForbruksutgifterStub() {
-    var url = "/bidrag-sjablon/forbruksutgifter/all";
+    var url = "/sjablon/forbruksutgifter?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -320,7 +320,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonMaksTilsynStub() {
-    var url = "/bidrag-sjablon/makstilsyn/all";
+    var url = "/sjablon/makstilsyn?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -376,7 +376,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonMaksFradragStub() {
-    var url = "/bidrag-sjablon/maksfradrag/all";
+    var url = "/sjablon/maksfradrag?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -453,7 +453,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonSamvaersfradragStub() {
-    var url = "/bidrag-sjablon/samvaersfradrag/all";
+    var url = "/sjablon/samvaersfradrag?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -877,7 +877,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonBidragsevneStub() {
-    var url = "/bidrag-sjablon/bidragsevner/all";
+    var url = "/sjablon/bidragsevner?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -923,7 +923,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonTrinnvisSkattesatsStub() {
-    var url = "/bidrag-sjablon/trinnvisskattesats/all";
+    var url = "/sjablon/trinnvisskattesats?all=true";
 
     stubFor(
         get(urlEqualTo(url))
@@ -965,7 +965,7 @@ public class SjablonApiStub {
   }
 
   private void settOppSjablonBarnetilsynStub() {
-    var url = "/bidrag-sjablon/barnetilsyn/all";
+    var url = "/sjablon/barnetilsyn?all=true";
 
     stubFor(
         get(urlEqualTo(url))

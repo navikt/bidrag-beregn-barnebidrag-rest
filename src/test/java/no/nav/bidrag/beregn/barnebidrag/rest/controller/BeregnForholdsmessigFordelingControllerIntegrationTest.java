@@ -9,8 +9,12 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
+import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragOverridesConfig;
+import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.wiremock_stub.SjablonApiStub;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetForholdsmessigFordelingResultat;
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate;
+import no.nav.security.token.support.spring.test.EnableMockOAuth2Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,14 +22,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(classes = BidragBeregnBarnebidragLocal.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("integrationtest")
+@SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@Import(BidragBeregnBarnebidragOverridesConfig.class)
+@AutoConfigureWireMock(port = 8096)
+@EnableMockOAuth2Server
 public class BeregnForholdsmessigFordelingControllerIntegrationTest {
 
   @Autowired
@@ -40,7 +48,7 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
   @BeforeEach
   void init() {
     // Bygg opp url
-    url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/forholdsmessigfordeling";
+    url = "http://localhost:" + port + "/beregn/forholdsmessigfordeling";
   }
 
   @Test

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
+import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlagFF;
@@ -29,7 +29,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 @DisplayName("BeregnBarnebidragControllerTest")
-@SpringBootTest(classes = BidragBeregnBarnebidragLocal.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 class BeregnBarnebidragControllerMockTest {
 
   @Autowired
@@ -47,7 +47,7 @@ class BeregnBarnebidragControllerMockTest {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
 
-    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
+    var url = "http://localhost:" + port + "/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnetTotalBarnebidragResultat.class);
     var totalBarnebidragResultat = responseEntity.getBody();
@@ -64,7 +64,7 @@ class BeregnBarnebidragControllerMockTest {
 
     when(beregnBarnebidragServiceMock.beregn(any(BeregnGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
 
-    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/barnebidrag";
+    var url = "http://localhost:" + port + "/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnetTotalBarnebidragResultat.class);
     var totalBarnebidragResultat = responseEntity.getBody();
@@ -81,7 +81,7 @@ class BeregnBarnebidragControllerMockTest {
 
     when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnGrunnlagFF.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
 
-    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/forholdsmessigfordeling";
+    var url = "http://localhost:" + port + "/beregn/forholdsmessigfordeling";
     var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnetForholdsmessigFordelingResultat.class);
     var forholdsmessigFordelingResultat = responseEntity.getBody();
@@ -98,7 +98,7 @@ class BeregnBarnebidragControllerMockTest {
 
     when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnGrunnlagFF.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
 
-    var url = "http://localhost:" + port + "/bidrag-beregn-barnebidrag-rest/beregn/forholdsmessigfordeling";
+    var url = "http://localhost:" + port + "/beregn/forholdsmessigfordeling";
     var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlag());
     var responseEntity = httpHeaderTestRestTemplate.exchange(url, HttpMethod.POST, request, BeregnetForholdsmessigFordelingResultat.class);
     var forholdsmessigFordelingResultat = responseEntity.getBody();
