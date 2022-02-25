@@ -25,14 +25,13 @@
     <!-- dependencies -->
     <bidrag-commons.version>0.5.19</bidrag-commons.version>
     <bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
-    <bidrag-beregn-felles.version>0.18.1</bidrag-beregn-felles.version>
-    <bidrag-beregn-barnebidrag-core.version>0.18.3</bidrag-beregn-barnebidrag-core.version>
+    <bidrag-beregn-felles.version>0.18.3</bidrag-beregn-felles.version>
+    <bidrag-beregn-barnebidrag-core.version>0.18.5</bidrag-beregn-barnebidrag-core.version>
     <springdoc-openapi-ui.version>1.6.4</springdoc-openapi-ui.version>
     <wiremock-standalone.version>2.27.2</wiremock-standalone.version>
     <springframework-cloud.version>2.2.3.RELEASE</springframework-cloud.version>
     <token-support.version>1.3.9</token-support.version>
     <com.squareup.okhttp3.version>4.9.2</com.squareup.okhttp3.version>
-
     <okhttp3.version>4.9.1</okhttp3.version>
 
     <!-- language -->
