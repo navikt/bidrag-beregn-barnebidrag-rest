@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragOverridesConfig;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.wiremock_stub.SjablonApiStub;
@@ -29,13 +28,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Import(BidragBeregnBarnebidragOverridesConfig.class)
 @AutoConfigureWireMock(port = 8096)
 @EnableMockOAuth2Server
-public class BeregnBarnebidragControllerIntegrationTest {
+class BeregnBarnebidragControllerIntegrationTest {
 
   @Autowired
   private HttpHeaderTestRestTemplate httpHeaderTestRestTemplate;
