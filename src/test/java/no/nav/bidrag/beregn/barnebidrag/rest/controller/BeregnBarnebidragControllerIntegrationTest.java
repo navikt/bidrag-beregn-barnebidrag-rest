@@ -83,7 +83,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5999);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(3749);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(62.5);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.625);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(256);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(3490);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -101,7 +101,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.valueOf(2478);
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8477);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5298);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(62.5);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.625);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(256);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(5040);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -119,7 +119,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.valueOf(2478);
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8477);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4239);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(50.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.500);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(256);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(3980);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -137,7 +137,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.valueOf(2478);
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8477);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4239);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(50.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.500);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(256);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(1330);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_REDUSERT_AV_EVNE";
@@ -155,7 +155,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.valueOf(2478);
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8477);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4239);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(50.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.500);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(256);
     forventetBarnebidragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragResultatkodeBarn1 = "INGEN_EVNE";
@@ -173,7 +173,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(7237);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(83.3333333333);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.833333333333);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(7240);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -192,7 +192,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5210);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(1513);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(3700);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -200,7 +200,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn2 = BigDecimal.valueOf(1978);
     forventetUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(9459);
     forventetBPAndelUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(5675);
-    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn2 = BigDecimal.valueOf(1167);
     forventetBarnebidragBelopBarn2 = BigDecimal.valueOf(4510);
     forventetBarnebidragResultatkodeBarn2 = "KOSTNADSBEREGNET_BIDRAG";
@@ -219,7 +219,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5210);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(1513);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(2750);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_REDUSERT_AV_EVNE";
@@ -227,7 +227,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn2 = BigDecimal.valueOf(1874);
     forventetUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(9355);
     forventetBPAndelUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(5613);
-    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn2 = BigDecimal.valueOf(1167);
     forventetBarnebidragBelopBarn2 = BigDecimal.valueOf(3420);
     forventetBarnebidragResultatkodeBarn2 = "BIDRAG_REDUSERT_AV_EVNE";
@@ -246,7 +246,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(7237);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(83.3333333333);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.833333333333);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(1513);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(4500);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_REDUSERT_TIL_25_PROSENT_AV_INNTEKT";
@@ -254,7 +254,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn2 = BigDecimal.valueOf(1874);
     forventetUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(9355);
     forventetBPAndelUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(7796);
-    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(83.3333333333);
+    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(0.833333333333);
     forventetSamvaersfradragBelopBarn2 = BigDecimal.valueOf(1167);
     forventetBarnebidragBelopBarn2 = BigDecimal.valueOf(5320);
     forventetBarnebidragResultatkodeBarn2 = "BIDRAG_REDUSERT_TIL_25_PROSENT_AV_INNTEKT";
@@ -272,7 +272,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(3725);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(42.9);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.429);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(140);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_REDUSERT_AV_EVNE";
@@ -290,7 +290,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(3725);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(42.9);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.429);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(1220);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_REDUSERT_AV_EVNE";
@@ -308,7 +308,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(3725);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(42.9);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.429);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(457);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(1140);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_SATT_TIL_BARNETILLEGG_BP";
@@ -326,7 +326,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5210);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(5080);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_SATT_TIL_UNDERHOLDSKOSTNAD_MINUS_BARNETILLEGG_BM";
@@ -344,7 +344,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5210);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(457);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(4750);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -362,7 +362,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5210);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(5400);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_SATT_TIL_BARNETILLEGG_BP";
@@ -380,7 +380,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5210);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(60.0);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.600);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.valueOf(457);
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(4940);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_SATT_TIL_BARNETILLEGG_BP";
@@ -398,7 +398,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(5080);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(58.5);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.585);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(740);
     forventetBarnebidragResultatkodeBarn1 = "DELT_BOSTED";
@@ -416,7 +416,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4203);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(48.4);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.484);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragResultatkodeBarn1 = "BARNEBIDRAG_IKKE_BEREGNET_DELT_BOSTED";
@@ -434,7 +434,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4898);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(56.4);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.564);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(360);
     forventetBarnebidragResultatkodeBarn1 = "BIDRAG_REDUSERT_AV_EVNE";
@@ -452,7 +452,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(7208);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(83);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.83);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(7210);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
@@ -471,7 +471,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4724);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(54.4);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.544);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(380);
     forventetBarnebidragResultatkodeBarn1 = "DELT_BOSTED";
@@ -479,7 +479,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn2 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn2 = BigDecimal.valueOf(4724);
-    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(54.4);
+    forventetBPAndelUnderholdskostnadProsentBarn2 = BigDecimal.valueOf(0.544);
     forventetSamvaersfradragBelopBarn2 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn2 = BigDecimal.valueOf(380);
     forventetBarnebidragResultatkodeBarn2 = "DELT_BOSTED";
@@ -515,7 +515,7 @@ class BeregnBarnebidragControllerIntegrationTest {
     forventetNettoBarnetilsynBelopBarn1 = BigDecimal.ZERO;
     forventetUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(8684);
     forventetBPAndelUnderholdskostnadBelopBarn1 = BigDecimal.valueOf(4194);
-    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(48.3);
+    forventetBPAndelUnderholdskostnadProsentBarn1 = BigDecimal.valueOf(0.483);
     forventetSamvaersfradragBelopBarn1 = BigDecimal.ZERO;
     forventetBarnebidragBelopBarn1 = BigDecimal.valueOf(4190);
     forventetBarnebidragResultatkodeBarn1 = "KOSTNADSBEREGNET_BIDRAG";
