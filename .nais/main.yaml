@@ -1,5 +1,7 @@
 name: bidrag-beregn-barnebidrag-rest
-ingress: https://bidrag-beregn-barnebidrag-rest.dev.intern.nav.no/
+ingresses:
+  - https://bidrag-beregn-barnebidrag-rest.intern.dev.nav.no/
+  - https://bidrag-beregn-barnebidrag-rest.dev.intern.nav.no/
 azure:
   bidraggcpproxy_url: bidrag-gcp-proxy.dev-fss-pub.nais.io
   bidraggcpproxy_scope: dev-fss.bidrag.bidrag-gcp-proxy
