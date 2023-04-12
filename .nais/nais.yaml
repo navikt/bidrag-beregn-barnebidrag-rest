@@ -47,4 +47,4 @@ spec:
     - name: BIDRAGSJABLON_URL
       value: https://{{ unsecured.bidragsjablon_url }}
     - name: BIDRAGSJABLON_SCOPE
-      value: { { unsecured.bidragsjablon_scope } }
+      value: {{ unsecured.bidragsjablon_scope }}
