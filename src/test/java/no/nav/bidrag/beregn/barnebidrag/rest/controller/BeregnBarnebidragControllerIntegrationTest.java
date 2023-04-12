@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragOverridesConfig;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.wiremock_stub.SjablonApiStub;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
@@ -23,14 +22,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 @SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@Import(BidragBeregnBarnebidragOverridesConfig.class)
 @AutoConfigureWireMock(port = 8096)
 @EnableMockOAuth2Server
 class BeregnBarnebidragControllerIntegrationTest {
@@ -542,27 +539,27 @@ class BeregnBarnebidragControllerIntegrationTest {
         () -> assertThat(totalBarnebidragResultat.getGrunnlagListe()).isNotNull(),
 
         // Sjekk BeregnBarnebidragResultat
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe()).hasSize(2),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getBarn()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getPeriode().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2020-08-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getPeriode().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2020-10-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(3490))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(3490)),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("KOSTNADSBEREGNET_BIDRAG"),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe().size()).isEqualTo(7),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe()).hasSize(7),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getBarn()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getPeriode().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2020-10-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getPeriode().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2021-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1330))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1330)),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("BIDRAG_REDUSERT_AV_EVNE"),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe().size()).isEqualTo(7)
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe()).hasSize(7)
     );
 
     // Sjekk delberegninger
@@ -612,27 +609,27 @@ class BeregnBarnebidragControllerIntegrationTest {
         () -> assertThat(totalBarnebidragResultat.getGrunnlagListe()).isNotNull(),
 
         // Sjekk BeregnBarnebidragResultat
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe()).hasSize(2),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getBarn()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getPeriode().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2020-08-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getPeriode().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2020-10-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1140))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1140)),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("BIDRAG_SATT_TIL_BARNETILLEGG_BP"),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe().size()).isEqualTo(7),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe()).hasSize(7),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getBarn()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getPeriode().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2020-10-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getPeriode().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2021-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(5080))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(5080)),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("BIDRAG_SATT_TIL_UNDERHOLDSKOSTNAD_MINUS_BARNETILLEGG_BM"),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe().size()).isEqualTo(7)
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe()).hasSize(7)
     );
 
     // Sjekk delberegninger
@@ -680,27 +677,27 @@ class BeregnBarnebidragControllerIntegrationTest {
         () -> assertThat(totalBarnebidragResultat.getGrunnlagListe()).isNotNull(),
 
         // Sjekk BeregnBarnebidragResultat
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe()).hasSize(2),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getBarn()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getPeriode().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2020-06-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getPeriode().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2020-07-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(3150))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(3150)),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("KOSTNADSBEREGNET_BIDRAG"),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe().size()).isEqualTo(7),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe()).hasSize(7),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getBarn()).isEqualTo(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getPeriode().getPeriodeDatoFra())
             .isEqualTo(LocalDate.parse("2020-07-01")),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getPeriode().getPeriodeDatoTil())
             .isEqualTo(LocalDate.parse("2021-01-01")),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(3490))).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(3490)),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("KOSTNADSBEREGNET_BIDRAG"),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe().size()).isEqualTo(7)
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe()).hasSize(7)
     );
 
     // Sjekk delberegninger
@@ -747,14 +744,14 @@ class BeregnBarnebidragControllerIntegrationTest {
         () -> assertThat(totalBarnebidragResultat.getGrunnlagListe()).isNotNull(),
 
         // Sjekk Barnebidrag
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().size()).isEqualTo(1),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe()).hasSize(1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getBarn()).isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(forventetBarnebidragBelopBarn1)).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            forventetBarnebidragBelopBarn1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo(forventetBarnebidragResultatkodeBarn1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe().size())
-            .isEqualTo(forventetBarnebidragAntallGrunnlagReferanser)
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe())
+            .hasSize(forventetBarnebidragAntallGrunnlagReferanser)
     );
 
     // Sjekk delberegninger
@@ -790,21 +787,21 @@ class BeregnBarnebidragControllerIntegrationTest {
         () -> assertThat(totalBarnebidragResultat.getGrunnlagListe()).isNotNull(),
 
         // Sjekk Barnebidrag
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe()).hasSize(2),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getBarn()).isEqualTo(1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(forventetBarnebidragBelopBarn1)).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            forventetBarnebidragBelopBarn1),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo(forventetBarnebidragResultatkodeBarn1),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe().size())
-            .isEqualTo(forventetBarnebidragAntallGrunnlagReferanser),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(0).getGrunnlagReferanseListe())
+            .hasSize(forventetBarnebidragAntallGrunnlagReferanser),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getBarn()).isEqualTo(2),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(forventetBarnebidragBelopBarn2)).isZero(),
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            forventetBarnebidragBelopBarn2),
         () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo(forventetBarnebidragResultatkodeBarn2),
-        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe().size())
-            .isEqualTo(forventetBarnebidragAntallGrunnlagReferanser)
+        () -> assertThat(totalBarnebidragResultat.getBeregnetBarnebidragPeriodeListe().get(1).getGrunnlagReferanseListe())
+            .hasSize(forventetBarnebidragAntallGrunnlagReferanser)
     );
 
     // Sjekk delberegninger

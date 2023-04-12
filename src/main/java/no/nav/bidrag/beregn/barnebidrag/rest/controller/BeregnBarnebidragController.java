@@ -8,7 +8,7 @@ import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetForholdsmessigFord
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnBarnebidragService;
 import no.nav.bidrag.beregn.barnebidrag.rest.service.BeregnForholdsmessigFordelingService;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
+import no.nav.security.token.support.core.api.Protected;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/beregn")
-@ProtectedWithClaims(issuer = "aad")
+@Protected
 public class BeregnBarnebidragController {
 
   private final BeregnBarnebidragService beregnBarnebidragService;

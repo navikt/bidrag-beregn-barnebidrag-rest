@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnetBarnebidragResultatCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Barnetilsyn;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.Bidragsevne;
@@ -35,6 +34,7 @@ import no.nav.bidrag.beregn.forholdsmessigfordeling.dto.ResultatPerBarnCore;
 import no.nav.bidrag.beregn.nettobarnetilsyn.dto.BeregnetNettoBarnetilsynResultatCore;
 import no.nav.bidrag.beregn.samvaersfradrag.dto.BeregnetSamvaersfradragResultatCore;
 import no.nav.bidrag.beregn.underholdskostnad.dto.BeregnetUnderholdskostnadResultatCore;
+import org.apache.commons.lang3.StringUtils;
 
 public class TestUtil {
 

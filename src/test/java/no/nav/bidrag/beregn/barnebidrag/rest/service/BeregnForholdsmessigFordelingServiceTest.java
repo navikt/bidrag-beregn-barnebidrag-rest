@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;

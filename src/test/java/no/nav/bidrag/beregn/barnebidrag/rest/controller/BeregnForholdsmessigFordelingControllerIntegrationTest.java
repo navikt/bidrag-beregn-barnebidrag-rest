@@ -8,10 +8,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragLocal;
-import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragOverridesConfig;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
-import no.nav.bidrag.beregn.barnebidrag.rest.consumer.wiremock_stub.SjablonApiStub;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetForholdsmessigFordelingResultat;
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate;
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server;
@@ -23,18 +20,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@Import(BidragBeregnBarnebidragOverridesConfig.class)
 @AutoConfigureWireMock(port = 8096)
 @EnableMockOAuth2Server
-public class BeregnForholdsmessigFordelingControllerIntegrationTest {
+class BeregnForholdsmessigFordelingControllerIntegrationTest {
 
   @Autowired
   private HttpHeaderTestRestTemplate httpHeaderTestRestTemplate;
@@ -67,20 +61,22 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
         () -> assertThat(forholdsmessigFordelingResultat).isNotNull(),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).isNotNull(),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().size()).isEqualTo(2),
+        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).hasSize(2),
 
         // Sjekk resultatet av beregningen
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getSakNr()).isEqualTo(1),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getBarn()).isEqualTo(1),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(2060))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(2060)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getSakNr()).isEqualTo(2),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getBarn()).isEqualTo(2),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(3600))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(3600)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
     );
@@ -102,27 +98,30 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
         () -> assertThat(forholdsmessigFordelingResultat).isNotNull(),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).isNotNull(),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().size()).isEqualTo(3),
+        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).hasSize(3),
 
         // Sjekk resultatet av beregningen
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getSakNr()).isEqualTo(1),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getBarn()).isEqualTo(1),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1460))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1460)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getSakNr()).isEqualTo(2),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getBarn()).isEqualTo(2),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(2550))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(2550)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getSakNr()).isEqualTo(3),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getBarn()).isEqualTo(3),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1640))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1640)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
     );
@@ -144,48 +143,54 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
         () -> assertThat(forholdsmessigFordelingResultat).isNotNull(),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).isNotNull(),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().size()).isEqualTo(6),
+        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).hasSize(6),
 
         // Sjekk resultatet av beregningen
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getSakNr()).isEqualTo(1),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getBarn()).isEqualTo(1),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1340))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1340)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getSakNr()).isEqualTo(2),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getBarn()).isEqualTo(2),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(2180))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(2180)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getSakNr()).isEqualTo(3),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getBarn()).isEqualTo(3),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1940))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1940)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getSakNr()).isEqualTo(4),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getBarn()).isEqualTo(4),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1940))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1940)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getSakNr()).isEqualTo(5),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getBarn()).isEqualTo(5),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1670))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1670)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getSakNr()).isEqualTo(6),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getBarn()).isEqualTo(6),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1340))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1340)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
     );
@@ -207,48 +212,54 @@ public class BeregnForholdsmessigFordelingControllerIntegrationTest {
         () -> assertThat(responseEntity.getStatusCode()).isEqualTo(OK),
         () -> assertThat(forholdsmessigFordelingResultat).isNotNull(),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).isNotNull(),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().size()).isEqualTo(6),
+        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe()).hasSize(6),
 
         // Sjekk resultatet av beregningen
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getSakNr()).isEqualTo(1),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getBarn()).isEqualTo(1),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1630))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1630)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(0).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getSakNr()).isEqualTo(2),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getBarn()).isEqualTo(2),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(2220))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(2220)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(1).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getSakNr()).isEqualTo(2),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getBarn()).isEqualTo(3),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1980))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1980)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(2).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getSakNr()).isEqualTo(3),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getBarn()).isEqualTo(4),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1800))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1800)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(3).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getSakNr()).isEqualTo(3),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getBarn()).isEqualTo(5),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1550))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1550)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(4).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET"),
 
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getSakNr()).isEqualTo(3),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getBarn()).isEqualTo(6),
-        () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getResultat().getBelop()
-            .compareTo(BigDecimal.valueOf(1240))).isZero(),
+        () -> assertThat(
+            forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getResultat().getBelop()).isEqualByComparingTo(
+            BigDecimal.valueOf(1240)),
         () -> assertThat(forholdsmessigFordelingResultat.getBeregnetForholdsmessigFordelingPeriodeListe().get(5).getResultat().getKode())
             .isEqualTo("FORHOLDSMESSIG_FORDELING_BIDRAGSBELOP_ENDRET")
     );
