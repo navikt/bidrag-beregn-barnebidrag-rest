@@ -13,6 +13,7 @@ import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
 import no.nav.bidrag.beregn.barnebidrag.rest.BidragBeregnBarnebidragTest;
 import no.nav.bidrag.beregn.barnebidrag.rest.TestUtil;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.exception.UgyldigInputException;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bidragsevne.dto.BeregnBidragsevneGrunnlagCore;
@@ -45,7 +46,7 @@ class BeregnBarnebidragServiceTest {
   @Autowired
   private BeregnBarnebidragService beregnBarnebidragService;
   @MockBean
-  private SjablonService sjablonService;
+  private SjablonConsumer sjablonConsumerMock;
   @MockBean
   private BidragsevneCore bidragsevneCoreMock;
   @MockBean
@@ -59,19 +60,23 @@ class BeregnBarnebidragServiceTest {
   @MockBean
   private BarnebidragCore barnebidragCoreMock;
 
-
   void settOppSjablonMocks() {
-    when(sjablonService.hentSjablonSjablontall()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
-    when(sjablonService.hentSjablonForbruksutgifter())
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
-    when(sjablonService.hentSjablonMaksFradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
-    when(sjablonService.hentSjablonMaksTilsyn()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
-    when(sjablonService.hentSjablonSamvaersfradrag()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
-    when(sjablonService.hentSjablonBidragsevne()).thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
-    when(sjablonService.hentSjablonTrinnvisSkattesats())
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
-    when(sjablonService.hentSjablonBarnetilsyn())
-        .thenReturn(HttpResponse.from(HttpStatus.OK, TestUtil.dummySjablonBarnetilsynListe()));
+    when(sjablonConsumerMock.hentSjablonSjablontall())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonSjablontallListe()));
+    when(sjablonConsumerMock.hentSjablonForbruksutgifter())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonForbruksutgifterListe()));
+    when(sjablonConsumerMock.hentSjablonMaksFradrag())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonMaksFradragListe()));
+    when(sjablonConsumerMock.hentSjablonMaksTilsyn())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonMaksTilsynListe()));
+    when(sjablonConsumerMock.hentSjablonSamvaersfradrag())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonSamvaersfradragListe()));
+    when(sjablonConsumerMock.hentSjablonBidragsevne())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonBidragsevneListe()));
+    when(sjablonConsumerMock.hentSjablonTrinnvisSkattesats())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonTrinnvisSkattesatsListe()));
+    when(sjablonConsumerMock.hentSjablonBarnetilsyn())
+        .thenReturn(HttpResponse.Companion.from(HttpStatus.OK, TestUtil.dummySjablonBarnetilsynListe()));
   }
 
   @Test
@@ -126,14 +131,13 @@ class BeregnBarnebidragServiceTest {
     assertAll(
         () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK),
         () -> assertThat(beregnTotalBarnebidragResultat.getResponseEntity().getBody()).isNotNull(),
-        () -> assertThat(bidragsevneGrunnlagTilCore.getSjablonPeriodeListe().size()).isEqualTo(forventetAntallSjablonElementerBidragsevne),
-        () -> assertThat(nettoBarnetilsynGrunnlagTilCore.getSjablonPeriodeListe().size()).isEqualTo(forventetAntallSjablonElementerNettoBarnetilsyn),
-        () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().size())
-            .isEqualTo(forventetAntallSjablonElementerUnderholdskostnad),
-        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().size())
-            .isEqualTo(forventetAntallSjablonElementerBPsAndelUnderholdskostnad),
-        () -> assertThat(samvaersfradragGrunnlagTilCore.getSjablonPeriodeListe().size()).isEqualTo(forventetAntallSjablonElementerSamvaersfradrag),
-        () -> assertThat(barnebidragGrunnlagTilCore.getSjablonPeriodeListe().size()).isEqualTo(forventetAntallSjablonElementerBarnebidrag),
+        () -> assertThat(bidragsevneGrunnlagTilCore.getSjablonPeriodeListe()).hasSize(forventetAntallSjablonElementerBidragsevne),
+        () -> assertThat(nettoBarnetilsynGrunnlagTilCore.getSjablonPeriodeListe()).hasSize(forventetAntallSjablonElementerNettoBarnetilsyn),
+        () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe()).hasSize(forventetAntallSjablonElementerUnderholdskostnad),
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getSjablonPeriodeListe()).hasSize(
+            forventetAntallSjablonElementerBPsAndelUnderholdskostnad),
+        () -> assertThat(samvaersfradragGrunnlagTilCore.getSjablonPeriodeListe()).hasSize(forventetAntallSjablonElementerSamvaersfradrag),
+        () -> assertThat(barnebidragGrunnlagTilCore.getSjablonPeriodeListe()).hasSize(forventetAntallSjablonElementerBarnebidrag),
 
         // Sjekk at det mappes ut riktig antall for en gitt sjablon av type Sjablontall
         () -> assertThat(underholdskostnadGrunnlagTilCore.getSjablonPeriodeListe().stream()

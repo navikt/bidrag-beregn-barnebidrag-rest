@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = BidragBeregnBarnebidragTest.class)
-@DisplayName("CoreMapperTest")
+@DisplayName("BPAndelUnderholdskostnadCoreMapperTest")
 class BPAndelUnderholdskostnadCoreMapperTest {
 
   @Autowired
@@ -31,7 +31,7 @@ class BPAndelUnderholdskostnadCoreMapperTest {
     assertAll(
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore).isNotNull(),
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isNotNull(),
-        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe().size()).isEqualTo(1)
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).hasSize(1)
     );
   }
 
@@ -44,7 +44,7 @@ class BPAndelUnderholdskostnadCoreMapperTest {
     assertAll(
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore).isNotNull(),
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isNotNull(),
-        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe().size()).isEqualTo(1)
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).hasSize(1)
     );
   }
 
@@ -57,7 +57,7 @@ class BPAndelUnderholdskostnadCoreMapperTest {
     assertAll(
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore).isNotNull(),
         () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isNotNull(),
-        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe().size()).isEqualTo(0)
+        () -> assertThat(bpAndelUnderholdskostnadGrunnlagTilCore.getInntektBMPeriodeListe()).isEmpty()
     );
   }
 }

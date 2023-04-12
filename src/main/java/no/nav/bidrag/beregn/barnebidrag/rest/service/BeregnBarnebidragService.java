@@ -2,7 +2,6 @@ package no.nav.bidrag.beregn.barnebidrag.rest.service;
 
 import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
 import static no.nav.bidrag.beregn.barnebidrag.rest.service.SoknadsbarnUtil.validerSoknadsbarnId;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,6 +19,7 @@ import no.nav.bidrag.beregn.barnebidrag.dto.BeregnBarnebidragGrunnlagCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BeregnetBarnebidragResultatCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.BidragsevnePeriodeCore;
 import no.nav.bidrag.beregn.barnebidrag.dto.SamvaersfradragPeriodeCore;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonListe;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnGrunnlag;
 import no.nav.bidrag.beregn.barnebidrag.rest.dto.http.BeregnetTotalBarnebidragResultat;
@@ -74,7 +74,7 @@ public class BeregnBarnebidragService {
   private final BPAndelUnderholdskostnadCoreMapper bpAndelUnderholdskostnadCoreMapper;
   private final SamvaersfradragCoreMapper samvaersfradragCoreMapper;
   private final BarnebidragCoreMapper barnebidragCoreMapper;
-  private final SjablonService sjablonService;
+  private final SjablonConsumer sjablonConsumer;
   private final BidragsevneCore bidragsevneCore;
   private final NettoBarnetilsynCore nettoBarnetilsynCore;
   private final UnderholdskostnadCore underholdskostnadCore;
@@ -84,7 +84,7 @@ public class BeregnBarnebidragService {
 
   public BeregnBarnebidragService(BidragsevneCoreMapper bidragsevneCoreMapper, NettoBarnetilsynCoreMapper nettoBarnetilsynCoreMapper,
       UnderholdskostnadCoreMapper underholdskostnadCoreMapper, BPAndelUnderholdskostnadCoreMapper bpAndelUnderholdskostnadCoreMapper,
-      SamvaersfradragCoreMapper samvaersfradragCoreMapper, BarnebidragCoreMapper barnebidragCoreMapper, SjablonService sjablonService,
+      SamvaersfradragCoreMapper samvaersfradragCoreMapper, BarnebidragCoreMapper barnebidragCoreMapper, SjablonConsumer sjablonConsumer,
       BidragsevneCore bidragsevneCore, NettoBarnetilsynCore nettoBarnetilsynCore, UnderholdskostnadCore underholdskostnadCore,
       BPsAndelUnderholdskostnadCore bpAndelUnderholdskostnadCore, SamvaersfradragCore samvaersfradragCore,
       BarnebidragCore barnebidragCore) {
@@ -94,7 +94,7 @@ public class BeregnBarnebidragService {
     this.bpAndelUnderholdskostnadCoreMapper = bpAndelUnderholdskostnadCoreMapper;
     this.samvaersfradragCoreMapper = samvaersfradragCoreMapper;
     this.barnebidragCoreMapper = barnebidragCoreMapper;
-    this.sjablonService = sjablonService;
+    this.sjablonConsumer = sjablonConsumer;
     this.bidragsevneCore = bidragsevneCore;
     this.nettoBarnetilsynCore = nettoBarnetilsynCore;
     this.underholdskostnadCore = underholdskostnadCore;
@@ -158,7 +158,7 @@ public class BeregnBarnebidragService {
         barnebidragGrunnlagTilCore, bidragsevneResultatFraCore, bpAndelUnderholdskostnadResultatFraCore, samvaersfradragResultatFraCore));
 
     // Bygger responsobjekt
-    return HttpResponse.from(HttpStatus.OK, new BeregnetTotalBarnebidragResultat(barnebidragResultatFraCore,
+    return HttpResponse.Companion.from(HttpStatus.OK, new BeregnetTotalBarnebidragResultat(barnebidragResultatFraCore,
         grunnlagReferanseListe.stream().sorted(comparing(ResultatGrunnlag::getReferanse)).distinct().toList()));
   }
 
@@ -407,42 +407,42 @@ public class BeregnBarnebidragService {
   private SjablonListe hentSjabloner() {
 
     // Henter sjabloner for sjablontall
-    var sjablonSjablontallListe = Optional.ofNullable(sjablonService.hentSjablonSjablontall().getResponseEntity().getBody())
+    var sjablonSjablontallListe = Optional.ofNullable(sjablonConsumer.hentSjablonSjablontall().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Sjablontall: {}", sjablonSjablontallListe.size());
 
     // Henter sjabloner for forbruksutgifter
-    var sjablonForbruksutgifterListe = Optional.ofNullable(sjablonService.hentSjablonForbruksutgifter().getResponseEntity().getBody())
+    var sjablonForbruksutgifterListe = Optional.ofNullable(sjablonConsumer.hentSjablonForbruksutgifter().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonForbruksutgifterListe.size());
 
     // Henter sjabloner for maks tilsyn
-    var sjablonMaksTilsynListe = Optional.ofNullable(sjablonService.hentSjablonMaksTilsyn().getResponseEntity().getBody())
+    var sjablonMaksTilsynListe = Optional.ofNullable(sjablonConsumer.hentSjablonMaksTilsyn().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Maks tilsyn: {}", sjablonMaksTilsynListe.size());
 
     // Henter sjabloner for maks bidrag
-    var sjablonMaksFradragListe = Optional.ofNullable(sjablonService.hentSjablonMaksFradrag().getResponseEntity().getBody())
+    var sjablonMaksFradragListe = Optional.ofNullable(sjablonConsumer.hentSjablonMaksFradrag().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Maks fradrag: {}", sjablonMaksFradragListe.size());
 
     // Henter sjabloner for samværsfradrag
-    var sjablonSamvaersfradragListe = Optional.ofNullable(sjablonService.hentSjablonSamvaersfradrag().getResponseEntity().getBody())
+    var sjablonSamvaersfradragListe = Optional.ofNullable(sjablonConsumer.hentSjablonSamvaersfradrag().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Samværsfradrag: {}", sjablonSamvaersfradragListe.size());
 
     // Henter sjabloner for bidragsevne
-    var sjablonBidragsevneListe = Optional.ofNullable(sjablonService.hentSjablonBidragsevne().getResponseEntity().getBody())
+    var sjablonBidragsevneListe = Optional.ofNullable(sjablonConsumer.hentSjablonBidragsevne().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Bidragsevne: {}", sjablonBidragsevneListe.size());
 
     // Henter sjabloner for trinnvis skattesats
-    var sjablonTrinnvisSkattesatsListe = Optional.ofNullable(sjablonService.hentSjablonTrinnvisSkattesats().getResponseEntity().getBody())
+    var sjablonTrinnvisSkattesatsListe = Optional.ofNullable(sjablonConsumer.hentSjablonTrinnvisSkattesats().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Trinnvis skattesats: {}", sjablonTrinnvisSkattesatsListe.size());
 
     // Henter sjabloner for barnetilsyn
-    var sjablonBarnetilsynListe = Optional.ofNullable(sjablonService.hentSjablonBarnetilsyn().getResponseEntity().getBody())
+    var sjablonBarnetilsynListe = Optional.ofNullable(sjablonConsumer.hentSjablonBarnetilsyn().getResponseEntity().getBody())
         .orElse(emptyList());
     LOGGER.debug("Antall sjabloner hentet av type Barnetilsyn: {}", sjablonBarnetilsynListe.size());
 
@@ -467,13 +467,13 @@ public class BeregnBarnebidragService {
         .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
             .map(String::new))
         .distinct()
-        .collect(toList());
+        .toList();
 
     // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
     resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
-        .collect(toList()));
+        .toList());
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
     resultatGrunnlagListe.addAll(mapSjabloner(bidragsevneResultatFraCore.getSjablonListe()));
@@ -491,13 +491,13 @@ public class BeregnBarnebidragService {
         .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
             .map(String::new))
         .distinct()
-        .collect(toList());
+        .toList();
 
     // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
     resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
-        .collect(toList()));
+        .toList());
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
     resultatGrunnlagListe.addAll(mapSjabloner(nettoBarnetilsynResultatFraCore.getSjablonListe()));
@@ -516,20 +516,20 @@ public class BeregnBarnebidragService {
         .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
             .map(String::new))
         .distinct()
-        .collect(toList());
+        .toList();
 
     // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
     resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
-        .collect(toList()));
+        .toList());
 
     // Mapper ut delberegninger som er brukt som grunnlag
     resultatGrunnlagListe.addAll(underholdskostnadGrunnlagTilCore.getNettoBarnetilsynPeriodeListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
             lagInnholdNettoBarnetilsyn(grunnlag, underholdskostnadGrunnlagTilCore.getSoknadsbarn().getPersonId(), nettoBarnetilsynResultatFraCore)))
-        .collect(toList()));
+        .toList());
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
     resultatGrunnlagListe.addAll(mapSjabloner(underholdskostnadResultatFraCore.getSjablonListe()));
@@ -549,20 +549,20 @@ public class BeregnBarnebidragService {
         .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
             .map(String::new))
         .distinct()
-        .collect(toList());
+        .toList();
 
     // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
     resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
-        .collect(toList()));
+        .toList());
 
     // Mapper ut delberegninger som er brukt som grunnlag
     resultatGrunnlagListe.addAll(bpAndelUnderholdskostnadGrunnlagTilCore.getUnderholdskostnadPeriodeListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning", lagInnholdUnderholdskostnad(grunnlag,
             bpAndelUnderholdskostnadGrunnlagTilCore.getSoknadsbarnPersonId(), underholdskostnadResultatFraCore)))
-        .collect(toList()));
+        .toList());
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
     resultatGrunnlagListe.addAll(mapSjabloner(bpAndelUnderholdskostnadResultatFraCore.getSjablonListe()));
@@ -580,13 +580,13 @@ public class BeregnBarnebidragService {
         .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
             .map(String::new))
         .distinct()
-        .collect(toList());
+        .toList();
 
     // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
     resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
-        .collect(toList()));
+        .toList());
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
     resultatGrunnlagListe.addAll(mapSjabloner(samvaersfradragResultatFraCore.getSjablonListe()));
@@ -607,31 +607,31 @@ public class BeregnBarnebidragService {
         .flatMap(resultatPeriodeCore -> resultatPeriodeCore.getGrunnlagReferanseListe().stream()
             .map(String::new))
         .distinct()
-        .collect(toList());
+        .toList();
 
     // Matcher mottatte grunnlag med grunnlag som er brukt i beregningen
     resultatGrunnlagListe.addAll(totalBarnebidragGrunnlag.getGrunnlagListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), grunnlag.getType(), grunnlag.getInnhold()))
-        .collect(toList()));
+        .toList());
 
     // Mapper ut delberegninger som er brukt som grunnlag
     resultatGrunnlagListe.addAll(barnebidragGrunnlagTilCore.getBidragsevnePeriodeListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning", lagInnholdBidragsevne(grunnlag, bidragsevneResultatFraCore)))
-        .collect(toList()));
+        .toList());
 
     resultatGrunnlagListe.addAll(barnebidragGrunnlagTilCore.getBPsAndelUnderholdskostnadPeriodeListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
             lagInnholdBPAndelUnderholdskostnad(grunnlag, bpAndelUnderholdskostnadResultatFraCore)))
-        .collect(toList()));
+        .toList());
 
     resultatGrunnlagListe.addAll(barnebidragGrunnlagTilCore.getSamvaersfradragPeriodeListe().stream()
         .filter(grunnlag -> grunnlagReferanseListe.contains(grunnlag.getReferanse()))
         .map(grunnlag -> new ResultatGrunnlag(grunnlag.getReferanse(), "Delberegning",
             lagInnholdSamvaersfradrag(grunnlag, samvaersfradragResultatFraCore)))
-        .collect(toList()));
+        .toList());
 
     // Danner grunnlag basert på liste over sjabloner som er brukt i beregningen
     resultatGrunnlagListe.addAll(mapSjabloner(barnebidragResultatFraCore.getSjablonListe()));
@@ -761,6 +761,6 @@ public class BeregnBarnebidragService {
               return new ResultatGrunnlag(sjablon.getReferanse(), "Sjablon", mapper.valueToTree(map));
             }
         )
-        .collect(toList());
+        .toList();
   }
 }

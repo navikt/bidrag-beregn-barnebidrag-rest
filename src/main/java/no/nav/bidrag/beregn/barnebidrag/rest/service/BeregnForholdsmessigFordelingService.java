@@ -53,6 +53,6 @@ public class BeregnForholdsmessigFordelingService {
 
     // Konverterer resultatet av beregningen og returnerer responsen
     LOGGER.debug("Forskudd - resultat av beregning: {}", resultatFraCore.getResultatPeriodeListe());
-    return HttpResponse.from(HttpStatus.OK, forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingResultatFraCore(resultatFraCore));
+    return HttpResponse.Companion.from(HttpStatus.OK, forholdsmessigFordelingCoreMapper.mapForholdsmessigFordelingResultatFraCore(resultatFraCore));
   }
 }

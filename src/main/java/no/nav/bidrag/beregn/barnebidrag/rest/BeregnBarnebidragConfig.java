@@ -1,7 +1,7 @@
 package no.nav.bidrag.beregn.barnebidrag.rest;
 
 import no.nav.bidrag.beregn.barnebidrag.BarnebidragCore;
-import no.nav.bidrag.beregn.barnebidrag.rest.consumer.BidragGcpProxyConsumer;
+import no.nav.bidrag.beregn.barnebidrag.rest.consumer.SjablonConsumer;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BPAndelUnderholdskostnadCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BarnebidragCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.BidragsevneCoreMapper;
@@ -9,8 +9,6 @@ import no.nav.bidrag.beregn.barnebidrag.rest.mapper.ForholdsmessigFordelingCoreM
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.NettoBarnetilsynCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.SamvaersfradragCoreMapper;
 import no.nav.bidrag.beregn.barnebidrag.rest.mapper.UnderholdskostnadCoreMapper;
-import no.nav.bidrag.beregn.barnebidrag.rest.service.SecurityTokenService;
-import no.nav.bidrag.beregn.barnebidrag.rest.service.SjablonService;
 import no.nav.bidrag.beregn.bidragsevne.BidragsevneCore;
 import no.nav.bidrag.beregn.bpsandelunderholdskostnad.BPsAndelUnderholdskostnadCore;
 import no.nav.bidrag.beregn.forholdsmessigfordeling.ForholdsmessigFordelingCore;
@@ -20,7 +18,6 @@ import no.nav.bidrag.beregn.underholdskostnad.UnderholdskostnadCore;
 import no.nav.bidrag.commons.ExceptionLogger;
 import no.nav.bidrag.commons.web.CorrelationIdFilter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RootUriTemplateHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -63,25 +60,9 @@ public class BeregnBarnebidragConfig {
     return ForholdsmessigFordelingCore.getInstance();
   }
 
-//  @Bean
-//  public SjablonConsumer sjablonConsumer(@Value("${SJABLON_URL}") String sjablonBaseUrl, RestTemplate restTemplate) {
-//    return new SjablonConsumer(restTemplate, sjablonBaseUrl);
-//  }
-
   @Bean
-  public BidragGcpProxyConsumer bidragGcpProxyConsumer(
-      @Value("${BIDRAGGCPPROXY_URL}") String url,
-      SecurityTokenService securityTokenService,
-      RestTemplate restTemplate
-  ) {
-    restTemplate.setUriTemplateHandler(new RootUriTemplateHandler(url));
-    restTemplate.getInterceptors().add(securityTokenService.generateBearerToken("bidraggcpproxy"));
-    return new BidragGcpProxyConsumer(restTemplate);
-  }
-
-  @Bean
-  public SjablonService sjablonService(BidragGcpProxyConsumer bidragGcpProxyConsumer) {
-    return new SjablonService(bidragGcpProxyConsumer);
+  public SjablonConsumer sjablonConsumer(@Value("${BIDRAGSJABLON_URL}") String sjablonBaseUrl, RestTemplate restTemplate) {
+    return new SjablonConsumer(restTemplate, sjablonBaseUrl);
   }
 
   @Bean

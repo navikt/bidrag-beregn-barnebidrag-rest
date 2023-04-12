@@ -45,7 +45,7 @@ class BeregnBarnebidragControllerMockTest {
   @DisplayName("Skal returnere 400 Bad Request når input data mangler - barnebidrag")
   void skalReturnere400BadRequestNaarInputDataManglerBarnebidrag() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnGrunnlag.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnGrunnlag.class))).thenReturn(HttpResponse.Companion.from(BAD_REQUEST));
 
     var url = "http://localhost:" + port + "/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
@@ -62,7 +62,7 @@ class BeregnBarnebidragControllerMockTest {
   @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler - barnebidrag")
   void skalReturnere500InternalServerErrorNaarKallTilServicenFeilerBarnebidrag() {
 
-    when(beregnBarnebidragServiceMock.beregn(any(BeregnGrunnlag.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
+    when(beregnBarnebidragServiceMock.beregn(any(BeregnGrunnlag.class))).thenReturn(HttpResponse.Companion.from(INTERNAL_SERVER_ERROR));
 
     var url = "http://localhost:" + port + "/beregn/barnebidrag";
     var request = initHttpEntity(TestUtil.byggBarnebidragGrunnlag());
@@ -79,7 +79,7 @@ class BeregnBarnebidragControllerMockTest {
   @DisplayName("Skal returnere 400 Bad Request når input data mangler - forholdsmessig fordeling")
   void skalReturnere400BadRequestNaarInputDataManglerForholdsmessigFordeling() {
 
-    when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnGrunnlagFF.class))).thenReturn(HttpResponse.from(BAD_REQUEST));
+    when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnGrunnlagFF.class))).thenReturn(HttpResponse.Companion.from(BAD_REQUEST));
 
     var url = "http://localhost:" + port + "/beregn/forholdsmessigfordeling";
     var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlag());
@@ -96,7 +96,7 @@ class BeregnBarnebidragControllerMockTest {
   @DisplayName("Skal returnere 500 Internal Server Error når kall til servicen feiler - forholdsmessig fordeling")
   void skalReturnere500InternalServerErrorNaarKallTilServicenFeilerForholdsmessigFordeling() {
 
-    when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnGrunnlagFF.class))).thenReturn(HttpResponse.from(INTERNAL_SERVER_ERROR));
+    when(beregnForholdsmessigFordelingServiceMock.beregn(any(BeregnGrunnlagFF.class))).thenReturn(HttpResponse.Companion.from(INTERNAL_SERVER_ERROR));
 
     var url = "http://localhost:" + port + "/beregn/forholdsmessigfordeling";
     var request = initHttpEntity(TestUtil.byggForholdsmessigFordelingGrunnlag());
