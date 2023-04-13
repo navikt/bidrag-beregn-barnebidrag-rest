@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = BidragBeregnBarnebidragTest.class, webEnvironment = RANDOM_PORT)
-class BidragBeregnForskuddRestApplicationTest {
+class BidragBeregnBarnebidragRestApplicationTest {
 
   @Test
   void contextLoads() {
