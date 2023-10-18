@@ -39,7 +39,7 @@ public class BeregnForholdsmessigFordelingService {
     var resultatFraCore = forholdsmessigFordelingCore.beregnForholdsmessigFordeling(grunnlagTilCore);
 
     if (!resultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av forholdsmessig fordeling. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av forholdsmessig fordeling. Følgende avvik ble funnet: " + System.lineSeparator()
           + resultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Forholdsmessig fordeling - grunnlag for beregning: " + System.lineSeparator()
           + "beregnDatoFra= " + grunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()

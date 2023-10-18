@@ -247,7 +247,7 @@ public class BeregnBarnebidragService {
     var bidragsevneResultatFraCore = bidragsevneCore.beregnBidragsevne(bidragsevneGrunnlagTilCore);
 
     if (!bidragsevneResultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av bidragsevne. Følgende avvik ble funnet: " + System.lineSeparator()
           + bidragsevneResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst).collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Bidragsevne - grunnlag for beregning:" + System.lineSeparator()
           + "beregnDatoFra= " + bidragsevneGrunnlagTilCore.getBeregnDatoFra() + System.lineSeparator()
@@ -273,7 +273,7 @@ public class BeregnBarnebidragService {
     var nettoBarnetilsynResultatFraCore = nettoBarnetilsynCore.beregnNettoBarnetilsyn(nettoBarnetilsynGrunnlagTilCore);
 
     if (!nettoBarnetilsynResultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av netto barnetilsyn. Følgende avvik ble funnet: " + System.lineSeparator()
           + nettoBarnetilsynResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
           .collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Netto barnetilsyn - grunnlag for beregning:" + System.lineSeparator()
@@ -297,7 +297,7 @@ public class BeregnBarnebidragService {
     var underholdskostnadResultatFraCore = underholdskostnadCore.beregnUnderholdskostnad(underholdskostnadGrunnlagTilCore);
 
     if (!underholdskostnadResultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
           + underholdskostnadResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
           .collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
@@ -326,7 +326,7 @@ public class BeregnBarnebidragService {
         .beregnBPsAndelUnderholdskostnad(bpAndelUnderholdskostnadGrunnlagTilCore);
 
     if (!bpAndelUnderholdskostnadResultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av BPs andel av underholdskostnad. Følgende avvik ble funnet: " + System.lineSeparator()
           + bpAndelUnderholdskostnadResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
           .collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("BPs andel av underholdskostnad - grunnlag for beregning: " + System.lineSeparator()
@@ -354,7 +354,7 @@ public class BeregnBarnebidragService {
     var samvaersfradragResultatFraCore = samvaersfradragCore.beregnSamvaersfradrag(samvaersfradragGrunnlagTilCore);
 
     if (!samvaersfradragResultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av samværsfradrag. Følgende avvik ble funnet: " + System.lineSeparator()
           + samvaersfradragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
           .collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Samværsfradrag - grunnlag for beregning: " + System.lineSeparator()
@@ -379,7 +379,7 @@ public class BeregnBarnebidragService {
     var barnebidragResultatFraCore = barnebidragCore.beregnBarnebidrag(barnebidragGrunnlagTilCore);
 
     if (!barnebidragResultatFraCore.getAvvikListe().isEmpty()) {
-      LOGGER.error("Ugyldig input ved beregning av barnebidrag. Følgende avvik ble funnet: " + System.lineSeparator()
+      LOGGER.warn("Ugyldig input ved beregning av barnebidrag. Følgende avvik ble funnet: " + System.lineSeparator()
           + barnebidragResultatFraCore.getAvvikListe().stream().map(AvvikCore::getAvvikTekst)
           .collect(Collectors.joining(System.lineSeparator())));
       LOGGER.info("Barnebidrag - grunnlag for beregning: " + System.lineSeparator()
