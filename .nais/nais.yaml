@@ -17,11 +17,6 @@ spec:
             namespace: {{this.namespace}}
             cluster: {{this.cluster}}
       {{/each}}
-#    inbound:
-#      rules:
-#        - application: {{ azure.cucumber_cloud_app }}
-#          cluster: {{ azure.cucumber_cloud_cluster }}
-#          namespace: bidrag
     outbound:
       external:
         - host: {{ unsecured.bidragsjablon_url }}
