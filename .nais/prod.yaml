@@ -1,43 +1,13 @@
-apiVersion: "nais.io/v1alpha1"
-kind: "Application"
-metadata:
-  name: bidrag-beregn-barnebidrag-rest
-  namespace: bidrag
-  labels:
-    team: bidrag
-spec:
-  azure:
-    application:
-      enabled: true
-  accessPolicy:
-    outbound:
-      external:
-        - host: bidrag-sjablon.prod-fss-pub.nais.io
-  image: {{ image }}
-  liveness:
-    path: /actuator/health
-    initialDelay: 20
-    timeout: 1
-    periodSeconds: 5
-    failureThreshold: 10
-  readiness:
-    path: /actuator/health
-    initialDelay: 20
-    timeout: 1
-  prometheus:
-    enabled: true
-    path: /actuator/prometheus
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1024Mi
-    requests:
-      cpu: 500m
-      memory: 512Mi
-  ingresses:
-    - https://bidrag-beregn-barnebidrag-rest.intern.nav.no
-  env:
-    - name: BIDRAGSJABLON_URL
-      value: https://bidrag-sjablon.prod-fss-pub.nais.io
-    - name: BIDRAGSJABLON_SCOPE
-      value: prod-fss.bidrag.bidrag-sjablon
+name: bidrag-beregn-barnebidrag-rest
+ingresses:
+  - https://bidrag-beregn-barnebidrag-rest.intern.nav.no
+azure_access_inbound:
+  - application: bidrag-cucumber-cloud
+    namespace: bidrag
+    cluster: prod-gcp
+  - application: bidrag-simuler-beregning
+    namespace: bidrag
+    cluster: prod-gcp
+unsecured:
+  bidragsjablon_url: bidrag-sjablon.prod-fss-pub.nais.io
+  bidragsjablon_scope: prod-fss.bidrag.bidrag-sjablon
